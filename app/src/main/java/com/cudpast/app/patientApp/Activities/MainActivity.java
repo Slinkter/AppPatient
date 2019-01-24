@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        getSupportActionBar().hide();
+
         photoImageView = findViewById(R.id.idFotoUsuario);
         nameTextView = findViewById(R.id.nameTextView);
         emailTextView = findViewById(R.id.emailTextView);

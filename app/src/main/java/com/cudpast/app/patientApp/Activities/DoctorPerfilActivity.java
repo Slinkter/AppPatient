@@ -14,7 +14,7 @@ public class DoctorPerfilActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_doctor_perfil);
-
+        getSupportActionBar().hide();
         String img = getIntent().getExtras().getString("doctor_img");
         String firstName = getIntent().getExtras().getString("doctor_name");
         String lastname = getIntent().getExtras().getString("doctor_last");

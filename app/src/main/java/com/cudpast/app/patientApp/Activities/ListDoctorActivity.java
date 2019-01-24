@@ -27,7 +27,7 @@ public class ListDoctorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_doctor);
-
+        getSupportActionBar().hide();
         mDatabase = FirebaseDatabase.getInstance().getReference().child("db_doctor_consulta");
         mDatabase.keepSynced(true);
 

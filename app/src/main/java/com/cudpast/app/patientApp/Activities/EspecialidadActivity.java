@@ -12,6 +12,7 @@ public class EspecialidadActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_especialidad);
+        getSupportActionBar().hide();
     }
 
     public void btnMedicos(View view) {
