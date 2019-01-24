@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">AppPatient</string>
+    <string name="title_activity_maps">Map</string>
+
+
+    <string name="username_hint">
+        <font size="12">Usuario</font>
+    </string>
+    <string name="password_hint">
+        <font size="12">Contraseña</font>
+    </string>
+    <string name="login">
+        <font size="15">Ingresar</font>
+    </string>
+    <string name="register">
+        <font size="15">Crear Cuenta</font>
+    </string>
+</resources>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context=".Activities.MainActivity">
+
+    <TextView
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="20dp"
+        android:layout_gravity="center"
+        android:text="WellcomeActivity"
+        android:textSize="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:onClick="btnMedicos"
+        android:layout_gravity="center"
+        android:text="Ver medicos "
+        android:layout_width="190dp"
+        android:layout_height="wrap_content" />
+    <Button
+        android:onClick="btnEspecialidad"
+        android:layout_gravity="center"
+        android:text="Especialidad "
+        android:layout_width="190dp"
+        android:layout_height="wrap_content" />
+    <Button
+        android:onClick="btnMedicos"
+        android:layout_gravity="center"
+        android:text="Historial "
+        android:layout_width="190dp"
+        android:layout_height="wrap_content" />
+    <Button
+        android:onClick="btnMedicos"
+        android:layout_gravity="center"
+        android:text="Actualizar Datos "
+        android:layout_width="190dp"
+        android:layout_height="wrap_content" />
+    <Button
+        android:onClick="btnUbicacion"
+        android:layout_gravity="center"
+        android:text="Ubicación "
+        android:layout_width="190dp"
+        android:layout_height="wrap_content" />
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".MainActivity">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/idFotoUsuario"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_margin="8dp"
+                android:background="@color/colorAccent" />
+
+            <TextView
+                android:id="@+id/nameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hello World!"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/emailTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hello World!"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/idTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hello World!"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <Button
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="Salir"
+            android:text="Cerrar session" />
+
+        <Button
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="Cerra_sesion"
+            android:text="Cerra Cuenta" />
+
+
+    </LinearLayout>
+
+</LinearLayout>
