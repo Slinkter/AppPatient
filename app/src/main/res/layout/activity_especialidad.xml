@@ -1,105 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="vertical"
     android:layout_height="match_parent"
-
+    android:orientation="vertical"
     tools:context=".Activities.EspecialidadActivity">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
-        >
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+
+        android:orientation="vertical">
+
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="50dp"
             android:layout_marginBottom="20dp"
-            android:layout_gravity="center"
             android:text="Especialidad"
-            android:textSize="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:textSize="20dp" />
 
         <Button
-            android:onClick="btnMedicos"
-            android:layout_gravity="center"
-            android:text="Alergología"
             android:layout_width="190dp"
-            android:layout_height="wrap_content" />
-        <Button
-            android:onClick="btnMedicos"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:onClick="btnMedicos"
+            android:text="Alergología" />
+
+        <Button
+            android:layout_width="190dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:onClick="btnMedicos"
             android:text="Cardiología "
-            android:layout_width="190dp"
-            android:layout_height="wrap_content" />
+            android:visibility="gone" />
+
         <Button
-            android:onClick="btnMedicos"
-            android:layout_gravity="center"
-            android:text="Dermatología "
             android:layout_width="190dp"
-            android:layout_height="wrap_content" />
-        <Button
-            android:onClick="btnMedicos"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:onClick="btnMedicos"
+            android:text="Dermatología " />
+
+        <Button
+            android:layout_width="190dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:onClick="btnMedicos"
             android:text="Gastroenterología"
-            android:layout_width="190dp"
-            android:layout_height="wrap_content" />
+            android:visibility="gone" />
+
         <Button
-            android:onClick="btnMedicos"
+            android:layout_width="190dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:onClick="btnMedicos"
             android:text="Medicina Física y Rehabilitación"
-            android:layout_width="190dp"
-            android:layout_height="wrap_content" />
+            android:visibility="gone" />
+
         <Button
-            android:onClick="btnMedicos"
-            android:layout_gravity="center"
-            android:text="Medicina General "
             android:layout_width="190dp"
-            android:layout_height="wrap_content" />
-        <Button
-            android:onClick="btnMedicos"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Medicina Interna"
+            android:onClick="btnMedicos"
+            android:text="Medicina General " />
+
+        <Button
             android:layout_width="190dp"
-            android:layout_height="wrap_content" />
-        <Button
-            android:onClick="btnMedicos"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:onClick="btnMedicos"
+            android:text="Medicina Interna" />
+
+        <Button
+            android:layout_width="190dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:onClick="btnMedicos"
             android:text="Nutrición "
-            android:layout_width="190dp"
-            android:layout_height="wrap_content" />
+            android:visibility="gone" />
+
         <Button
-            android:onClick="btnMedicos"
-            android:layout_gravity="center"
-            android:text="Pediatría"
             android:layout_width="190dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:onClick="btnMedicos"
+            android:text="Pediatría" />
+
         <Button
-            android:onClick="btnMedicos"
-            android:layout_gravity="center"
-            android:text="Psicología"
             android:layout_width="190dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:onClick="btnMedicos"
+            android:text="Psicología" />
+
         <Button
-            android:onClick="btnMedicos"
-            android:layout_gravity="center"
-            android:text="Traumatologia y Ortopedia"
             android:layout_width="190dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:onClick="btnMedicos"
+            android:text="Traumatologia y Ortopedia" />
 
         <TextView
-            android:layout_marginTop="50dp"
-            android:layout_marginBottom="20dp"
-            android:layout_gravity="center"
-
-            android:textSize="20dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="50dp"
+
+            android:layout_marginBottom="20dp"
+            android:textSize="20dp"
+            android:visibility="gone" />
 
     </LinearLayout>
 
-</ScrollView>
+</LinearLayout>
