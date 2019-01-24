@@ -27,12 +27,19 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.cudpast.app.patientApp.Model.User;
 import com.cudpast.app.patientApp.R;
 import com.cudpast.app.patientApp.Soporte.VolleyRP;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.rengwuxian.materialedittext.MaterialEditText;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,19 +49,20 @@ import java.util.HashMap;
 
 import dmax.dialog.SpotsDialog;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity  implements GoogleApiClient.OnConnectionFailedListener{
 
     //
     FirebaseAuth auth;
     FirebaseDatabase db;
     DatabaseReference db_users;
+    private GoogleApiClient googleApiClient;
     //
     private static String TAG = "Date";
     private static final String IP_REGISTRAR = "http://www.cudpast.com/AppUsuario/Registro_INSERT.php";
     private RequestQueue mRequest;
     private VolleyRP volleyRP;
-
-    EditText signupDNI,signupUser,signupPassword,signupName,signupLast,signupNumPhone,signupDate,signupAnddress;
+    //
+    MaterialEditText signupDNI,signupUser,signupPassword,signupName,signupLast,signupNumPhone,signupDate,signupAnddress;
     RelativeLayout root;
     Button guardar, salir;
     //fecha
@@ -131,6 +139,17 @@ public class RegisterActivity extends AppCompatActivity {
 
         signupDate = findViewById(R.id.signupDate);
 
+        //--> CERRA VERIFICACION DE GOOGLE
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+        //<--
+
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -142,6 +161,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                     String user = signupUser.getText().toString();
                     String pass = signupPassword.getText().toString();
+
                     auth.createUserWithEmailAndPassword(user, pass)
                             .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
                                 @Override
@@ -158,13 +178,8 @@ public class RegisterActivity extends AppCompatActivity {
                                         user.setPassword(signupPassword.getText().toString());
                                         user.setFecha(signupDate.getText().toString());
                                         user.setDireecion(signupAnddress.getText().toString());
-                                        //Guadar en Firebase
-                                        db_users.child("db_usuarios")  //nombre carperta.
-                                                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                                // .child(user.getDni()) //subcarpera.
-                                                .setValue(user);       //toda la información.
                                         //Guardar en GoDaddy
-                                        registrarWebGoDaddy(
+                                        String cadena =  registrarWebGoDaddy(
                                                 user.getDni(),
                                                 user.getCorreo(),
                                                 user.getPassword(),
@@ -174,9 +189,19 @@ public class RegisterActivity extends AppCompatActivity {
                                                 user.getFecha(),
                                                 user.getDireecion()
                                         );
-                                        //Regresar al LoginActivity
-                                        waitingDialog.dismiss();
-                                        iniciarActivity();
+
+                                        if(!cadena.isEmpty() && cadena.equalsIgnoreCase("ok")){
+                                            iniciarActivity();
+                                            //Guadar en Firebase
+                                            db_users.child("db_usuarios")  //nombre carperta.
+                                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                                    // .child(user.getDni()) //subcarpera.
+                                                    .setValue(user);       //toda la información.
+                                            //Regresar al LoginActivity
+                                            waitingDialog.dismiss();
+                                        }
+
+
                                         Log.d(TAG, "signInWithEmail:success");
                                     } else {
                                         waitingDialog.dismiss();
@@ -203,14 +228,12 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     public void iniciarActivity() {
-        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-        startActivity(intent);
-        finish();
+        Cerra_sesion();
     }
 
 
     //Insertar en la base de datos de Godaddy
-    public void registrarWebGoDaddy(String dni, String correo, String password, String nombre, String apellido, String telefono, String fecha,String direecion) {
+    public String  registrarWebGoDaddy(String dni, String correo, String password, String nombre, String apellido, String telefono, String fecha,String direecion) {
 
         HashMap<String, String> hashMapRegistro = new HashMap<>();
         hashMapRegistro.put("iddni",dni);
@@ -232,6 +255,8 @@ public class RegisterActivity extends AppCompatActivity {
                             String estado = datos.getString("resultado");
                             if (estado.equalsIgnoreCase("Datos registrados  :) ")) {
                                 Toast.makeText(RegisterActivity.this, estado, Toast.LENGTH_SHORT).show();
+                                // AQUI DEBERIA IR EL DIAGLO CLOSE
+                                //
                             } else {
                                 Toast.makeText(RegisterActivity.this, estado, Toast.LENGTH_SHORT).show();
                             }
@@ -247,6 +272,8 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
         VolleyRP.addToQueue(solicitar, mRequest, this, volleyRP);
+
+        return "ok";
     }
 
     //Validación de formulario parte 1
@@ -360,6 +387,34 @@ public class RegisterActivity extends AppCompatActivity {
         }
         return true;
     }
+
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    //cerra session
+
+    public void Cerra_sesion() {
+        Auth.GoogleSignInApi.revokeAccess(googleApiClient).setResultCallback(new ResultCallback<Status>() {
+            @Override
+            public void onResult(@NonNull Status status) {
+                if (status.isSuccess()) {
+                    goLogIngScreen();
+                } else {
+                    Toast.makeText(getApplicationContext(), "no se puedo salir", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void goLogIngScreen() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | intent.FLAG_ACTIVITY_CLEAR_TASK | intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
 
 
 
