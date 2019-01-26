@@ -13,4 +13,7 @@
 
     <color name="startblue">#4bb6ef</color>
     <color name="endblue">#44bcfc</color>
+
+
+    <color name="btnSignIN">#1fbad6</color>
 </resources>

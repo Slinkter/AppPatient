@@ -6,8 +6,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
@@ -134,7 +132,7 @@ public class BusinessActivity extends AppCompatActivity
 
         mService = Common.getIFCMService(); // Enviar notificaciones
         //init view parte 7
-        driversAvailable = FirebaseDatabase.getInstance().getReference(Common.driver_tbl);
+        driversAvailable = FirebaseDatabase.getInstance().getReference(Common.tb_Business_Doctor);
 
         imgExpandable = findViewById(R.id.imgExpandable);
 
@@ -229,9 +227,25 @@ public class BusinessActivity extends AppCompatActivity
 
     private void updateFirebaseToken() {
         FirebaseDatabase db = FirebaseDatabase.getInstance();
+        Log.e("BusinessActiviy " , "db " + db);
         DatabaseReference tokens = db.getReference(Common.token_tbl);
+        Log.e("BusinessActiviy " , "tokens " + tokens);
         Token token = new Token(FirebaseInstanceId.getInstance().getToken());
-        tokens.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(token);
+
+        Log.e("BusinessActiviy " , " token" + token);
+        try {
+            tokens.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(token);
+            Log.e("BusinessActiviy " , " token" +  tokens.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(token));
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+
+
+
+
     }
 
     private void requestPickUpHere(String s) {
@@ -265,7 +279,7 @@ public class BusinessActivity extends AppCompatActivity
 
     private void findDriver() {
 
-        final DatabaseReference drivers = FirebaseDatabase.getInstance().getReference(Common.driver_tbl);
+        final DatabaseReference drivers = FirebaseDatabase.getInstance().getReference(Common.tb_Business_Doctor);
         GeoFire gfDrivers = new GeoFire(drivers);
 
         GeoQuery geoQuery = gfDrivers.queryAtLocation(new GeoLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude()), radius);
@@ -383,7 +397,7 @@ public class BusinessActivity extends AppCompatActivity
             place_location.setFilter(typeFilter);
 
 
-            driversAvailable = FirebaseDatabase.getInstance().getReference(Common.driver_tbl);
+            driversAvailable = FirebaseDatabase.getInstance().getReference(Common.tb_Business_Doctor);
             driversAvailable.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -420,7 +434,7 @@ public class BusinessActivity extends AppCompatActivity
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 15.0f));
         //falta algo
 
-        DatabaseReference driverLocation = FirebaseDatabase.getInstance().getReference(Common.driver_tbl);
+        DatabaseReference driverLocation = FirebaseDatabase.getInstance().getReference(Common.tb_Business_Doctor);
         GeoFire gf = new GeoFire(driverLocation);
 
         GeoQuery geoQuery = gf.queryAtLocation(new GeoLocation(location.latitude, location.longitude), distance);
@@ -432,7 +446,7 @@ public class BusinessActivity extends AppCompatActivity
                 //use key to get email from table users
                 //table users is table when driver register account and update infomation
                 // just open your driver to cehck this table name
-                FirebaseDatabase.getInstance().getReference(Common.user_driver_tbl)
+                FirebaseDatabase.getInstance().getReference(Common.tb_Info_Doctor)
                         .child(key)
                         .addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
@@ -447,8 +461,8 @@ public class BusinessActivity extends AppCompatActivity
                                         .flat(true)
                                         .title(rider.getName())
                                         .snippet(rider.getPhone())
-                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_doctor))
-                                );
+                                        .icon(BitmapDescriptorFactory.defaultMarker()));
+
                             }
 
                             @Override

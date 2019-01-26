@@ -47,12 +47,12 @@ public class MyFirebaseMessaging  extends FirebaseMessagingService {
         super.onNewToken(s);
 
         String refreshedToken1 = FirebaseInstanceId.getInstance().getToken();
-        String refreshedToken2 = "-->" +FirebaseInstanceId.getInstance().getInstanceId();
+        String refreshedToken2 = FirebaseInstanceId.getInstance().getInstanceId().toString();
 
 
         Log.e("onNewToke        : ",s);
-        Log.e("refreshedToken1  :",FirebaseInstanceId.getInstance().getToken());
-        Log.e("refreshedToken2  :","" + FirebaseInstanceId.getInstance().getInstanceId());
+        Log.e("refreshedToken1  : ",refreshedToken1);
+        Log.e("refreshedToken2  : ",refreshedToken2);
 
         DatabaseReference tb_tokens = FirebaseDatabase.getInstance().getReference(Common.token_tbl);
 

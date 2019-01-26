@@ -7,10 +7,10 @@ import com.cudpast.app.patientApp.Remote.IGoogleAPI;
 
 public class Common {
 
-    public static final String driver_tbl = "Drivers";
-    public static final String user_driver_tbl = "DriversInformation";
-    public static final String user_rider_tbl = "RidersInformation";
-    public static final String pickup_request_tbl = "PickupRequest";
+    public static final String tb_Business_Doctor = "tb_Business_Doctor";
+    public static final String tb_Info_Doctor = "tb_Info_Doctor";
+    public static final String tb_Info_Paciente = "tb_Info_Paciente";
+    public static final String pickup_request_tbl = "pickup_request_tbl";
     public static final String token_tbl = "Tokens";
 
 
