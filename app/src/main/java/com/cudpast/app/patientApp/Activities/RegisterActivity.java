@@ -28,12 +28,8 @@ import com.cudpast.app.patientApp.Common.Common;
 import com.cudpast.app.patientApp.Model.User;
 import com.cudpast.app.patientApp.R;
 import com.cudpast.app.patientApp.Soporte.VolleyRP;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -87,8 +83,6 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         //---------------Instancia de Firebase
         auth = FirebaseAuth.getInstance();
         tb_Info_Paciente = FirebaseDatabase.getInstance().getReference(Common.tb_Info_Paciente);
-
-
         //--------------->Servidor
         volleyRP = VolleyRP.getInstance(this);
         mRequest = volleyRP.getRequestQueue();
@@ -108,10 +102,8 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         signupDNI = findViewById(R.id.signupDNI);
         signupEmail = findViewById(R.id.signupUser);//correo
         signupPassword = findViewById(R.id.signupPassword);
-
-        //--------------->fecha de nacimiento
+        //-->OBTENER FECHA DE NACIMIENTO
         msignupDate = findViewById(R.id.signupDate);
-
         msignupDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,7 +121,6 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
                 dialog.show();
             }
         });
-
         mDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -140,20 +131,8 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
                 msignupDate.setText(fechauser);
             }
         };
-
         signupDate = findViewById(R.id.signupDate);
-
-        //--> CERRA VERIFICACION DE GOOGLE
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
         //<--
-
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -163,16 +142,16 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
                     final SpotsDialog waitingDialog = new SpotsDialog(RegisterActivity.this, R.style.CustomSDialog);
                     waitingDialog.show();
 
-                    String correo = signupEmail.getText().toString();
-                    String pass = signupPassword.getText().toString();
+                    String mail = signupEmail.getText().toString();
+                    String pwd = signupPassword.getText().toString();
 
-                    auth.createUserWithEmailAndPassword(correo, pass)
+                    auth.createUserWithEmailAndPassword(mail, pwd)
                             .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
 
                                     if (task.isSuccessful()) {
-
+                                        //Obtener datos del usuario
                                         User user = new User();
                                         user.setNombre(signupName.getText().toString());
                                         user.setApellido(signupLast.getText().toString());
@@ -184,7 +163,7 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
                                         user.setDireecion(signupAnddress.getText().toString());
 
                                         //Guardar en GoDaddy
-                                        String cadena = registrarWebGoDaddy(
+                                        registrarWebGoDaddy(
                                                 user.getDni(),
                                                 user.getCorreo(),
                                                 user.getPassword(),
@@ -194,28 +173,23 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
                                                 user.getFecha(),
                                                 user.getDireecion()
                                         );
-                                        //Guadar en Firebase
-                                        if (!cadena.isEmpty() && cadena.equalsIgnoreCase("ok")) {
-
-                                            tb_Info_Paciente.child(FirebaseAuth.getInstance().getUid())
-                                                    .setValue(user)
-                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                        @Override
-                                                        public void onSuccess(Void aVoid) {
-                                                            Toast.makeText(RegisterActivity.this, "Usuario Registrado", Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    }).addOnFailureListener(new OnFailureListener() {
-                                                        @Override
-                                                        public void onFailure(@NonNull Exception e) {
-                                                            Toast.makeText(RegisterActivity.this, "No se pudo registar usuario", Toast.LENGTH_SHORT).show();
-                                                        }
-                                            });
-
-
-                                            iniciarActivity();
-
-                                        }
+                                        //Guadar en Firebase Database
+                                        tb_Info_Paciente.child(FirebaseAuth.getInstance().getUid())
+                                                .setValue(user)
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        Toast.makeText(RegisterActivity.this, "Usuario Registrado", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Toast.makeText(RegisterActivity.this, "No se pudo registar usuario", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                        goToLoginActivity();
                                         waitingDialog.dismiss();
+
                                     } else {
                                         waitingDialog.dismiss();
                                         Log.e(TAG, "No se pudo registrar ", task.getException());
@@ -230,22 +204,21 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         salir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
+                goToLoginActivity();
             }
         });
     }
 
-
-    public void iniciarActivity() {
-        Cerra_sesion();
+    //METODOS
+    //1. IR a Login Activity
+    public void goToLoginActivity() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
     }
-
-
-    //Insertar en la base de datos de Godaddy
-    public String registrarWebGoDaddy(String dni, String correo, String password, String nombre, String apellido, String telefono, String fecha, String direecion) {
+    //2.Insertar en la base de datos de Godaddy
+    public void registrarWebGoDaddy(String dni, String correo, String password, String nombre, String apellido, String telefono, String fecha, String direecion) {
 
         HashMap<String, String> hashMapRegistro = new HashMap<>();
         hashMapRegistro.put("iddni", dni);
@@ -257,9 +230,10 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         hashMapRegistro.put("birth", fecha);
         hashMapRegistro.put("direccion", direecion);
 
-        JsonObjectRequest solicitar = new JsonObjectRequest(Request.Method.POST,
-                IP_REGISTRAR,
-                new JSONObject(hashMapRegistro),
+
+
+        JsonObjectRequest solicitar = new JsonObjectRequest( Request.Method.POST, IP_REGISTRAR, new JSONObject(hashMapRegistro),
+
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject datos) {
@@ -267,8 +241,6 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
                             String estado = datos.getString("resultado");
                             if (estado.equalsIgnoreCase("Datos registrados  :) ")) {
                                 Toast.makeText(RegisterActivity.this, estado, Toast.LENGTH_SHORT).show();
-                                // AQUI DEBERIA IR EL DIAGLO CLOSE
-                                //
                             } else {
                                 Toast.makeText(RegisterActivity.this, estado, Toast.LENGTH_SHORT).show();
                             }
@@ -284,11 +256,10 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
             }
         });
         VolleyRP.addToQueue(solicitar, mRequest, this, volleyRP);
-
-        return "ok";
     }
 
-    //Validación de formulario parte 1
+    //3.1 Validación de formulario parte 1
+
     private boolean submitForm() {
 
         if (!checkName()) {
@@ -334,8 +305,8 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         }
         return true;
     }
-    //Validación de formulario parte 2
-
+    //3.2 Validación de formulario parte 2
+    //-->
     private boolean checkName() {
         if (signupName.getText().toString().trim().isEmpty()) {
             signupName.setError("Debes ingresar tu nombre  ");
@@ -399,33 +370,11 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         }
         return true;
     }
-
+    //<--
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
-
-    //cerra session
-
-    public void Cerra_sesion() {
-        Auth.GoogleSignInApi.revokeAccess(googleApiClient).setResultCallback(new ResultCallback<Status>() {
-            @Override
-            public void onResult(@NonNull Status status) {
-                if (status.isSuccess()) {
-                    goLogIngScreen();
-                } else {
-                    Toast.makeText(getApplicationContext(), "no se puedo salir", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
-
-    private void goLogIngScreen() {
-        Intent intent = new Intent(this, LoginActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | intent.FLAG_ACTIVITY_CLEAR_TASK | intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-    }
-
 
 }
