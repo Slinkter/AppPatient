@@ -36,6 +36,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.rengwuxian.materialedittext.MaterialEditText;
@@ -48,32 +49,31 @@ import java.util.HashMap;
 
 import dmax.dialog.SpotsDialog;
 
-public class RegisterActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class RegisterActivity extends AppCompatActivity {
 
-    //
-    FirebaseAuth auth;
 
-    DatabaseReference tb_Info_Paciente;
-    private GoogleApiClient googleApiClient;
-    //
-    private static String TAG = "Date";
+    private static String TAG = "RegisterActivity";
     private static final String IP_REGISTRAR = "http://www.cudpast.com/AppUsuario/Registro_INSERT.php";
+
+    private FirebaseAuth auth;
+    private DatabaseReference tb_Info_Paciente;
+
     private RequestQueue mRequest;
     private VolleyRP volleyRP;
-    //
-    MaterialEditText signupDNI, signupEmail, signupPassword, signupName, signupLast, signupNumPhone, signupDate, signupAnddress;
-    RelativeLayout root;
-    Button guardar, salir;
-    //fecha
+
+    private MaterialEditText signupDNI, signupEmail, signupPassword, signupName, signupLast, signupNumPhone, signupDate, signupAnddress;
+
+    private Button guardar, salir;
+    //-->fecha
     private EditText msignupDate;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
-
     public int year_n, month_n, day_n;
-
-    //Validacion
+    //<--
+    //-->Validacion
     private Animation animation;
     private Vibrator vib;
 
+    //<--
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -139,64 +139,62 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
 
                 if (submitForm()) {
 
-                    final SpotsDialog waitingDialog = new SpotsDialog(RegisterActivity.this, R.style.CustomSDialog);
-                    waitingDialog.show();
+//                    final SpotsDialog waitingDialog = new SpotsDialog(RegisterActivity.this, R.style.RegsiterActivity);
+//                    waitingDialog.show();
+
+                    //Obtener datos del usuario
+                    final User user = new User();
+                    user.setNombre(signupName.getText().toString());
+                    user.setApellido(signupLast.getText().toString());
+                    user.setTelefono(signupNumPhone.getText().toString());
+                    user.setDni(signupDNI.getText().toString());
+                    user.setCorreo(signupEmail.getText().toString());
+                    user.setPassword(signupPassword.getText().toString());
+                    user.setFecha(signupDate.getText().toString());
+                    user.setDireecion(signupAnddress.getText().toString());
 
                     String mail = signupEmail.getText().toString();
                     String pwd = signupPassword.getText().toString();
 
-                    auth.createUserWithEmailAndPassword(mail, pwd)
-                            .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
+                    //Guardar en GoDaddy
+                    if (registrarWebGoDaddy(user.getDni(), user.getCorreo(), user.getPassword(), user.getNombre(), user.getApellido(), user.getTelefono(), user.getFecha(), user.getDireecion())) {
 
-                                    if (task.isSuccessful()) {
-                                        //Obtener datos del usuario
-                                        User user = new User();
-                                        user.setNombre(signupName.getText().toString());
-                                        user.setApellido(signupLast.getText().toString());
-                                        user.setTelefono(signupNumPhone.getText().toString());
-                                        user.setDni(signupDNI.getText().toString());
-                                        user.setCorreo(signupEmail.getText().toString());
-                                        user.setPassword(signupPassword.getText().toString());
-                                        user.setFecha(signupDate.getText().toString());
-                                        user.setDireecion(signupAnddress.getText().toString());
+                        auth.createUserWithEmailAndPassword(mail, pwd)
+                                .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                        if (task.isSuccessful()) {
 
-                                        //Guardar en GoDaddy
-                                        registrarWebGoDaddy(
-                                                user.getDni(),
-                                                user.getCorreo(),
-                                                user.getPassword(),
-                                                user.getNombre(),
-                                                user.getApellido(),
-                                                user.getTelefono(),
-                                                user.getFecha(),
-                                                user.getDireecion()
-                                        );
-                                        //Guadar en Firebase Database
-                                        tb_Info_Paciente.child(FirebaseAuth.getInstance().getUid())
-                                                .setValue(user)
-                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                    @Override
-                                                    public void onSuccess(Void aVoid) {
-                                                        Toast.makeText(RegisterActivity.this, "Usuario Registrado", Toast.LENGTH_SHORT).show();
-                                                    }
-                                                }).addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Toast.makeText(RegisterActivity.this, "No se pudo registar usuario", Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-                                        goToLoginActivity();
-                                        waitingDialog.dismiss();
+                                            tb_Info_Paciente
+                                                    .child(FirebaseAuth.getInstance().getUid())
+                                                    .setValue(user)
+                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void aVoid) {
+                                                            Toast.makeText(RegisterActivity.this, "Usuario Registrado", Toast.LENGTH_SHORT).show();
+                                                            sendEmailVerification();
+//                                                            waitingDialog.dismiss();
+                                                        }
+                                                    }).addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            Toast.makeText(RegisterActivity.this, "No se pudo registar usuario", Toast.LENGTH_SHORT).show();
+//                                                            waitingDialog.dismiss();
+                                                        }
+                                            });
+                                            goToLoginActivity();
 
-                                    } else {
-                                        waitingDialog.dismiss();
-                                        Log.e(TAG, "No se pudo registrar ", task.getException());
-                                        Toast.makeText(RegisterActivity.this, "No se pudo registar", Toast.LENGTH_SHORT).show();
+                                        } else {
+//                                            waitingDialog.dismiss();
+                                            Log.e(TAG, "El correo ya existe", task.getException());
+                                            Toast.makeText(RegisterActivity.this, "El correo ya existe", Toast.LENGTH_SHORT).show();
+                                        }
                                     }
-                                }
-                            });
+                                });
+
+                    }
+
+
                 }
             }
         });
@@ -217,10 +215,14 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         startActivity(intent);
         finish();
     }
+
     //2.Insertar en la base de datos de Godaddy
-    public void registrarWebGoDaddy(String dni, String correo, String password, String nombre, String apellido, String telefono, String fecha, String direecion) {
+    public Boolean registrarWebGoDaddy(String dni, String correo, String password, String nombre, String apellido, String telefono, String fecha, String direecion) {
+
+        boolean registro = false;
 
         HashMap<String, String> hashMapRegistro = new HashMap<>();
+
         hashMapRegistro.put("iddni", dni);
         hashMapRegistro.put("correo", correo);
         hashMapRegistro.put("password", password);
@@ -230,9 +232,7 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         hashMapRegistro.put("birth", fecha);
         hashMapRegistro.put("direccion", direecion);
 
-
-
-        JsonObjectRequest solicitar = new JsonObjectRequest( Request.Method.POST, IP_REGISTRAR, new JSONObject(hashMapRegistro),
+        JsonObjectRequest solicitar = new JsonObjectRequest(Request.Method.POST, IP_REGISTRAR, new JSONObject(hashMapRegistro),
 
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -240,9 +240,11 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
                         try {
                             String estado = datos.getString("resultado");
                             if (estado.equalsIgnoreCase("Datos registrados  :) ")) {
-                                Toast.makeText(RegisterActivity.this, estado, Toast.LENGTH_SHORT).show();
+                                // Toast.makeText(RegisterActivity.this, estado, Toast.LENGTH_SHORT).show();
+                                Log.e("registrarWebGoDaddy", "onResponse : ok ");
                             } else {
-                                Toast.makeText(RegisterActivity.this, estado, Toast.LENGTH_SHORT).show();
+                                //  Toast.makeText(RegisterActivity.this, estado, Toast.LENGTH_SHORT).show();
+                                Log.e("registrarWebGoDaddy", "onResponse : error");
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -252,10 +254,25 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
                 Toast.makeText(RegisterActivity.this, "no se pudo registrar", Toast.LENGTH_SHORT).show();
+                Log.e("registrarWebGoDaddy", " : onErrorResponse" + error.getMessage());
             }
         });
-        VolleyRP.addToQueue(solicitar, mRequest, this, volleyRP);
+
+        try {
+            VolleyRP.addToQueue(solicitar, mRequest, this, volleyRP);
+            registro = true;
+            Log.e("registrarWebGoDaddy", "try ok");
+        } catch (Exception e) {
+            Log.e("registrarWebGoDaddy", "cathc " + e.getMessage());
+            e.printStackTrace();
+            registro = false;
+        }
+
+
+        return registro;
+
     }
 
     //3.1 Validación de formulario parte 1
@@ -305,8 +322,8 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         }
         return true;
     }
+
     //3.2 Validación de formulario parte 2
-    //-->
     private boolean checkName() {
         if (signupName.getText().toString().trim().isEmpty()) {
             signupName.setError("Debes ingresar tu nombre  ");
@@ -370,10 +387,24 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         }
         return true;
     }
-    //<--
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    private void sendEmailVerification() {
+
+        final FirebaseUser user = auth.getCurrentUser();
+        user.sendEmailVerification()
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(RegisterActivity.this, "Revise su correo " + user.getEmail(), Toast.LENGTH_SHORT).show();
+                        } else {
+                            Log.e("RegisterActivity", "sendEmailVerification", task.getException());
+                            Toast.makeText(RegisterActivity.this, "Failed to send verification email.", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
 
     }
 
