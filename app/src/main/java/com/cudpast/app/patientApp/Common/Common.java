@@ -1,5 +1,8 @@
 package com.cudpast.app.patientApp.Common;
 
+import android.location.Location;
+
+import com.cudpast.app.patientApp.Model.User;
 import com.cudpast.app.patientApp.Remote.FCMClient;
 import com.cudpast.app.patientApp.Remote.GoogleMapApi;
 import com.cudpast.app.patientApp.Remote.IFCMService;
@@ -13,7 +16,8 @@ public class Common {
     public static final String pickup_request_tbl = "pickup_request_tbl";
     public static final String token_tbl = "Tokens";
 
-
+    public static User currentUser;
+    public static Location mLastLocation;
     public static final String fcmURL = "https://fcm.googleapis.com/";
 
     public static final String googleAPIUrl = "https://maps.googleapis.com";

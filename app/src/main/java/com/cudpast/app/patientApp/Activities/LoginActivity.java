@@ -58,7 +58,8 @@ public class LoginActivity extends AppCompatActivity {
         final MaterialEditText edtPassword = layout_login.findViewById(R.id.edtPassowrd);
         dialog.setView(layout_login);
         dialog.setTitle("Login");
-        dialog.setMessage("Correo & Contraseña ");
+        dialog.setMessage("Por favor ingrese Email & Contraseña ");
+
         dialog.setPositiveButton("Ingresar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -96,12 +97,13 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        dialog.setNegativeButton("Salir", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
             }
         });
+
         dialog.show();
     }
 

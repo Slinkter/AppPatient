@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".Activities.MainActivity">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -19,6 +20,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -27,15 +29,9 @@
                 android:layout_marginBottom="20dp"
                 android:text="Bienvenido"
                 android:textColor="@color/grey_white_1000"
-                android:textStyle="bold"
-                android:textSize="42dp" />
+                android:textSize="42dp"
+                android:textStyle="bold" />
 
-            <ImageView
-                android:id="@+id/idFotoUsuario"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_margin="8dp"
-                android:background="@color/color_white" />
 
             <TextView
                 android:id="@+id/nameTextView"
@@ -45,74 +41,60 @@
                 android:textSize="24sp" />
 
             <TextView
-                android:visibility="gone"
                 android:id="@+id/emailTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="USUARIO"
+
                 android:textSize="18sp" />
 
-            <TextView
-                android:visibility="gone"
-                android:id="@+id/idTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="USUARIO"
-                android:textSize="16sp" />
 
             <Button
+                android:layout_marginTop="20dp"
+                android:id="@+id/btnMedicos"
                 android:layout_width="190dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:onClick="btnMedicos"
                 android:text="Ver medicos " />
 
             <Button
+                android:id="@+id/btnEspecialidad"
                 android:layout_width="190dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:onClick="btnEspecialidad"
                 android:text="Especialidad " />
 
             <Button
+                android:id="@+id/btnHistorial"
                 android:layout_width="190dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:onClick="btnMedicos"
                 android:text="Historial " />
 
             <Button
+                android:id="@+id/btnUpdateInfo"
                 android:layout_width="190dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:onClick="btnMedicos"
                 android:text="Actualizar Datos " />
 
             <Button
+                android:id="@+id/btnUbicacion"
                 android:layout_width="190dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:onClick="btnUbicacion"
                 android:text="Ubicación " />
 
 
         </LinearLayout>
 
-        <Button
-            android:visibility="gone"
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="Salir"
-            android:text="Cerrar session" />
 
         <Button
+            android:id="@+id/btnCerra_sesion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="Cerra_sesion"
             android:text="Cerra Sesión" />
-
 
     </LinearLayout>
 

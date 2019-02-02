@@ -28,7 +28,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="50dp"
                 android:contentDescription="nada"
-                android:src="@drawable/ic_hospital" />
+                android:src="@drawable/ic_ambulance" />
 
             <Button
                 android:id="@+id/login_button"
