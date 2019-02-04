@@ -54,13 +54,13 @@ public class MainActivity extends AppCompatActivity implements
     protected void onStart() {
         super.onStart();
         //commo.user.
-        FirebaseUser currentUser = auth.getCurrentUser();
+        User currentUser = Common.currentUser;
         updateUI(currentUser);
     }
     //.VerificarSiUsuarioExiste
-    private void updateUI(FirebaseUser user) {
+    private void updateUI(User user) {
         if (user != null) {
-            Toast.makeText(this, "Hola" + user.getDisplayName(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Hola" + user.getNombre(), Toast.LENGTH_SHORT).show();
             mostratInfoDelUsuario();
         } else {
             goLogIngScreen();
@@ -97,8 +97,7 @@ public class MainActivity extends AppCompatActivity implements
         try {
 
             User usuario = Common.currentUser;
-            Log.e("usuario ------> ", usuario.getNombre() + " \n" + usuario.getApellido());
-            nameTextView.setText(usuario.getNombre());
+            nameTextView.setText(usuario.getNombre() +"" +  usuario.getApellido() );
             emailTextView.setText(usuario.getCorreo());
             idTextView.setText(usuario.getDni());
 

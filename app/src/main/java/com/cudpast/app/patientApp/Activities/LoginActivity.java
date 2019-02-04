@@ -13,14 +13,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import com.cudpast.app.patientApp.Common.Common;
+import com.cudpast.app.patientApp.Model.User;
 import com.cudpast.app.patientApp.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import dmax.dialog.SpotsDialog;
@@ -32,6 +39,8 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private FirebaseDatabase db;
     private DatabaseReference users;
+
+    private static final String TAG = "LoginActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,12 +104,48 @@ public class LoginActivity extends AppCompatActivity {
                         .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                             @Override
                             public void onSuccess(AuthResult authResult) {
-                                Log.e("LoginActivity " , "onSuccess : " + authResult.getUser().getDisplayName() + " . " + authResult.getUser().getEmail());
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
-                                finish();
-                                waitingDialog.dismiss();
+
+                                Log.e(TAG, "onSuccess");
+                                final FirebaseUser user = auth.getCurrentUser();
+
+                                if (user.isEmailVerified()){
+                                    Log.e(TAG, "isEmailVerified");
+                                    updateUI(user);
+                                    String user_Uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                                    String tabla_paciente = Common.tb_Info_Paciente;
+                                    FirebaseDatabase
+                                            .getInstance()
+                                            .getReference(tabla_paciente)
+                                            .child(user_Uid)
+                                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                    waitingDialog.dismiss();
+                                                    User user001= dataSnapshot.getValue(User.class);
+                                                    Common.currentUser = user001;
+                                                    Log.e(TAG, "currentUser ------>" + Common.currentUser.getNombre() );
+                                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                    startActivity(intent);
+                                                    finish();
+
+
+                                                }
+
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                    waitingDialog.dismiss();
+                                                    Log.e("ERROR", "DatabaseError -->" + databaseError.toString());
+                                                    updateUI(null);
+                                                }
+                                            });
+
+                                }else {
+                                    waitingDialog.dismiss();
+                                    Log.e(TAG, "NotIsEmailVerified");
+                                    updateUI(null);
+                                }
+
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
@@ -123,6 +168,18 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         dialog.show();
+    }
+
+    private void updateUI(FirebaseUser user) {
+        if (user !=null){
+            if (user.isEmailVerified() )   {
+                Toast.makeText(this, "Correo verificado", Toast.LENGTH_SHORT).show();
+           //     Snackbar.make(root, "Correo verificado", Snackbar.LENGTH_SHORT).show();
+            }
+        }else {
+            Toast.makeText(this, "correo no verificado", Toast.LENGTH_SHORT).show();
+           // Snackbar.make(root, "correo no verificado", Snackbar.LENGTH_SHORT).show();
+        }
     }
 
     public void btnregister(View view) {

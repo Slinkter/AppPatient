@@ -17,6 +17,7 @@ public class Common {
     public static final String token_tbl = "Tokens";
 
     public static User currentUser;
+
     public static Location mLastLocation;
     public static final String fcmURL = "https://fcm.googleapis.com/";
 

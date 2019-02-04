@@ -32,23 +32,24 @@
 
             <Button
                 android:id="@+id/login_button"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_width="150dp"
+                android:layout_width="@dimen/button_width_main"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/icon"
-                android:text="@string/login" />
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/custom_botton_3"
+                android:text="@string/login"
+                android:textColor="@color/color_white" />
 
             <Button
                 android:id="@+id/register_button"
-                style="@style/Widget.AppCompat.Button.Colored"
-
-                android:layout_width="150dp"
+                android:layout_width="@dimen/button_width_main"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/login_button"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/custom_botton_3"
                 android:onClick="btnregister"
                 android:text="@string/register"
-
-                android:textColor="#FFFFFF" />
+                android:textColor="@color/color_white" />
 
 
         </LinearLayout>

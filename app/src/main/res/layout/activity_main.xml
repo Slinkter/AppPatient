@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="10dp"
                 android:text="Bienvenido"
                 android:textColor="@color/grey_white_1000"
                 android:textSize="42dp"
@@ -45,56 +45,74 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="USUARIO"
-
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:visibility="gone" />
 
 
             <Button
-                android:layout_marginTop="20dp"
                 android:id="@+id/btnMedicos"
-                android:layout_width="190dp"
+                android:layout_width="@dimen/button_width_main"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Ver medicos " />
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/custom_botton_1"
+                android:text="Ver medicos "
+                android:textColor="@color/color_white" />
 
             <Button
                 android:id="@+id/btnEspecialidad"
-                android:layout_width="190dp"
+                android:layout_width="@dimen/button_width_main"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Especialidad " />
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/custom_botton_1"
+                android:text="Especialidad "
+                android:textColor="@color/color_white" />
 
             <Button
                 android:id="@+id/btnHistorial"
-                android:layout_width="190dp"
+                android:layout_width="@dimen/button_width_main"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Historial " />
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/custom_botton_1"
+                android:text="Historial "
+                android:textColor="@color/color_white" />
 
             <Button
                 android:id="@+id/btnUpdateInfo"
-                android:layout_width="190dp"
+                android:layout_width="@dimen/button_width_main"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Actualizar Datos " />
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/custom_botton_1"
+                android:text="Actualizar Datos "
+                android:textColor="@color/color_white" />
 
             <Button
                 android:id="@+id/btnUbicacion"
-                android:layout_width="190dp"
+                android:layout_width="@dimen/button_width_main"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Ubicación " />
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/custom_botton_1"
+                android:text="Ubicación "
+                android:textColor="@color/color_white" />
+
+            <Button
+                android:id="@+id/btnCerra_sesion"
+                android:layout_width="@dimen/button_width_main"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/custom_botton_2"
+                android:textColor="@color/colorRed"
+                android:text="Cerra Sesión" />
 
 
         </LinearLayout>
 
-
-        <Button
-            android:id="@+id/btnCerra_sesion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:text="Cerra Sesión" />
 
     </LinearLayout>
 
