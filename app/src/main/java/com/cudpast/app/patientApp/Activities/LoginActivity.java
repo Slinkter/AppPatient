@@ -23,6 +23,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
+import dmax.dialog.SpotsDialog;
+
 public class LoginActivity extends AppCompatActivity {
 
     private RelativeLayout root;
@@ -59,28 +61,33 @@ public class LoginActivity extends AppCompatActivity {
         final MaterialEditText edtPassword = layout_login.findViewById(R.id.edtPassowrd);
         dialog.setView(layout_login);
         dialog.setTitle(" ");
-//        dialog.setMessage("");
+
+        final SpotsDialog waitingDialog = new SpotsDialog(LoginActivity.this, R.style.DialogLogin);
+        waitingDialog.show();
+
 
         dialog.setPositiveButton("Ingresar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
                 if (TextUtils.isEmpty(edtEmail.getText().toString())) {
+                    waitingDialog.dismiss();
                     Snackbar.make(root, "Error : Usuario o contraseña incorrecto", Snackbar.LENGTH_SHORT).show();
+
                     return;
                 }
 
                 if (TextUtils.isEmpty(edtPassword.getText().toString())) {
+                    waitingDialog.dismiss();
                     Snackbar.make(root, "Error : Contraseña vacia", Snackbar.LENGTH_SHORT).show();
                     return;
                 }
 
                 if (edtEmail.getText().toString().length() < 6) {
+                    waitingDialog.dismiss();
                     Snackbar.make(root, "Error : Contraseña muy Corta", Snackbar.LENGTH_SHORT).show();
                     return;
                 }
-
-
 
 
                 //-->Login
@@ -88,11 +95,12 @@ public class LoginActivity extends AppCompatActivity {
                         .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                             @Override
                             public void onSuccess(AuthResult authResult) {
-                                Log.e("LoginActivity " , "onSuccess : " + authResult.toString());
+                                Log.e("LoginActivity " , "onSuccess : " + authResult.getUser().getDisplayName() + " . " + authResult.getUser().getEmail());
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
                                 finish();
+                                waitingDialog.dismiss();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
@@ -100,6 +108,7 @@ public class LoginActivity extends AppCompatActivity {
                                // Snackbar.make(root, "Failed" + e.getMessage(), Snackbar.LENGTH_SHORT).show();
                                 Log.e("LoginActivity " , "onFailure : " + e.getMessage());
                                 Snackbar.make(root, "Usuario o Contraseña Incorrecta", Snackbar.LENGTH_SHORT).show();
+                                waitingDialog.dismiss();
                             }
                         });
             }
@@ -109,6 +118,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
+                waitingDialog.dismiss();
             }
         });
 
