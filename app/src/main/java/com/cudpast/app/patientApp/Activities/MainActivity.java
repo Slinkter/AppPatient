@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements
     //.VerificarSiUsuarioExiste
     private void updateUI(User user) {
         if (user != null) {
-            Toast.makeText(this, "Hola" + user.getNombre(), Toast.LENGTH_SHORT).show();
             mostratInfoDelUsuario();
         } else {
             goLogIngScreen();

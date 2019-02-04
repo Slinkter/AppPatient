@@ -37,6 +37,7 @@
             android:text="firstname"
             android:textColor="#fff" />
 
+
         <TextView
             android:id="@+id/lastname"
             android:layout_width="wrap_content"
