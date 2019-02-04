@@ -1,50 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:cardElevation="10dp">
+    app:cardElevation="20dp">
 
     <LinearLayout
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:orientation="vertical">
 
+
+        <TextView
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textSize="30sp"
+            android:textColor="@color/colorCelesteDark"
+            android:text="Login"
+            android:layout_marginBottom="10dp"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
         <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/edtEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Email"
+            android:gravity="center"
+            android:hint="Correo"
             android:inputType="textEmailAddress"
             android:text=""
-            android:textColor="@color/colorPrimary"
-            android:textColorHint="@color/colorPrimary"
+            android:textColor="@color/colorCeleste"
+            android:textColorHint="@color/colorCeleste"
             android:textSize="20sp"
-
-            app:met_baseColor="@color/colorPrimary"
+            app:met_baseColor="@color/colorCeleste"
             app:met_floatingLabel="highlight"
-            app:met_primaryColor="@color/colorPrimary"
-            app:met_singleLineEllipsis="true" />
+            app:met_primaryColor="@color/colorCeleste"
+            app:met_singleLineEllipsis="false" />
 
         <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/edtPassowrd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Password"
+            android:gravity="center"
+            android:hint="Contraseña"
             android:inputType="textPassword"
             android:text=""
-            android:textColor="@color/colorPrimary"
-            android:textColorHint="@color/colorPrimary"
+            android:textColor="@color/colorCeleste"
+            android:textColorHint="@color/colorCeleste"
             android:textSize="20sp"
-
-            app:met_baseColor="@color/colorPrimary"
+            app:met_baseColor="@color/colorCeleste"
             app:met_floatingLabel="highlight"
-            app:met_primaryColor="@color/colorPrimary"
-            app:met_singleLineEllipsis="true" />
+            app:met_primaryColor="@color/colorCeleste"
+            app:met_singleLineEllipsis="false" />
 
     </LinearLayout>
-
 
 </android.support.v7.widget.CardView>

@@ -8,6 +8,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -57,43 +58,50 @@ public class LoginActivity extends AppCompatActivity {
         final MaterialEditText edtEmail = layout_login.findViewById(R.id.edtEmail);
         final MaterialEditText edtPassword = layout_login.findViewById(R.id.edtPassowrd);
         dialog.setView(layout_login);
-        dialog.setTitle("Login");
-        dialog.setMessage("Por favor ingrese Email & Contraseña ");
+        dialog.setTitle(" ");
+//        dialog.setMessage("");
 
         dialog.setPositiveButton("Ingresar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
                 if (TextUtils.isEmpty(edtEmail.getText().toString())) {
-                    Snackbar.make(root, "por favor , Ingresar correo", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(root, "Error : Usuario o contraseña incorrecto", Snackbar.LENGTH_SHORT).show();
                     return;
                 }
 
                 if (TextUtils.isEmpty(edtPassword.getText().toString())) {
-                    Snackbar.make(root, "por favor , Ingresar contraeña", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(root, "Error : Contraseña vacia", Snackbar.LENGTH_SHORT).show();
                     return;
                 }
 
                 if (edtEmail.getText().toString().length() < 6) {
-                    Snackbar.make(root, "Password to short", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(root, "Error : Contraseña muy Corta", Snackbar.LENGTH_SHORT).show();
                     return;
                 }
+
+
+
+
                 //-->Login
                 auth.signInWithEmailAndPassword(edtEmail.getText().toString(), edtPassword.getText().toString())
                         .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                             @Override
                             public void onSuccess(AuthResult authResult) {
+                                Log.e("LoginActivity " , "onSuccess : " + authResult.toString());
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
                                 finish();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Snackbar.make(root, "Failed" + e.getMessage(), Snackbar.LENGTH_SHORT).show();
-                    }
-                });
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                               // Snackbar.make(root, "Failed" + e.getMessage(), Snackbar.LENGTH_SHORT).show();
+                                Log.e("LoginActivity " , "onFailure : " + e.getMessage());
+                                Snackbar.make(root, "Usuario o Contraseña Incorrecta", Snackbar.LENGTH_SHORT).show();
+                            }
+                        });
             }
         });
 
@@ -112,5 +120,8 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
+
+
 
 }

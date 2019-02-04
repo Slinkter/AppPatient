@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorAccent">#D30808</color>
 
 
     <color name="color_white">#ffffff</color>
@@ -16,4 +16,11 @@
 
 
     <color name="btnSignIN">#1fbad6</color>
+
+    <color name="colorRed">#D30808</color>
+
+
+    <color name="colorCeleste">#039BE5</color>
+    <color name="colorCelesteDark">#0288D1</color>
+    <color name="colorAmarillo">#FFA000</color>
 </resources>

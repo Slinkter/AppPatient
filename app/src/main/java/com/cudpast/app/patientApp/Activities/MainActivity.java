@@ -36,6 +36,17 @@ public class MainActivity extends AppCompatActivity implements
         emailTextView = findViewById(R.id.emailTextView);
         auth = FirebaseAuth.getInstance();
 
+
+        // Buttons
+        findViewById(R.id.btnMedicos).setOnClickListener(this);
+        findViewById(R.id.btnEspecialidad).setOnClickListener(this);
+
+        findViewById(R.id.btnHistorial).setOnClickListener(this);
+        findViewById(R.id.btnUpdateInfo).setOnClickListener(this);
+        findViewById(R.id.btnUbicacion).setOnClickListener(this);
+        findViewById(R.id.btnCerra_sesion).setOnClickListener(this);
+
+
     }
 
     //1.Metodo Principal

@@ -15,10 +15,10 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="vertical">
 
             <ImageView
 
@@ -36,9 +36,7 @@
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/icon"
-
-                android:text="@string/login"
-                />
+                android:text="@string/login" />
 
             <Button
                 android:id="@+id/register_button"
@@ -51,7 +49,6 @@
                 android:text="@string/register"
 
                 android:textColor="#FFFFFF" />
-
 
 
         </LinearLayout>
