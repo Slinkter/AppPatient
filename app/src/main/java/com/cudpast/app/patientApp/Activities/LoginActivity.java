@@ -10,16 +10,20 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cudpast.app.patientApp.Common.Common;
 import com.cudpast.app.patientApp.Model.User;
 import com.cudpast.app.patientApp.R;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -42,6 +46,9 @@ public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
 
+    TextView txt_forgot_pwd;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +66,64 @@ public class LoginActivity extends AppCompatActivity {
                 showLoginDialog();
             }
         });
+
+        txt_forgot_pwd = findViewById(R.id.txt_forgot_password);
+        txt_forgot_pwd.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                showDialogForgotPwd();
+                return false;
+            }
+        });
+    }
+
+    private void showDialogForgotPwd() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(LoginActivity.this);
+        alertDialog.setTitle("Recuperar Contraseña");
+        alertDialog.setMessage("Escriba su correo");
+
+        LayoutInflater inflater = LayoutInflater.from(LoginActivity.this);
+        View forgot_pwd_layout = inflater.inflate(R.layout.layout_forgot_pwd, null);
+
+        final MaterialEditText editEmail = (MaterialEditText) forgot_pwd_layout.findViewById(R.id.edtEmailForgot);
+        alertDialog.setView(forgot_pwd_layout);
+
+        alertDialog.setPositiveButton("ENVIAR", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(final DialogInterface dialogInterface, int i) {
+                final SpotsDialog waitingDialog = new SpotsDialog(LoginActivity.this,R.style.DialogLogin);
+                waitingDialog.show();
+
+                auth.sendPasswordResetEmail(editEmail.getText().toString().trim())
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                dialogInterface.dismiss();
+                                waitingDialog.dismiss();
+                                Toast.makeText(LoginActivity.this, "Revise su correo", Toast.LENGTH_SHORT).show();
+
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        dialogInterface.dismiss();
+                        waitingDialog.dismiss();
+                        Toast.makeText(LoginActivity.this, "error" + e.getMessage(), Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+            }
+        });
+
+        alertDialog.setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+
+        alertDialog.show();
     }
 
     private void showLoginDialog() {
