@@ -3,16 +3,13 @@ package com.cudpast.app.patientApp.Activities;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cudpast.app.patientApp.Common.Common;
 import com.cudpast.app.patientApp.Model.User;
 import com.cudpast.app.patientApp.R;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity implements
         View.OnClickListener {
@@ -76,13 +73,13 @@ public class MainActivity extends AppCompatActivity implements
             Intent intent = new Intent(MainActivity.this, EspecialidadActivity.class);
             startActivity(intent);
         } else if (i == R.id.btnHistorial) {
-            Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+            Intent intent = new Intent(MainActivity.this, UbicacionActivity.class);
             startActivity(intent);
         } else if (i == R.id.btnUpdateInfo) {
-            Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+            Intent intent = new Intent(MainActivity.this, UbicacionActivity.class);
             startActivity(intent);
         } else if (i == R.id.btnUbicacion) {
-            Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+            Intent intent = new Intent(MainActivity.this, UbicacionActivity.class);
             startActivity(intent);
         } else if (i == R.id.btnCerra_sesion) {
             signOut();

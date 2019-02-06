@@ -14,10 +14,10 @@
         android:roundIcon="@drawable/ic_ambulance"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity android:name=".Activities.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -29,9 +29,9 @@
         <activity
             android:name=".Activities.BusinessActivity"
             android:label="@string/title_activity_business"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Activities.MapsActivity"
+            android:name=".Activities.UbicacionActivity"
             android:label="@string/title_activity_maps" />
         <activity android:name=".Activities.DoctorPerfilActivity">
             <intent-filter>
