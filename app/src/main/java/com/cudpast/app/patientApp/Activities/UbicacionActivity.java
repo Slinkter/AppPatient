@@ -17,7 +17,6 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.cudpast.app.patientApp.Common.Common;
@@ -39,8 +38,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.AutocompleteFilter;
-import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -48,7 +45,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -60,7 +56,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
-import com.google.maps.android.SphericalUtil;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -74,6 +69,8 @@ public class UbicacionActivity extends FragmentActivity implements
 
     private GoogleMap mMap;
     SupportMapFragment mapFragment;
+
+    public static final String TAG = "UbicacionActivity";
 
     // -->LocationRequest
     private static int UPDATE_INTERVAL = 5000;
@@ -287,20 +284,17 @@ public class UbicacionActivity extends FragmentActivity implements
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     Double latitud = mLastLocation.getLatitude();
                     Double longitude = mLastLocation.getLongitude();
-                    loadAllAvailableDriver(new LatLng(latitud, longitude));
+                    LatLng userLocation = new LatLng(latitud, longitude);
+                    Log.e(TAG ,  "displayLocation() --> userLocation  " + userLocation);
+                    //enviar localizacion del usuario para mapear a los doctores
+                    cargarDoctoresDisponibles(userLocation);
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                    Log.d(TAG, "ERROR : " + "Cannot get your location");
                 }
             });
-
-            final double latitude = mLastLocation.getLatitude();
-            final double longitud = mLastLocation.getLongitude();
-
-
-            loadAllAvailableDriver(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
 
 
         } else {
@@ -310,21 +304,23 @@ public class UbicacionActivity extends FragmentActivity implements
 
     }
 
-    // . loadAllAvailableDriver
-    private void loadAllAvailableDriver(final LatLng location) {
-        //1. Dibujar al usuario
+    // . cargarDoctoresDisponibles
+    private void cargarDoctoresDisponibles(final LatLng pacienteLocation) {
+        //A. Dibujar al usuario
         mMap.clear();
-        mUserMarker = mMap
-                        .addMarker(new MarkerOptions()
-                        .position(location)
-                        .icon(bitmapDescriptorFromVector(UbicacionActivity.this, R.drawable.ic_client))
-                        .title(String.format("Usted")));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 16.0f));
+        mUserMarker = mMap.addMarker(new MarkerOptions()
+                          .position(pacienteLocation)
+                          .icon(bitmapDescriptorFromVector(UbicacionActivity.this, R.drawable.ic_client))
+                          .title(String.format("Usted"))
+                          .snippet(String.format("selecione un doctor"))
+        );
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pacienteLocation, 15.5f));
 
-        //2.Obtener a todos los doctores desde Firebase
-        DatabaseReference driverLocation = FirebaseDatabase.getInstance().getReference(Common.tb_Business_Doctor);
-        GeoFire gf = new GeoFire(driverLocation);
-        GeoLocation pacienetGeo = new GeoLocation(location.latitude, location.longitude);
+        //B.Obtener a todos los doctores desde Firebase
+        DatabaseReference listDoctorLocation = FirebaseDatabase.getInstance().getReference(Common.tb_Business_Doctor);
+        GeoFire gf = new GeoFire(listDoctorLocation);
+        //C.
+        GeoLocation pacienetGeo = new GeoLocation(pacienteLocation.latitude, pacienteLocation.longitude);
         GeoQuery geoQuery = gf.queryAtLocation(pacienetGeo, distance);
         geoQuery.removeAllListeners();
         geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
@@ -377,7 +373,7 @@ public class UbicacionActivity extends FragmentActivity implements
             public void onGeoQueryReady() {
                 if (distance <= LIMIT) {
                     distance++;
-                    loadAllAvailableDriver(location);
+                    cargarDoctoresDisponibles(pacienteLocation);
                 }
             }
 

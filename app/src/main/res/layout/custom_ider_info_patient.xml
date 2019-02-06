@@ -33,6 +33,15 @@
                 android:layout_height="wrap_content"
                 android:text="USTED"
                 android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtPickupSnippet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="snip"
+                android:textStyle="normal" />
+
+
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
