@@ -86,16 +86,13 @@ public class UbicacionActivity extends FragmentActivity implements
     Location mLastLocation;
     IFCMService mService;
 
-    private DatabaseReference driversAvailable;
-    private DatabaseReference ref;
-    private GeoFire geoFire;
+    private DatabaseReference FirebaseDB_doctorAvailable;
     private Marker mUserMarker;
-    private Marker markerDestionation;
     private Button btnPickupRequest;
     private boolean isDriverFound = false;
     private String driverID = "";
-    public int radius = 1;// 1km
-    public int distance = 3;// 3km
+    private int radius = 1;     // 1km
+    private int distance = 3;   // 3km
     private static final int LIMIT = 3;
 
 
@@ -107,21 +104,23 @@ public class UbicacionActivity extends FragmentActivity implements
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         //<--
-
-        driversAvailable = FirebaseDatabase.getInstance().getReference(Common.tb_Business_Doctor);
         mService = Common.getIFCMService();
+        FirebaseDB_doctorAvailable = FirebaseDatabase.getInstance().getReference(Common.tb_Business_Doctor);
 
-        btnPickupRequest = findViewById(R.id.btnPickupRequest);
-        btnPickupRequest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!isDriverFound) {
-                    requestPickUpHere(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                } else {
-                    sendRequestToDriver(driverID);
-                }
-            }
-        });
+
+//        btnPickupRequest = findViewById(R.id.btnPickupRequest);
+//
+//
+//        btnPickupRequest.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (!isDriverFound) {
+//                    requestPickUpHere(FirebaseAuth.getInstance().getCurrentUser().getUid());
+//                } else {
+//                    sendRequestToDriver(driverID);
+//                }
+//            }
+//        });
 
         setUpLocation();
 
@@ -145,255 +144,15 @@ public class UbicacionActivity extends FragmentActivity implements
         }
     }
 
+
+
+
     //.
     private void updateFirebaseToken() {
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         DatabaseReference tokens = db.getReference(Common.token_tbl);
         Token token = new Token(FirebaseInstanceId.getInstance().getToken());
         tokens.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(token);
-    }
-    //.
-    private void createLocationRequest() {
-        //Los objetos LocationRequest se utilizan para solicitar una calidad de servicio para actualizaciones de ubicación desde FusedLocationProviderApi.
-        mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(UPDATE_INTERVAL);
-        mLocationRequest.setFastestInterval(FATEST_INTERVAL);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setSmallestDisplacement(DISPLACEMENT);
-
-    }
-
-    private void builGoogleApiClient() {
-        //El principal punto de entrada para la integración de servicios de Google Play.
-        mGoogleApiCliente = new GoogleApiClient.Builder(this).addConnectionCallbacks(this)
-                                                                     .addOnConnectionFailedListener(this)
-                                                                     .addApi(LocationServices.API)
-                                                                     .build();
-        mGoogleApiCliente.connect();
-    }
-
-    private boolean checkPlayService() {
-        //los servicios de Google Play está disponible y actualizado en este dispositivo
-        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-        if (resultCode != ConnectionResult.SUCCESS) {
-            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-                GooglePlayServicesUtil.getErrorDialog(resultCode, this, PLAY_SERVICE_RES_REQUEST).show();
-            } else {
-                Toast.makeText(this, "this device is support ", Toast.LENGTH_SHORT).show();
-                finish();
-            }
-            return false;
-        }
-        return true;
-    }
-
-
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-
-
-        try {
-            boolean isSuccess = googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.my_map_style));
-            if (!isSuccess) {
-                Log.e("ERROR", "El map no carga");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            return;
-        }
-
-        mMap = googleMap;
-
-        mMap.getUiSettings().setZoomControlsEnabled(false);
-        mMap.getUiSettings().setMyLocationButtonEnabled(true);
-        mMap.getUiSettings().setZoomGesturesEnabled(true);
-
-        mMap.setInfoWindowAdapter(new CustomInfoWindow(this));
-
-
-
-
-
-
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        displayLocation();
-        startLocationUpdates();
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        mGoogleApiCliente.connect();
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        mGoogleApiCliente.connect();
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        mLastLocation = location;
-        displayLocation();
-
-    }
-
-
-    //Metodo Auxiliar
-    //.Imagen SVG
-    private BitmapDescriptor bitmapDescriptorFromVector(Context context, @DrawableRes int vectorDrawableResourceId) {
-        Drawable background = ContextCompat.getDrawable(context, vectorDrawableResourceId);
-        background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight());
-        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId);
-        vectorDrawable.setBounds(40, 20, vectorDrawable.getIntrinsicWidth() + 40, vectorDrawable.getIntrinsicHeight() + 20);
-        Bitmap bitmap = Bitmap.createBitmap(background.getIntrinsicWidth(), background.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        background.draw(canvas);
-        vectorDrawable.draw(canvas);
-        return BitmapDescriptorFactory.fromBitmap(bitmap);
-    }
-
-    //.DisplayLocation
-    private void displayLocation() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return;
-        }
-        //Obtener GPS desde googleApiCliente
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiCliente);
-
-        if (mLastLocation != null) {
-
-
-            driversAvailable = FirebaseDatabase
-                    .getInstance()
-                    .getReference(Common.tb_Info_Doctor);
-
-            driversAvailable.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    Double latitud = mLastLocation.getLatitude();
-                    Double longitude = mLastLocation.getLongitude();
-                    LatLng userLocation = new LatLng(latitud, longitude);
-                    Log.e(TAG ,  "displayLocation() --> userLocation  " + userLocation);
-                    //enviar localizacion del usuario para mapear a los doctores
-                    cargarDoctoresDisponibles(userLocation);
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Log.d(TAG, "ERROR : " + "Cannot get your location");
-                }
-            });
-
-
-        } else {
-            Log.d("ERROR", "Cannot get your location");
-        }
-
-
-    }
-
-    // . cargarDoctoresDisponibles
-    private void cargarDoctoresDisponibles(final LatLng pacienteLocation) {
-        //A. Dibujar al usuario
-        mMap.clear();
-        mUserMarker = mMap.addMarker(new MarkerOptions()
-                          .position(pacienteLocation)
-                          .icon(bitmapDescriptorFromVector(UbicacionActivity.this, R.drawable.ic_client))
-                          .title(String.format("Usted"))
-                          .snippet(String.format("selecione un doctor"))
-        );
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pacienteLocation, 15.5f));
-
-        //B.Obtener a todos los doctores desde Firebase
-        DatabaseReference listDoctorLocation = FirebaseDatabase.getInstance().getReference(Common.tb_Business_Doctor);
-        GeoFire gf = new GeoFire(listDoctorLocation);
-        //C.
-        GeoLocation pacienetGeo = new GeoLocation(pacienteLocation.latitude, pacienteLocation.longitude);
-        GeoQuery geoQuery = gf.queryAtLocation(pacienetGeo, distance);
-        geoQuery.removeAllListeners();
-        geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
-            @Override
-            public void onKeyEntered(String key, final GeoLocation location) {
-                //use key to get email from table users
-                //table users is table when driver register account and update infomation
-                // just open your driver to check this table name
-                FirebaseDatabase
-                        .getInstance()
-                        .getReference(Common.tb_Business_Doctor)
-                        .child(key)
-                        .addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                // because rider and user model is same properties
-                                // so we can user Rider model to get user here
-                                Rider rider = dataSnapshot.getValue(Rider.class);
-                                //add Driver to map
-
-                                mMap.addMarker(new MarkerOptions()
-                                        .position(new LatLng(location.latitude, location.longitude))
-                                        .flat(true)
-                                        .title(rider.getName())
-                                        .snippet(rider.getPhone())
-                                        .icon(bitmapDescriptorFromVector(UbicacionActivity.this, R.drawable.ic_doctoraapp))
-                                );
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
-
-
-            }
-
-            @Override
-            public void onKeyExited(String key) {
-
-            }
-
-            @Override
-            public void onKeyMoved(String key, GeoLocation location) {
-
-            }
-
-            @Override
-            public void onGeoQueryReady() {
-                if (distance <= LIMIT) {
-                    distance++;
-                    cargarDoctoresDisponibles(pacienteLocation);
-                }
-            }
-
-            @Override
-            public void onGeoQueryError(DatabaseError error) {
-
-            }
-        });
-
-    }
-
-    //.
-    private void startLocationUpdates() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return;
-        }
-
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiCliente, mLocationRequest, this);
     }
 
     //.
@@ -426,6 +185,7 @@ public class UbicacionActivity extends FragmentActivity implements
         findDriver();
 
     }
+
     //.
     private void findDriver() {
 
@@ -519,6 +279,254 @@ public class UbicacionActivity extends FragmentActivity implements
 
                     }
                 });
+    }
+
+
+    //.DisplayLocation
+    private void displayLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return;
+        }
+        //Obtener GPS desde googleApiCliente
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiCliente);
+
+        if (mLastLocation != null) {
+
+
+            FirebaseDB_doctorAvailable = FirebaseDatabase
+                    .getInstance()
+                    .getReference(Common.tb_Info_Doctor);
+
+            FirebaseDB_doctorAvailable.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    Double latitud = mLastLocation.getLatitude();
+                    Double longitude = mLastLocation.getLongitude();
+                    LatLng userLocation = new LatLng(latitud, longitude);
+                    Log.e(TAG ,  "displayLocation() --> userLocation  " + userLocation);
+                    //enviar localizacion del usuario para mapear a los doctores
+                    cargarDoctoresDisponibles(userLocation);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.d(TAG, "ERROR : " + "Cannot get your location");
+                }
+            });
+
+            cargarDoctoresDisponibles(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
+
+
+        } else {
+            Log.d("ERROR", "Cannot get your location");
+        }
+
+
+    }
+
+    // . loadAllAvailableDriver - cargarDoctoresDisponibles
+    private void cargarDoctoresDisponibles(final LatLng pacienteLocation) {
+        //A. Dibujar al usuario
+        mMap.clear();
+        mUserMarker = mMap.addMarker(new MarkerOptions()
+                .position(pacienteLocation)
+                .icon(bitmapDescriptorFromVector(UbicacionActivity.this, R.drawable.ic_client))
+                .title(String.format("Usted"))
+                .snippet(String.format("selecione un doctor"))
+        );
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pacienteLocation, 14.9f));
+
+        //B.Obtener a todos los doctores desde Firebase
+        DatabaseReference listDoctorLocation = FirebaseDatabase.getInstance().getReference(Common.tb_Business_Doctor);
+        GeoFire gf = new GeoFire(listDoctorLocation);
+        //C.
+        GeoLocation pacienetGeo = new GeoLocation(pacienteLocation.latitude, pacienteLocation.longitude);
+        GeoQuery geoQuery = gf.queryAtLocation(pacienetGeo, distance);
+        geoQuery.removeAllListeners();
+        geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
+            @Override
+            public void onKeyEntered(String key, final GeoLocation location) {
+                //use key to get email from table users
+                //table users is table when driver register account and update infomation
+                // just open your driver to check this table name
+                FirebaseDatabase
+                        .getInstance()
+                        .getReference(Common.tb_Business_Doctor)
+                        .child(key)
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                // because rider and user model is same properties
+                                // so we can user Rider model to get user here
+                                Rider rider = dataSnapshot.getValue(Rider.class);
+                                //add Driver to map
+
+                                mMap.addMarker(new MarkerOptions()
+                                        .position(new LatLng(location.latitude, location.longitude))
+                                        .flat(true)
+                                        .title(rider.getName())
+                                        .snippet(rider.getPhone())
+                                        .icon(bitmapDescriptorFromVector(UbicacionActivity.this, R.drawable.ic_doctoraapp))
+                                );
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+
+            }
+
+            @Override
+            public void onKeyExited(String key) {
+
+            }
+
+            @Override
+            public void onKeyMoved(String key, GeoLocation location) {
+
+            }
+
+            @Override
+            public void onGeoQueryReady() {
+                if (distance <= LIMIT) {
+                    distance++;
+                    cargarDoctoresDisponibles(pacienteLocation);
+                }
+            }
+
+            @Override
+            public void onGeoQueryError(DatabaseError error) {
+
+            }
+        });
+
+    }
+
+    //.
+    private void createLocationRequest() {
+        //Los objetos LocationRequest se utilizan para solicitar una calidad de servicio para actualizaciones de ubicación desde FusedLocationProviderApi.
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(UPDATE_INTERVAL);
+        mLocationRequest.setFastestInterval(FATEST_INTERVAL);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setSmallestDisplacement(DISPLACEMENT);
+
+    }
+
+    private void builGoogleApiClient() {
+        //El principal punto de entrada para la integración de servicios de Google Play.
+        mGoogleApiCliente = new GoogleApiClient.Builder(this).addConnectionCallbacks(this)
+                                                                     .addOnConnectionFailedListener(this)
+                                                                     .addApi(LocationServices.API)
+                                                                     .build();
+        mGoogleApiCliente.connect();
+    }
+
+    private boolean checkPlayService() {
+        //los servicios de Google Play está disponible y actualizado en este dispositivo
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+                GooglePlayServicesUtil.getErrorDialog(resultCode, this, PLAY_SERVICE_RES_REQUEST).show();
+            } else {
+                Toast.makeText(this, "this device is support ", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case MY_PERMISSION_REQUEST_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (checkPlayService()) {
+                        builGoogleApiClient();
+                        createLocationRequest();
+                        displayLocation();
+                    }
+                }
+                break;
+        }
+
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        try {
+            boolean isSuccess = googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.my_map_style));
+            if (!isSuccess) {
+                Log.e("ERROR", "El map no carga");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+
+        mMap = googleMap;
+
+        mMap.getUiSettings().setZoomControlsEnabled(false);
+        mMap.getUiSettings().setMyLocationButtonEnabled(true);
+        mMap.getUiSettings().setZoomGesturesEnabled(true);
+        mMap.setInfoWindowAdapter(new CustomInfoWindow(this));
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        displayLocation();
+        startLocationUpdates();
+    }
+
+    //.
+    private void startLocationUpdates() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return;
+        }
+
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiCliente, mLocationRequest, this);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        mGoogleApiCliente.connect();
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        mGoogleApiCliente.connect();
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        mLastLocation = location;
+        displayLocation();
+
+    }
+
+
+    //Metodo Auxiliar
+    //.Imagen SVG
+    private BitmapDescriptor bitmapDescriptorFromVector(Context context, @DrawableRes int vectorDrawableResourceId) {
+        Drawable background = ContextCompat.getDrawable(context, vectorDrawableResourceId);
+        background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight());
+        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId);
+        vectorDrawable.setBounds(40, 20, vectorDrawable.getIntrinsicWidth() + 40, vectorDrawable.getIntrinsicHeight() + 20);
+        Bitmap bitmap = Bitmap.createBitmap(background.getIntrinsicWidth(), background.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        background.draw(canvas);
+        vectorDrawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
 
