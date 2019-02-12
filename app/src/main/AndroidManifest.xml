@@ -27,7 +27,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".Activities.BusinessActivity"
+            android:name=".Activities.DeleteBusinessActivity"
             android:label="@string/title_activity_business"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

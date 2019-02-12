@@ -70,7 +70,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class BusinessActivity extends AppCompatActivity
+public class DeleteBusinessActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
@@ -293,7 +293,7 @@ public class BusinessActivity extends AppCompatActivity
                     isDriverFound = true;
                     driverID = key;
                     btnPickupRequest.setText("Llamar al Doctor");
-                      Toast.makeText(BusinessActivity.this, "" + key, Toast.LENGTH_SHORT).show();
+                      Toast.makeText(DeleteBusinessActivity.this, "" + key, Toast.LENGTH_SHORT).show();
 
                 }
             }
@@ -315,7 +315,7 @@ public class BusinessActivity extends AppCompatActivity
                     radius++;
                     findDriver();
                 } else {
-                    Toast.makeText(BusinessActivity.this, "No hay doctores en tu zona", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DeleteBusinessActivity.this, "No hay doctores en tu zona", Toast.LENGTH_SHORT).show();
                     btnPickupRequest.setText("BUSCAR DE NUEVO");
                 }
             }
@@ -349,9 +349,9 @@ public class BusinessActivity extends AppCompatActivity
                                             Log.e("CustomerCallActivity", "response :--------->" + response);
                                             Log.e("CustomerCallActivity", "response.body().success:--------->" + response.body().success);
                                             if (response.body().success == 1) {
-                                                Toast.makeText(BusinessActivity.this, "Llamando al doctor !", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(DeleteBusinessActivity.this, "Llamando al doctor !", Toast.LENGTH_SHORT).show();
                                             } else {
-                                                Toast.makeText(BusinessActivity.this, "Failed ! ", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(DeleteBusinessActivity.this, "Failed ! ", Toast.LENGTH_SHORT).show();
                                             }
                                         }
 
