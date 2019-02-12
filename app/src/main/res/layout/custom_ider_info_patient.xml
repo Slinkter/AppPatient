@@ -20,8 +20,9 @@
 
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:padding="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -31,10 +32,13 @@
                 android:id="@+id/txtPickupInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/colorCelesteDark"
                 android:text="USTED"
                 android:textStyle="bold" />
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/txtPickupSnippet"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

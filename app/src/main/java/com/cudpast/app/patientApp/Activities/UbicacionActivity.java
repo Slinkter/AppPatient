@@ -15,18 +15,15 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cudpast.app.patientApp.Adapter.CustomInfoWindow;
 import com.cudpast.app.patientApp.Common.Common;
-import com.cudpast.app.patientApp.Model.Rider;
+import com.cudpast.app.patientApp.Model.DoctorPerfil;
 import com.cudpast.app.patientApp.R;
 import com.cudpast.app.patientApp.Remote.IFCMService;
-import com.cudpast.app.patientApp.Soporte.BSRFDoctor;
-import com.cudpast.app.patientApp.helper.CustomInfoWindow;
+import com.cudpast.app.patientApp.Adapter.BSRFDoctor;
 import com.cudpast.app.patientApp.helper.FCMResponse;
 import com.cudpast.app.patientApp.helper.Notification;
 import com.cudpast.app.patientApp.helper.Sender;
@@ -155,6 +152,10 @@ public class UbicacionActivity extends FragmentActivity implements
         mService = Common.getIFCMService();
         FirebaseDB_doctorAvailable = FirebaseDatabase.getInstance().getReference(Common.tb_Business_Doctor);
 
+        setUpLocation();
+        updateFirebaseToken();
+
+
 
 //        btnPickupRequest = findViewById(R.id.btnPickupRequest);
 //
@@ -170,8 +171,6 @@ public class UbicacionActivity extends FragmentActivity implements
 //            }
 //        });
 
-        setUpLocation();
-        updateFirebaseToken();
 
     }
 
@@ -200,7 +199,6 @@ public class UbicacionActivity extends FragmentActivity implements
             }
         }
     }
-
 
     //.
     private void updateFirebaseToken() {
@@ -258,7 +256,6 @@ public class UbicacionActivity extends FragmentActivity implements
                     isDriverFound = true;
                     driverID = key;
                     btnPickupRequest.setText("Llamar al Doctor");
-                    //   Toast.makeText(HomeActivity.this, "" + key, Toast.LENGTH_SHORT).show();
                     Log.e(TAG, "findDriver() : " + key);
 
                 }
@@ -296,9 +293,7 @@ public class UbicacionActivity extends FragmentActivity implements
 
     //.sendRequestToDoctor Enviar un requiermiento hacia el doctor
     private void sendRequestToDriver(String driverID) {
-        DatabaseReference tokens = FirebaseDatabase
-                .getInstance()
-                .getReference(Common.token_tbl);
+        DatabaseReference tokens = FirebaseDatabase.getInstance().getReference(Common.token_tbl);
 
         Log.e(TAG, "TOKEN : -->" + tokens.toString());
         //Buscar a driver por su id
@@ -349,7 +344,6 @@ public class UbicacionActivity extends FragmentActivity implements
                 });
     }
 
-
     //.DisplayLocation
     private void displayLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -362,9 +356,7 @@ public class UbicacionActivity extends FragmentActivity implements
 
         if (mLastLocation != null) {
 
-            FirebaseDB_doctorAvailable = FirebaseDatabase
-                    .getInstance()
-                    .getReference(Common.tb_Info_Doctor);
+            FirebaseDB_doctorAvailable = FirebaseDatabase.getInstance().getReference(Common.tb_Info_Doctor);
 
             FirebaseDB_doctorAvailable.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -372,9 +364,11 @@ public class UbicacionActivity extends FragmentActivity implements
                     Double latitud = mLastLocation.getLatitude();
                     Double longitude = mLastLocation.getLongitude();
                     LatLng userLocation = new LatLng(latitud, longitude);
+
+
                     Log.e(TAG, "319 : displayLocation() --> userLocation  " + userLocation);
                     //enviar localizacion del usuario para mapear a los doctores
-                    cargarDoctoresDisponibles(userLocation);
+                    loadDoctorAvailableOnMap(userLocation);
                 }
 
                 @Override
@@ -383,7 +377,7 @@ public class UbicacionActivity extends FragmentActivity implements
                 }
             });
 
-            cargarDoctoresDisponibles(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
+            loadDoctorAvailableOnMap(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
 
 
         } else {
@@ -393,22 +387,16 @@ public class UbicacionActivity extends FragmentActivity implements
 
     }
 
-    // . loadAllAvailableDriver - cargarDoctoresDisponibles
-    private void cargarDoctoresDisponibles(final LatLng pacienteLocation) {
-        //A. Dibujar al usuario
+    // . loadAllAvailableDriver - loadDoctorAvailableOnMap
+    private void loadDoctorAvailableOnMap(final LatLng pacienteLocation) {
+        //.
         mMap.clear();
-//        mUserMarker = mMap.addMarker(new MarkerOptions()
-//                .position(pacienteLocation)
-//                .icon(bitmapDescriptorFromVector(UbicacionActivity.this, R.drawable.ic_client))
-//                .title(String.format("Usted"))
-//                .snippet(String.format("selecione un doctor"))
-//        );
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pacienteLocation, 14.9f));
 
-        //B.Obtener a todos los doctores desde Firebase
+        //.Obtener a todos los doctores desde Firebase
         DatabaseReference listDoctorLocation = FirebaseDatabase.getInstance().getReference(Common.tb_Business_Doctor);
         GeoFire gf = new GeoFire(listDoctorLocation);
-        //C.
+        //.
         GeoLocation pacienetGeo = new GeoLocation(pacienteLocation.latitude, pacienteLocation.longitude);
         GeoQuery geoQuery = gf.queryAtLocation(pacienetGeo, distance);
         geoQuery.removeAllListeners();
@@ -428,16 +416,19 @@ public class UbicacionActivity extends FragmentActivity implements
                                 // because rider and user model is same properties
                                 // so we can user Rider model to get user here
                                 Log.e(TAG, "onKeyEntered " + dataSnapshot.toString());
-                                Rider rider = dataSnapshot.getValue(Rider.class);
+
+                                DoctorPerfil rider = dataSnapshot.getValue(DoctorPerfil.class);
                                 //add Driver to map
 
                                 mMap.addMarker(new MarkerOptions()
                                         .position(new LatLng(location.latitude, location.longitude))
                                         .flat(true)
-                                        .title(rider.getName())
-                                        .snippet(rider.getPhone())
+                                        .title(rider.getFirstname() + " " +  rider.getLastname())
+                                        .snippet(rider.getUid())
                                         .icon(bitmapDescriptorFromVector(UbicacionActivity.this, R.drawable.ic_doctoraapp))
                                 );
+
+                                mMap.setInfoWindowAdapter(new CustomInfoWindow(getApplicationContext()));
                             }
 
                             @Override
@@ -463,7 +454,7 @@ public class UbicacionActivity extends FragmentActivity implements
             public void onGeoQueryReady() {
                 if (distance <= LIMIT) {
                     distance++;
-                    cargarDoctoresDisponibles(pacienteLocation);
+                    loadDoctorAvailableOnMap(pacienteLocation);
                 }
             }
 
@@ -486,6 +477,7 @@ public class UbicacionActivity extends FragmentActivity implements
 
     }
 
+    //.
     private void builGoogleApiClient() {
         //El principal punto de entrada para la integración de servicios de Google Play.
         mGoogleApiCliente = new GoogleApiClient.Builder(this).addConnectionCallbacks(this)
@@ -495,6 +487,7 @@ public class UbicacionActivity extends FragmentActivity implements
         mGoogleApiCliente.connect();
     }
 
+    //.
     private boolean checkPlayService() {
         //los servicios de Google Play está disponible y actualizado en este dispositivo
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
@@ -510,6 +503,7 @@ public class UbicacionActivity extends FragmentActivity implements
         return true;
     }
 
+    //.
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -531,6 +525,7 @@ public class UbicacionActivity extends FragmentActivity implements
 
     }
 
+    //.
     @Override
     public void onMapReady(GoogleMap googleMap) {
         try {
@@ -552,7 +547,8 @@ public class UbicacionActivity extends FragmentActivity implements
                 Log.e(TAG, "latitude " + latitude);
                 Log.e(TAG, "longitud " + longitud);
                 String title = marker.getTitle();
-                String snippet = marker.getSnippet();
+                String snippet = marker.getSnippet();//pasar el uid
+
                 BSRFDoctor mBottomSheet = BSRFDoctor.newInstance(title, snippet, true);
                 mBottomSheet.show(getSupportFragmentManager(), mBottomSheet.getTag());
                 marker.showInfoWindow();
@@ -570,6 +566,7 @@ public class UbicacionActivity extends FragmentActivity implements
         getDeviceLocation();
     }
 
+    //.
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         displayLocation();
@@ -587,23 +584,25 @@ public class UbicacionActivity extends FragmentActivity implements
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiCliente, mLocationRequest, this);
     }
 
+    //.
     @Override
     public void onConnectionSuspended(int i) {
         mGoogleApiCliente.connect();
     }
 
+    //.
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         mGoogleApiCliente.connect();
     }
 
+    //.
     @Override
     public void onLocationChanged(Location location) {
         mLastLocation = location;
         displayLocation();
 
     }
-
 
     //Metodo Auxiliar
     //.Imagen SVG
@@ -619,6 +618,7 @@ public class UbicacionActivity extends FragmentActivity implements
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
+    //.
     private void getDeviceLocation() {
         /*
          * Get the best and most recent location of the device, which may be null in rare
@@ -635,8 +635,9 @@ public class UbicacionActivity extends FragmentActivity implements
                             mLastKnownLocation = task.getResult();
                             LatLng userGeoLocation = new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude());
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userGeoLocation, DEFAULT_ZOOM));
+                            Log.e(TAG, "mLocationPermissionGranted : task.isSuccessful()  " );
                         } else {
-                            Log.d(TAG, "Current location is null. Using defaults.");
+                            Log.e(TAG, "Current location is null. Using defaults.");
                             Log.e(TAG, "Exception: %s", task.getException());
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
                             mMap.getUiSettings().setMyLocationButtonEnabled(false);
@@ -649,6 +650,7 @@ public class UbicacionActivity extends FragmentActivity implements
         }
     }
 
+    //.
     private void getLocationPermission() {
         /*
          * Prompts the user for permission to use the device location.
@@ -667,6 +669,7 @@ public class UbicacionActivity extends FragmentActivity implements
         }
     }
 
+    //.
     private void updateLocationUI() {
         /*
          * Handles the result of the request for location permissions.
