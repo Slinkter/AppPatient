@@ -156,7 +156,6 @@ public class UbicacionActivity extends FragmentActivity implements
         updateFirebaseToken();
 
 
-
 //        btnPickupRequest = findViewById(R.id.btnPickupRequest);
 //
 //
@@ -415,7 +414,7 @@ public class UbicacionActivity extends FragmentActivity implements
                                 mMap.addMarker(new MarkerOptions()
                                         .position(new LatLng(location.latitude, location.longitude))
                                         .flat(true)
-                                        .title(rider.getFirstname() + " " +  rider.getLastname())
+                                        .title(rider.getFirstname() + " " + rider.getLastname())
                                         .snippet(rider.getUid())
                                         .icon(bitmapDescriptorFromVector(UbicacionActivity.this, R.drawable.ic_doctoraapp))
                                 );
@@ -534,14 +533,15 @@ public class UbicacionActivity extends FragmentActivity implements
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                String latitude = "" + marker.getPosition().latitude;
-                String longitud = "" + marker.getPosition().longitude;
+                Double latitude = marker.getPosition().latitude;
+                Double longitud = marker.getPosition().longitude;
                 Log.e(TAG, "latitude " + latitude);
                 Log.e(TAG, "longitud " + longitud);
                 String title = marker.getTitle();
                 String snippet = marker.getSnippet();//pasar el uid
 
-                BSRFDoctor mBottomSheet = BSRFDoctor.newInstance(title, snippet, true);
+                BSRFDoctor mBottomSheet = BSRFDoctor.newInstance(title, snippet, true, latitude, longitud);
+
                 mBottomSheet.show(getSupportFragmentManager(), mBottomSheet.getTag());
                 marker.showInfoWindow();
                 return true;
@@ -627,7 +627,7 @@ public class UbicacionActivity extends FragmentActivity implements
                             mLastKnownLocation = task.getResult();
                             LatLng userGeoLocation = new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude());
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userGeoLocation, DEFAULT_ZOOM));
-                            Log.e(TAG, "mLocationPermissionGranted : task.isSuccessful()  " );
+                            Log.e(TAG, "mLocationPermissionGranted : task.isSuccessful()  ");
                         } else {
                             Log.e(TAG, "Current location is null. Using defaults.");
                             Log.e(TAG, "Exception: %s", task.getException());
