@@ -164,6 +164,8 @@
                     android:layout_height="36dp"
                     android:src="@drawable/ic_specialist_user" />
 
+
+
                 <TextView
                     android:id="@+id/bs_doctorEspecialidad"
 

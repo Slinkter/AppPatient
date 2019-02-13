@@ -36,7 +36,6 @@ public class BSRFDoctor extends BottomSheetDialogFragment {
     boolean isTapOnMap;
     TextView title,snippet;
     Button btn_yes ,btn_no;
-
     TextView post_firstName;
     TextView post_lastName;
     TextView post_phone;
