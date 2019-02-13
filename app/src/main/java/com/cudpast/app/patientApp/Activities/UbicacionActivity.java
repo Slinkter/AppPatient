@@ -93,8 +93,8 @@ public class UbicacionActivity extends FragmentActivity implements
     private Button btnPickupRequest;
     private boolean isDriverFound = false;
     private String driverID = "";
-    private int radius = 1;     // 1km
-    private int distance = 3;   // 3km
+    private int radius = 3;     // 1km
+    private int distance = 5;   // 3km
     private static final int LIMIT = 10;
 
 
@@ -356,19 +356,16 @@ public class UbicacionActivity extends FragmentActivity implements
 
         if (mLastLocation != null) {
 
-            FirebaseDB_doctorAvailable = FirebaseDatabase.getInstance().getReference(Common.tb_Info_Doctor);
+            Double latitud = mLastLocation.getLatitude();
+            Double longitude = mLastLocation.getLongitude();
+            final LatLng pacienteLocation = new LatLng(latitud, longitude);
 
+            FirebaseDB_doctorAvailable = FirebaseDatabase.getInstance().getReference(Common.tb_Business_Doctor);
             FirebaseDB_doctorAvailable.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    Double latitud = mLastLocation.getLatitude();
-                    Double longitude = mLastLocation.getLongitude();
-                    LatLng userLocation = new LatLng(latitud, longitude);
-
-
-                    Log.e(TAG, "319 : displayLocation() --> userLocation  " + userLocation);
-                    //enviar localizacion del usuario para mapear a los doctores
-                    loadDoctorAvailableOnMap(userLocation);
+                    Log.e(TAG, "319 : displayLocation() --> FirebaseDB_doctorAvailable --> pacienteLocation  " + pacienteLocation);
+                    loadDoctorAvailableOnMap(pacienteLocation);
                 }
 
                 @Override
@@ -376,22 +373,17 @@ public class UbicacionActivity extends FragmentActivity implements
                     Log.d(TAG, "ERROR : " + "Cannot get your location");
                 }
             });
-
-            loadDoctorAvailableOnMap(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
-
-
+            loadDoctorAvailableOnMap(pacienteLocation);
         } else {
             Log.d("ERROR", "Cannot get your location");
         }
-
-
     }
 
     // . loadAllAvailableDriver - loadDoctorAvailableOnMap
     private void loadDoctorAvailableOnMap(final LatLng pacienteLocation) {
         //.
         mMap.clear();
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pacienteLocation, 14.9f));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pacienteLocation, 14.99f));
 
         //.Obtener a todos los doctores desde Firebase
         DatabaseReference listDoctorLocation = FirebaseDatabase.getInstance().getReference(Common.tb_Business_Doctor);

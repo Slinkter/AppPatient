@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:fitsSystemWindows="false"   >
+    android:fitsSystemWindows="false">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -22,8 +21,7 @@
                 android:background="@drawable/gradientbackground"
                 android:orientation="vertical">
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/bs_doctorImage"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
@@ -31,7 +29,7 @@
                     android:layout_marginTop="45dp"
                     android:scaleType="centerCrop"
                     app:civ_border_color="#ffffff"
-                    app:civ_border_width="1dp"          />
+                    app:civ_border_width="1dp" />
 
                 <TextView
                     android:id="@+id/bs_doctorFirstName"
@@ -43,6 +41,7 @@
                     android:textColor="#fff"
                     android:textSize="21sp"
                     android:textStyle="bold" />
+
                 <TextView
                     android:id="@+id/bs_doctorLastName"
                     android:layout_width="wrap_content"
@@ -145,13 +144,13 @@
 
 
         <LinearLayout
-            android:paddingLeft="19dp"
-            android:paddingRight="19dp"
             android:layout_width="360dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="45dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingLeft="19dp"
+            android:paddingRight="19dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -163,7 +162,6 @@
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:src="@drawable/ic_specialist_user" />
-
 
 
                 <TextView
@@ -205,50 +203,60 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:orientation="vertical">
+
                 <TextView
                     android:id="@+id/txtPickupSnippet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
                     android:text="¿Desea llamar al doctor?"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
+
                 <TextView
                     android:id="@+id/txt_doctor_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textStyle="normal" />
+                    android:textStyle="normal"
+                    android:visibility="gone" />
+
                 <TextView
                     android:id="@+id/txt_doctor_snippet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textStyle="normal" />
+                    android:textStyle="normal"
+                    android:visibility="gone" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:weightSum="2">
+
                 <Button
                     android:id="@+id/btn_yes"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Si" />
+                    android:layout_margin="1dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/custom_botton_3"
+                    android:text="Si"
+                    android:textColor="#fff" />
+
                 <Button
                     android:id="@+id/btn_no"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="No" />
+                    android:layout_margin="1dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/custom_botton_3"
+                    android:text="No"
+                    android:textColor="#fff" />
             </LinearLayout>
         </LinearLayout>
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="35dp"
-            android:background="@drawable/buttonstyle"
-            android:text="Contactar"
-            android:textColor="#fff" />
 
     </LinearLayout>
 
