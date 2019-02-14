@@ -91,6 +91,7 @@ public class LoginActivity extends AppCompatActivity {
         alertDialog.setPositiveButton("ENVIAR", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(final DialogInterface dialogInterface, int i) {
+
                 final SpotsDialog waitingDialog = new SpotsDialog(LoginActivity.this,R.style.DialogLogin);
                 waitingDialog.show();
 

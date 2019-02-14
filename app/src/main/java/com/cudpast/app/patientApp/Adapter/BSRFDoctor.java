@@ -239,19 +239,21 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
 
                             Log.e(TAG, "======================================================");
                             LatLng userGeo = new LatLng(pacienteLatitude, pacienteLongitud);
-                            Log.e(TAG, "userGeo " + userGeo);
                             Token tokenDoctor = postSnapShot.getValue(Token.class);
-                            Log.e(TAG, "postSnapShot.getValue(Token.class) " + postSnapShot.getValue(Token.class));
                             String json_lat_lng = new Gson().toJson(userGeo);
-                            Log.e(TAG, "json_lat_lng " + json_lat_lng);
                             String pacienteToken = FirebaseInstanceId.getInstance().getToken();
+
+                            Log.e(TAG, "userGeo " + userGeo);
+                            Log.e(TAG, "tokenDoctor " + tokenDoctor.toString() + " tokenDoctor : " + tokenDoctor.getToken());
+                            Log.e(TAG, "json_lat_lng " + json_lat_lng);
                             Log.e(TAG, "pacienteToken " + pacienteToken);
-                            Notification data = new Notification(pacienteToken, json_lat_lng);// envia la ubicacion lat y lng  hacia Doctor APP
+
+                            Notification notificacionData = new Notification(pacienteToken, json_lat_lng);// envia la ubicacion lat y lng  hacia Doctor APP
                             //Sender (to, Notification)
                             String doctorToken = tokenDoctor.getToken();
-                            Sender mensaje = new Sender(doctorToken, data);
+                            Sender mensaje = new Sender(doctorToken, notificacionData);
                             Log.e(TAG, "======================================================");
-                            //enviar al appDOCTOR
+
                             //enviar al appDOCTOR
                             mService.sendMessage(mensaje)
                                     .enqueue(new Callback<FCMResponse>() {
