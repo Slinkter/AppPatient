@@ -125,9 +125,6 @@ public class UbicacionActivity extends FragmentActivity implements
     private static final String KEY_CAMERA_POSITION = "camera_position";
     private static final String KEY_LOCATION = "location";
 
-    Button btn_yes, btn_no;
-
-    Marker markerDestionation;
 
 
     @Override
@@ -154,22 +151,6 @@ public class UbicacionActivity extends FragmentActivity implements
 
         setUpLocation();
         updateFirebaseToken();
-
-
-//        btnPickupRequest = findViewById(R.id.btnPickupRequest);
-//
-//
-//        btnPickupRequest.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (!isDriverFound) {
-//                    requestPickUpHere(FirebaseAuth.getInstance().getCurrentUser().getUid());
-//                } else {
-//                    sendRequestToDriver(driverID);
-//                }
-//            }
-//        });
-
 
     }
 
@@ -207,36 +188,6 @@ public class UbicacionActivity extends FragmentActivity implements
         tokens.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(token);
     }
 
-    //.
-    private void requestPickUpHere(String s) {
-
-        DatabaseReference dbRequest = FirebaseDatabase.getInstance().getReference(Common.pickup_request_tbl);
-        GeoFire mGeoFire = new GeoFire(dbRequest);
-
-        mGeoFire.setLocation(s, new GeoLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude()),
-                new GeoFire.CompletionListener() {
-                    @Override
-                    public void onComplete(String key, DatabaseError error) {
-                        // error
-                    }
-                });
-
-        if (mUserMarker.isVisible())
-            mUserMarker.remove();
-
-        mUserMarker = mMap.addMarker(new MarkerOptions()
-                .title("Paciente")
-                .snippet("buscando")
-                .position(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()))
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
-        );
-
-        mUserMarker.showInfoWindow();
-        btnPickupRequest.setText("Getting your Driver....");
-
-        findDriver();
-
-    }
 
     //.
     private void findDriver() {
@@ -291,57 +242,62 @@ public class UbicacionActivity extends FragmentActivity implements
     }
 
     //.sendRequestToDoctor Enviar un requiermiento hacia el doctor
-    private void sendRequestToDriver(String driverID) {
-        DatabaseReference tokens = FirebaseDatabase.getInstance().getReference(Common.token_tbl);
-
-        Log.e(TAG, "TOKEN : -->" + tokens.toString());
-        //Buscar a driver por su id
-        tokens
-                .orderByKey()
-                .equalTo(driverID)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for (DataSnapshot postSnapShot : dataSnapshot.getChildren()) {
-                            //convert to LatLng to json.
-                            LatLng userGeo = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-                            Log.e(TAG, "sendRequestToDoctor : postSnapShot " + postSnapShot.getValue());
-                            Token token = postSnapShot.getValue(Token.class); // Get toke object drom datbase with key
-                            String json_lat_lng = new Gson().toJson(userGeo);
-                            String pacienteToken = FirebaseInstanceId.getInstance().getToken();
-                            Log.e(TAG, "sendRequestToDoctor : pacienteToken " + pacienteToken);
-                            Notification data = new Notification(pacienteToken, json_lat_lng);// envia la ubicacion lat y lng  hacia Doctor APP
-                            //Sender (to, Notification)
-                            String doctorToken = token.getToken();
-                            Sender mensaje = new Sender(doctorToken, data);
-                            //enviar al appDOCTOR
-                            mService.sendMessage(mensaje)
-                                    .enqueue(new Callback<FCMResponse>() {
-                                        @Override
-                                        public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
-                                            Log.e("CustomerCallActivity", "response :--------->" + response);
-                                            Log.e("CustomerCallActivity", "response.body().success:--------->" + response.body().success);
-                                            if (response.body().success == 1) {
-                                                Toast.makeText(UbicacionActivity.this, "Contactando al doctor", Toast.LENGTH_SHORT).show();
-                                            } else {
-                                                Toast.makeText(UbicacionActivity.this, "Doctor Fuera de Servicio", Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call<FCMResponse> call, Throwable t) {
-                                            Log.e("ERROR", t.getMessage());
-                                        }
-                                    });
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        Log.e(TAG, " onCancelled" + databaseError.getMessage());
-                    }
-                });
-    }
+//    private void sendRequestToDriver(String driverID) {
+//        DatabaseReference tokens = FirebaseDatabase.getInstance().getReference(Common.token_tbl);
+//
+//        Log.e(TAG, "TOKEN : -->" + tokens.toString());
+//        //Buscar a driver por su id
+//        tokens
+//                .orderByKey()
+//                .equalTo(driverID)
+//                .addListenerForSingleValueEvent(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                        for (DataSnapshot postSnapShot : dataSnapshot.getChildren()) {
+//                            //convert to LatLng to json.
+//                            Log.e(TAG, "======================================================");
+//                            LatLng userGeo = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+//
+//                            Log.e(TAG, "userGeo " + userGeo);
+//                            Token tokenDoctor = postSnapShot.getValue(Token.class);
+//                            Log.e(TAG, "postSnapShot.getValue(Token.class) " + postSnapShot.getValue(Token.class));
+//                            String json_lat_lng = new Gson().toJson(userGeo);
+//                            Log.e(TAG, "json_lat_lng " + json_lat_lng);
+//                            String pacienteToken = FirebaseInstanceId.getInstance().getToken();
+//                            Log.e(TAG, "pacienteToken " + pacienteToken);
+//                            Notification data = new Notification(pacienteToken, json_lat_lng);// envia la ubicacion lat y lng  hacia Doctor APP
+//                            //Sender (to, Notification)
+//                            String doctorToken = tokenDoctor.getToken();
+//                            Sender mensaje = new Sender(doctorToken, data);
+//                            Log.e(TAG, "======================================================");
+//                            //enviar al appDOCTOR
+//                            mService.sendMessage(mensaje)
+//                                    .enqueue(new Callback<FCMResponse>() {
+//                                        @Override
+//                                        public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
+//                                            Log.e("CustomerCallActivity", "response :--------->" + response);
+//                                            Log.e("CustomerCallActivity", "response.body().success:--------->" + response.body().success);
+//                                            if (response.body().success == 1) {
+//                                                Toast.makeText(UbicacionActivity.this, "Contactando al doctor", Toast.LENGTH_SHORT).show();
+//                                            } else {
+//                                                Toast.makeText(UbicacionActivity.this, "Doctor Fuera de Servicio", Toast.LENGTH_SHORT).show();
+//                                            }
+//                                        }
+//
+//                                        @Override
+//                                        public void onFailure(Call<FCMResponse> call, Throwable t) {
+//                                            Log.e("ERROR", t.getMessage());
+//                                        }
+//                                    });
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError databaseError) {
+//                        Log.e(TAG, " onCancelled" + databaseError.getMessage());
+//                    }
+//                });
+//    }
 
     //.DisplayLocation
     private void displayLocation() {
@@ -533,14 +489,25 @@ public class UbicacionActivity extends FragmentActivity implements
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                Double latitude = marker.getPosition().latitude;
-                Double longitud = marker.getPosition().longitude;
-                Log.e(TAG, "latitude " + latitude);
-                Log.e(TAG, "longitud " + longitud);
+
+                Double doctorLatitude = marker.getPosition().latitude;
+                Double doctorLongitud = marker.getPosition().longitude;
+
+
+                Double pacienteLatitude = mLastLocation.getLatitude();
+                Double pacienteLongitud  = mLastLocation.getLongitude();
+
+
+
+
+                Log.e(TAG, "doctorLatitude " + doctorLatitude);
+                Log.e(TAG, "doctorLongitud " + doctorLongitud);
+                Log.e(TAG, "pacienteLatitude " + pacienteLatitude);
+                Log.e(TAG, "pacienteLongitud " + pacienteLongitud);
                 String title = marker.getTitle();
                 String snippet = marker.getSnippet();//pasar el uid
 
-                BSRFDoctor mBottomSheet = BSRFDoctor.newInstance(title, snippet, true, latitude, longitud);
+                BSRFDoctor mBottomSheet = BSRFDoctor.newInstance(title, snippet, true, doctorLatitude, doctorLongitud,pacienteLatitude , pacienteLongitud);
 
                 mBottomSheet.show(getSupportFragmentManager(), mBottomSheet.getTag());
                 marker.showInfoWindow();

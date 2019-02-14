@@ -1,9 +1,14 @@
 package com.cudpast.app.patientApp.Adapter;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,14 +33,25 @@ import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
 import com.firebase.geofire.GeoQueryEventListener;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
@@ -46,12 +62,13 @@ import retrofit2.Response;
 
 import static com.cudpast.app.patientApp.Common.Common.mLastLocation;
 
-public class BSRFDoctor extends BottomSheetDialogFragment {
+public class BSRFDoctor extends BottomSheetDialogFragment implements LocationListener {
 
     private static final String TAG = BSRFDoctor.class.getSimpleName();
     private String mTitle, mSnippet;
-    private Double mLatitude, mLongitud;
+    private Double mLatitude, mLongitud, pacienteLongitud, pacienteLatitude;
     boolean isTapOnMap;
+    private DatabaseReference mDatabase;
     TextView title, snippet;
     Button btn_yes, btn_no;
     TextView post_firstName;
@@ -59,23 +76,25 @@ public class BSRFDoctor extends BottomSheetDialogFragment {
     TextView post_phone;
     TextView post_especialidad;
     ImageView post_image;
-
-    private DatabaseReference mDatabase;
-
+    Location mLastLocation;
     IFCMService mService;
     String driverID;
 
 
-    public static BSRFDoctor newInstance(String title, String snippet, boolean isTapOnMap, Double latitude, Double longitud) {
+    public static BSRFDoctor newInstance(String title, String snippet, boolean isTapOnMap, Double doctorLatitude, Double doctorLongitud, Double pacienteLatitude, Double pacienteLongitud) {
         BSRFDoctor f = new BSRFDoctor();
         Bundle args = new Bundle();
         args.putString("title", title);
         args.putString("snippet", snippet);
         args.putBoolean("isTapOnMap", isTapOnMap);
-        args.putDouble("latitude", latitude);
-        args.putDouble("longitud", longitud);
+        args.putDouble("doctorLatitude", doctorLatitude);
+        args.putDouble("doctorLongitud", doctorLongitud);
+        args.putDouble("pacienteLatitude", pacienteLatitude);
+        args.putDouble("pacienteLongitud", pacienteLongitud);
+
         f.setArguments(args);
         return f;
+
     }
 
     @Override
@@ -88,14 +107,26 @@ public class BSRFDoctor extends BottomSheetDialogFragment {
         mLatitude = getArguments().getDouble("latitude");
         mLongitud = getArguments().getDouble("longitud");
 
+        pacienteLatitude = getArguments().getDouble("pacienteLatitude");
+        pacienteLongitud = getArguments().getDouble("pacienteLongitud");
+
 
     }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        mLastLocation = location;
+    }
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.botton_sheet_doctor, container, false);
+
+        // Construct a FusedLocationProviderClient.
+
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("tb_Info_Doctor");
         mDatabase.keepSynced(true);
@@ -116,6 +147,11 @@ public class BSRFDoctor extends BottomSheetDialogFragment {
         mService = Common.getIFCMService();
 
         driverID = mSnippet;
+
+
+
+        Log.e(TAG, "pacienteLatitude " + pacienteLatitude);
+        Log.e(TAG, "pacienteLongitud " + pacienteLongitud);
 
 
         if (!isTapOnMap) {
@@ -160,9 +196,12 @@ public class BSRFDoctor extends BottomSheetDialogFragment {
             btn_yes.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+
                     Toast.makeText(getContext(), "si", Toast.LENGTH_SHORT).show();
                     Log.e("driverID", driverID);
                     sendRequestToDriver(driverID);
+
 
                 }
             });
@@ -182,6 +221,8 @@ public class BSRFDoctor extends BottomSheetDialogFragment {
 
 
     //.
+
+
     private void sendRequestToDriver(String driverID) {
         DatabaseReference tokens = FirebaseDatabase.getInstance().getReference(Common.token_tbl);
 
@@ -195,16 +236,22 @@ public class BSRFDoctor extends BottomSheetDialogFragment {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot postSnapShot : dataSnapshot.getChildren()) {
                             //convert to LatLng to json.
-                            LatLng userGeo = new LatLng(mLatitude, mLongitud);
-                            Log.e(TAG, "sendRequestToDoctor : postSnapShot " + postSnapShot.getValue());
-                            Token token = postSnapShot.getValue(Token.class); // Get toke object drom datbase with key
+
+                            Log.e(TAG, "======================================================");
+                            LatLng userGeo = new LatLng(pacienteLatitude, pacienteLongitud);
+                            Log.e(TAG, "userGeo " + userGeo);
+                            Token tokenDoctor = postSnapShot.getValue(Token.class);
+                            Log.e(TAG, "postSnapShot.getValue(Token.class) " + postSnapShot.getValue(Token.class));
                             String json_lat_lng = new Gson().toJson(userGeo);
+                            Log.e(TAG, "json_lat_lng " + json_lat_lng);
                             String pacienteToken = FirebaseInstanceId.getInstance().getToken();
-                            Log.e(TAG, "sendRequestToDoctor : pacienteToken " + pacienteToken);
+                            Log.e(TAG, "pacienteToken " + pacienteToken);
                             Notification data = new Notification(pacienteToken, json_lat_lng);// envia la ubicacion lat y lng  hacia Doctor APP
                             //Sender (to, Notification)
-                            String doctorToken = token.getToken();
+                            String doctorToken = tokenDoctor.getToken();
                             Sender mensaje = new Sender(doctorToken, data);
+                            Log.e(TAG, "======================================================");
+                            //enviar al appDOCTOR
                             //enviar al appDOCTOR
                             mService.sendMessage(mensaje)
                                     .enqueue(new Callback<FCMResponse>() {
