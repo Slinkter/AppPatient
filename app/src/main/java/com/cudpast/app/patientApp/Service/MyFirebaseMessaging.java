@@ -20,24 +20,20 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-public class MyFirebaseMessaging  extends FirebaseMessagingService {
+public class MyFirebaseMessaging extends FirebaseMessagingService {
 
 
     @Override
     public void onMessageReceived(final RemoteMessage remoteMessage) {
 
-        if (remoteMessage.getNotification().getTitle().equals("Cancel")){
-            Handler handler = new Handler(Looper.getMainLooper());
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
+        if (remoteMessage.getNotification().getTitle().equals("Cancel")) {
 
-                    Toast.makeText(MyFirebaseMessaging.this, "" + remoteMessage.getNotification().getBody(), Toast.LENGTH_SHORT).show();
+            showCancelNotification(remoteMessage.getNotification().getBody());
 
-                }
-            });
-        }else  if (remoteMessage.getNotification().getTitle().equals("Arrived")){
+        } else if (remoteMessage.getNotification().getTitle().equals("Arrived")) {
+
             showArrivedNotification(remoteMessage.getNotification().getBody());
+
         }
     }
 
@@ -46,19 +42,12 @@ public class MyFirebaseMessaging  extends FirebaseMessagingService {
     public void onNewToken(String s) {
         super.onNewToken(s);
 
-        String refreshedToken1 = FirebaseInstanceId.getInstance().getToken();
-        String refreshedToken2 = FirebaseInstanceId.getInstance().getInstanceId().toString();
-
-
-        Log.e("onNewToke        : ",s);
-        Log.e("refreshedToken1  : ",refreshedToken1);
-        Log.e("refreshedToken2  : ",refreshedToken2);
 
         DatabaseReference tb_tokens = FirebaseDatabase.getInstance().getReference(Common.token_tbl);
 
         Token token = new Token(s);
 
-        if (FirebaseAuth.getInstance().getCurrentUser() !=null){
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             tb_tokens.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(token);
 
         }
@@ -68,18 +57,29 @@ public class MyFirebaseMessaging  extends FirebaseMessagingService {
     private void showArrivedNotification(String body) {
         //Only version 25
         //Create Canal de Notificacion > 26
-        PendingIntent contentIntent = PendingIntent.getActivity(getBaseContext(),0,new Intent(),PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent contentIntent = PendingIntent.getActivity(getBaseContext(), 0, new Intent(), PendingIntent.FLAG_ONE_SHOT);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext());
 
         builder.setAutoCancel(true)
-                .setDefaults(android.app.Notification.DEFAULT_LIGHTS|android.app.Notification.DEFAULT_SOUND)
+                .setDefaults(android.app.Notification.DEFAULT_LIGHTS | android.app.Notification.DEFAULT_SOUND)
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.mipmap.ic_launcher_round)
                 .setContentTitle("Arriver")
                 .setContentText(body)
                 .setContentIntent(contentIntent);
         NotificationManager manager = (NotificationManager) getBaseContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        manager.notify(1,builder.build());
+        manager.notify(1, builder.build());
 
+    }
+
+    private void showCancelNotification(final String cancel) {
+
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(MyFirebaseMessaging.this, "" + cancel, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
