@@ -508,6 +508,7 @@ public class UbicacionActivity extends FragmentActivity implements
                 String snippet = marker.getSnippet();//pasar el uid
 
                 BSRFDoctor mBottomSheet = BSRFDoctor.newInstance(title, snippet, true, doctorLatitude, doctorLongitud,pacienteLatitude , pacienteLongitud);
+                Log.e(TAG,"BSRFDoctor : " + "mBottomSheet.getTag() <-- " + mBottomSheet.getTag());
 
                 mBottomSheet.show(getSupportFragmentManager(), mBottomSheet.getTag());
                 marker.showInfoWindow();

@@ -64,6 +64,8 @@ dependencies {
     //Descargar imagenes
     implementation 'com.github.bumptech.glide:glide:4.8.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
+    // Imagen de GIF de lotti
+    implementation "com.airbnb.android:lottie:2.1.0"
 
 
 }
