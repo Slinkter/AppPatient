@@ -9,6 +9,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -37,9 +40,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="10dp"
-                    android:text="firstname"
+                    android:text="fasfs"
                     android:textColor="#fff"
-                    android:textSize="21sp"
+                    android:textSize="25sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -48,9 +51,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="10dp"
-                    android:text="lastname"
+                    android:text="sdfsd"
                     android:textColor="#fff"
-                    android:textSize="21sp"
+                    android:textSize="25sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -58,66 +61,21 @@
                 android:layout_width="400dp"
                 android:layout_height="120dp"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="275dp">
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="275dp"
+                android:layout_marginRight="50dp"
+                app:cardCornerRadius="25dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:weightSum="3">
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
 
                     <LinearLayout
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Atenciones"
-                            android:textSize="20sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingTop="10dp"
-                            android:text="125"
-                            android:textColor="@color/startblue"
-                            android:textSize="20sp"
-                            android:textStyle="bold" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Puntuación"
-                            android:textSize="20sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingTop="10dp"
-                            android:text="1205"
-                            android:textColor="@color/startblue"
-                            android:textSize="20sp"
-                            android:textStyle="bold" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
                         android:gravity="center"
                         android:orientation="vertical">
 
@@ -125,7 +83,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Consulta"
-                            android:textSize="20sp" />
+                            android:textSize="30sp"
+                            android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -135,7 +94,6 @@
                             android:textColor="@color/startblue"
                             android:textSize="20sp"
                             android:textStyle="bold" />
-
                     </LinearLayout>
                 </LinearLayout>
 
@@ -156,6 +114,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+
                 android:paddingLeft="25dp">
 
                 <ImageView
@@ -166,11 +125,11 @@
 
                 <TextView
                     android:id="@+id/bs_doctorEspecialidad"
-
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:paddingLeft="20dp"
+                    android:text="especiadlidad"
 
                     android:textStyle="bold" />
             </LinearLayout>
@@ -193,6 +152,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:paddingLeft="20dp"
+                    android:text="telefono"
 
                     android:textStyle="bold" />
             </LinearLayout>
@@ -229,31 +189,35 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:orientation="horizontal"
-                android:weightSum="2">
+                android:layout_marginBottom="50dp"
+                android:gravity="center"
+                android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/btn_yes"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="1dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/custom_botton_3"
+                    android:layout_marginRight="25dp"
+                    android:background="@drawable/custome_bottom_5"
+                    android:paddingLeft="50dp"
+                    android:paddingRight="50dp"
                     android:text="Si"
-                    android:textColor="#fff" />
+                    android:textColor="#fff"
+                    android:textSize="20dp" />
 
                 <Button
                     android:id="@+id/btn_no"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="1dp"
-                    android:layout_weight="1"
+                    android:layout_marginLeft="25dp"
                     android:background="@drawable/custom_botton_3"
+                    android:paddingLeft="50dp"
+                    android:paddingRight="50dp"
                     android:text="No"
-                    android:textColor="#fff" />
+                    android:textColor="#fff"
+                    android:textSize="20dp" />
             </LinearLayout>
         </LinearLayout>
 
