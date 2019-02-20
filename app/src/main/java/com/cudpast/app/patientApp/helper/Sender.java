@@ -2,16 +2,18 @@ package com.cudpast.app.patientApp.helper;
 
 public class Sender {
 
-    public String to ;
+    public String to;
     public Notification notification;
+    public Data data;
 
 
     public Sender() {
     }
 
-    public Sender(String to, Notification notification) {
+    public Sender(String to, Notification notification, Data data) {
         this.to = to;
         this.notification = notification;
+        this.data = data;
     }
 
     public String getTo() {
@@ -28,5 +30,13 @@ public class Sender {
 
     public void setNotification(Notification notification) {
         this.notification = notification;
+    }
+
+    public Data getData() {
+        return data;
+    }
+
+    public void setData(Data data) {
+        this.data = data;
     }
 }

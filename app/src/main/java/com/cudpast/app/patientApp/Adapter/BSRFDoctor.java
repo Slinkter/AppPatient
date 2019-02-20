@@ -25,6 +25,7 @@ import com.cudpast.app.patientApp.Common.Common;
 import com.cudpast.app.patientApp.Model.DoctorPerfil;
 import com.cudpast.app.patientApp.R;
 import com.cudpast.app.patientApp.Remote.IFCMService;
+import com.cudpast.app.patientApp.helper.Data;
 import com.cudpast.app.patientApp.helper.FCMResponse;
 import com.cudpast.app.patientApp.helper.Notification;
 import com.cudpast.app.patientApp.helper.Sender;
@@ -265,14 +266,18 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                             Token tokenDoctor = postSnapShot.getValue(Token.class);
                             String json_lat_lng = new Gson().toJson(userGeo);
                             String pacienteToken = FirebaseInstanceId.getInstance().getToken();
+
+                            //Notification
                             Notification notificacionData = new Notification(pacienteToken, json_lat_lng);// envia la ubicacion lat y lng  hacia Doctor APP
+                            //Data
+                            Data data = new Data("prueba de data" , "test of data");
 
                             Log.e(TAG,"Notification Data  : ");
                             Log.e(TAG,"pacienteToken : " + pacienteToken);
                             Log.e(TAG,"json_lat_lng : " + json_lat_lng);
                             //Sender (to, Notification)
                             String doctorToken = tokenDoctor.getToken();
-                            Sender mensaje = new Sender(doctorToken, notificacionData);
+                            Sender mensaje = new Sender(doctorToken, notificacionData,data);
                             Log.e(TAG, "======================================================");
                             //enviar al appDOCTOR
                             mService.sendMessage(mensaje)
@@ -280,7 +285,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                                         @Override
                                         public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
                                             Log.e("CustomerCallActivity", "response :--------->" + response);
-                                            Log.e("CustomerCallActivity", "response.body().success:--------->" + response.body().success);
+                                            Log.e("CustomerCallActivity", "response.descripcion().success:--------->" + response.body().success);
                                             if (response.body().success == 1) {
 //                                                Toast.makeText(UbicacionActivity.this, "Contactando al doctor", Toast.LENGTH_SHORT).show();
                                             } else {
