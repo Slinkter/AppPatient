@@ -266,6 +266,10 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                             String json_lat_lng = new Gson().toJson(userGeo);
                             String pacienteToken = FirebaseInstanceId.getInstance().getToken();
                             Notification notificacionData = new Notification(pacienteToken, json_lat_lng);// envia la ubicacion lat y lng  hacia Doctor APP
+
+                            Log.e(TAG,"Notification Data  : ");
+                            Log.e(TAG,"pacienteToken : " + pacienteToken);
+                            Log.e(TAG,"json_lat_lng : " + json_lat_lng);
                             //Sender (to, Notification)
                             String doctorToken = tokenDoctor.getToken();
                             Sender mensaje = new Sender(doctorToken, notificacionData);

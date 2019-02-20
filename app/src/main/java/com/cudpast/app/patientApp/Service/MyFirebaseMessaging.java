@@ -10,6 +10,8 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.cudpast.app.patientApp.Activities.MainActivity;
+import com.cudpast.app.patientApp.Activities.UbicacionActivity;
 import com.cudpast.app.patientApp.Common.Common;
 import com.cudpast.app.patientApp.R;
 import com.cudpast.app.patientApp.helper.Token;
@@ -79,6 +81,8 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
             @Override
             public void run() {
                 Toast.makeText(MyFirebaseMessaging.this, "" + cancel, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), UbicacionActivity.class);
+                startActivity(intent);
             }
         });
     }
