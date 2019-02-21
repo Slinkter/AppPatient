@@ -189,6 +189,11 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                         }
                     });
 
+            myDialog = new Dialog(getContext());
+            myDialog.setContentView(R.layout.pop_up_doctor);
+            myDialog.findViewById(R.id.animation_view);
+            final TextView mTextViewCountDown = myDialog.findViewById(R.id.text_view_countDown);
+
 
             btn_yes.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -199,10 +204,10 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                     sendRequestToDriver(driverID);
                     dismiss();
                     //
-                    myDialog = new Dialog(getContext());
-                    myDialog.setContentView(R.layout.pop_up_doctor);
-                    myDialog.findViewById(R.id.animation_view);
-                    final TextView mTextViewCountDown = myDialog.findViewById(R.id.text_view_countDown);
+//                    myDialog = new Dialog(getContext());
+//                    myDialog.setContentView(R.layout.pop_up_doctor);
+//                    myDialog.findViewById(R.id.animation_view);
+//                    final TextView mTextViewCountDown = myDialog.findViewById(R.id.text_view_countDown);
 
                     new CountDownTimer(mTimeLeftInMillis, 500) {
                         @Override
@@ -218,6 +223,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                         public void onFinish() {
                             myDialog.dismiss();
                             mTimeLeftInMillis = START_TIME_IN_MILLS;
+
                         }
                     }.start();
 
@@ -227,6 +233,23 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                     //
 
                     myDialog.show();
+
+
+
+
+                }
+            });
+
+            Button btn_s_cancelar;
+            btn_s_cancelar = myDialog.findViewById(R.id.btn_s_cancelar);
+            btn_s_cancelar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(myDialog.getContext(), "sadadsdad", Toast.LENGTH_SHORT).show();
+                    mTextViewCountDown.setText("");
+                    myDialog.dismiss();
+                    //todo : debe ir un intent para cancelar hacia ---
+                    cancelRequestToDriver(driverID);
 
                 }
             });
@@ -269,6 +292,68 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                             String json_lat_lng = new Gson().toJson(userGeo);
                             //Notification
                             Notification notification = new Notification("CUDPAST", "Usted tiene una solicutud de atención");// envia la ubicacion lat y lng  hacia Doctor APP
+                            //Data
+                            Data data = new Data(pToken, json_lat_lng);
+                            //Log
+                            Log.e(TAG, "doctorToken : " + dToken);
+                            Log.e(TAG, "pacienteToken : " + pToken);
+                            Log.e(TAG, "ubicacion de paciente: " + json_lat_lng);
+                            //Sender (to, Notification)
+                            Sender sender = new Sender(dToken, notification, data);
+                            mService
+                                    .sendMessage(sender)
+                                    .enqueue(new Callback<FCMResponse>() {
+                                        @Override
+                                        public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
+                                            if (response.body().success == 1) {
+                                                Log.e(TAG, "onResponse: success");
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<FCMResponse> call, Throwable t) {
+                                            Log.e(TAG, "onFailure : " + t.getMessage());
+                                        }
+                                    });
+
+
+                            Log.e(TAG, "======================================================");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Log.e(TAG, " onCancelled" + databaseError.getMessage());
+                    }
+                });
+
+
+    }
+
+    private void cancelRequestToDriver(String driverID) {
+
+        DatabaseReference tokens = FirebaseDatabase.getInstance().getReference(Common.token_tbl);
+
+        Log.e(TAG, "TOKEN : -->" + tokens.toString());
+        //Buscar a driver por su id
+        tokens
+                .orderByKey()
+                .equalTo(driverID)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot postSnapShot : dataSnapshot.getChildren()) {
+                            //convert to LatLng to json.
+                            Log.e(TAG, "======================================================");
+                            Log.e(TAG, "             sendRequestToDriver                    ");
+                            LatLng userGeo = new LatLng(pacienteLatitude, pacienteLongitud);
+                            Token tokenDoctor = postSnapShot.getValue(Token.class);
+                            //Get token doctor and paciente
+                            String dToken = tokenDoctor.getToken();
+                            String pToken = FirebaseInstanceId.getInstance().getToken();
+                            String json_lat_lng = new Gson().toJson(userGeo);
+                            //Notification
+                            Notification notification = new Notification("el usuario ha cancelado", "el usuario ha cancelado");// envia la ubicacion lat y lng  hacia Doctor APP
                             //Data
                             Data data = new Data(pToken, json_lat_lng);
                             //Log

@@ -445,7 +445,7 @@ public class UbicacionActivity extends FragmentActivity implements
                 Log.e(TAG, "pacienteLatitude " + pacienteLatitude);
                 Log.e(TAG, "pacienteLongitud " + pacienteLongitud);
                 String title = marker.getTitle();
-                String snippet = marker.getSnippet();//pasar el uid
+                String snippet = marker.getSnippet();//pasar el uid 
                 BSRFDoctor mBottomSheet = BSRFDoctor.newInstance(title, snippet, true, doctorLatitude, doctorLongitud,pacienteLatitude , pacienteLongitud);
                 Log.e(TAG,"BSRFDoctor : " + "mBottomSheet.getTag() <-- " + mBottomSheet.getTag());
 
@@ -573,10 +573,11 @@ public class UbicacionActivity extends FragmentActivity implements
         /*
          * Handles the result of the request for location permissions.
          */
-        if (mMap == null) {
-            return;
-        }
+
         try {
+            if (mMap == null) {
+                return;
+            }
             if (mLocationPermissionGranted) {
                 mMap.setMyLocationEnabled(true);
                 mMap.getUiSettings().setMyLocationButtonEnabled(true);
