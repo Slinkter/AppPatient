@@ -91,7 +91,6 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
         pacienteLongitud = getArguments().getDouble("pacienteLongitud");
 
 
-
     }
 
     //Constructor
@@ -110,7 +109,6 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
         return f;
 
     }
-
 
 
     @Override
@@ -224,8 +222,8 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                     }.start();
 
 
-                    Log.e("BSTFDoctor","myDialog" + myDialog.getContext());
-                    Log.e("BSTFDoctor","myDialog.findViewById(R.id.animation_view) <-- " + myDialog.findViewById(R.id.animation_view));
+                    Log.e("BSTFDoctor", "myDialog" + myDialog.getContext());
+                    Log.e("BSTFDoctor", "myDialog.findViewById(R.id.animation_view) <-- " + myDialog.findViewById(R.id.animation_view));
                     //
 
                     myDialog.show();
@@ -262,42 +260,41 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                         for (DataSnapshot postSnapShot : dataSnapshot.getChildren()) {
                             //convert to LatLng to json.
                             Log.e(TAG, "======================================================");
+                            Log.e(TAG, "             sendRequestToDriver                    ");
                             LatLng userGeo = new LatLng(pacienteLatitude, pacienteLongitud);
                             Token tokenDoctor = postSnapShot.getValue(Token.class);
+                            //Get token doctor and paciente
+                            String dToken = tokenDoctor.getToken();
+                            String pToken = FirebaseInstanceId.getInstance().getToken();
                             String json_lat_lng = new Gson().toJson(userGeo);
-                            String pacienteToken = FirebaseInstanceId.getInstance().getToken();
-
                             //Notification
-                            Notification notificacionData = new Notification(pacienteToken, json_lat_lng);// envia la ubicacion lat y lng  hacia Doctor APP
+                            Notification notification = new Notification("CUDPAST", "Usted tiene una solicutud de atención");// envia la ubicacion lat y lng  hacia Doctor APP
                             //Data
-                            Data data = new Data("prueba de data" , "test of data");
-
-                            Log.e(TAG,"Notification Data  : ");
-                            Log.e(TAG,"pacienteToken : " + pacienteToken);
-                            Log.e(TAG,"json_lat_lng : " + json_lat_lng);
+                            Data data = new Data(pToken, json_lat_lng);
+                            //Log
+                            Log.e(TAG, "doctorToken : " + dToken);
+                            Log.e(TAG, "pacienteToken : " + pToken);
+                            Log.e(TAG, "ubicacion de paciente: " + json_lat_lng);
                             //Sender (to, Notification)
-                            String doctorToken = tokenDoctor.getToken();
-                            Sender mensaje = new Sender(doctorToken, notificacionData,data);
-                            Log.e(TAG, "======================================================");
-                            //enviar al appDOCTOR
-                            mService.sendMessage(mensaje)
+                            Sender sender = new Sender(dToken, notification, data);
+                            mService
+                                    .sendMessage(sender)
                                     .enqueue(new Callback<FCMResponse>() {
                                         @Override
                                         public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
-                                            Log.e("CustomerCallActivity", "response :--------->" + response);
-                                            Log.e("CustomerCallActivity", "response.descripcion().success:--------->" + response.body().success);
                                             if (response.body().success == 1) {
-//                                                Toast.makeText(UbicacionActivity.this, "Contactando al doctor", Toast.LENGTH_SHORT).show();
-                                            } else {
-//                                                Toast.makeText(UbicacionActivity.this, "Doctor Fuera de Servicio", Toast.LENGTH_SHORT).show();
+                                                Log.e(TAG, "onResponse: success");
                                             }
                                         }
 
                                         @Override
                                         public void onFailure(Call<FCMResponse> call, Throwable t) {
-                                            Log.e("ERROR", t.getMessage());
+                                            Log.e(TAG, "onFailure : " + t.getMessage());
                                         }
                                     });
+
+
+                            Log.e(TAG, "======================================================");
                         }
                     }
 
@@ -309,9 +306,6 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
 
 
     }
-
-
-
 
 
 }
