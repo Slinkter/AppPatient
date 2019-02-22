@@ -19,9 +19,10 @@ public class Common {
     public static User currentUser;
 
     public static Location mLastLocation;
-    public static final String fcmURL = "https://fcm.googleapis.com/";
+
 
     public static final String googleAPIUrl = "https://maps.googleapis.com";
+    public static final String fcmURL = "https://fcm.googleapis.com/";
 
     private static double base_fare = 2.55;
     private static double time_rate = 2.55;
@@ -36,7 +37,6 @@ public class Common {
     }
 
     public static IGoogleAPI getGoogleService() {
-
         return GoogleMapApi.getClient(googleAPIUrl).create(IGoogleAPI.class);
     }
 

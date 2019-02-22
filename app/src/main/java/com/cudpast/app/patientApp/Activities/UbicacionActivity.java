@@ -319,7 +319,7 @@ public class UbicacionActivity extends FragmentActivity implements
                                         .icon(bitmapDescriptorFromVector(UbicacionActivity.this, R.drawable.ic_doctoraapp))
                                 );
 
-                                mMap.setInfoWindowAdapter(new CustomInfoWindow(getApplicationContext()));
+                              //  mMap.setInfoWindowAdapter(new CustomInfoWindow(getApplicationContext()));
                             }
 
                             @Override
