@@ -34,17 +34,17 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         if (remoteMessage.getNotification() != null && remoteMessage.getData().size() > 0) {
 
             String rpta = remoteMessage.getNotification().getTitle();
-
+            Log.e("rpta", rpta);
             if (rpta.equals("Cancel")) {
                 showCancelNotification(remoteMessage.getNotification().getBody());
             } else if (rpta.equals("Arrived")) {
                 showArrivedNotification(remoteMessage.getNotification().getBody());
             } else if (rpta.equals("Acepta")) {
                 Log.e("rpta -------------->", remoteMessage.getData().get("extra"));
-                String dToken = remoteMessage.getData().get("extra").toString();
+                String firebaseDoctorUID = remoteMessage.getData().get("extra").toString();
                 Intent intent = new Intent(getBaseContext(), GoDoctor.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("doctorToken", dToken);//
+                intent.putExtra("firebaseDoctorUID", firebaseDoctorUID);//
                 startActivity(intent);
             }
         }

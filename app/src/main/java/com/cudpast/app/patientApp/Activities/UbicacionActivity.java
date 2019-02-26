@@ -306,7 +306,7 @@ public class UbicacionActivity extends FragmentActivity implements
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 // because rider and user model is same properties
                                 // so we can user Rider model to get user here
-                                Log.e(TAG, "onKeyEntered " + dataSnapshot.toString());
+                              //  Log.e(TAG, "onKeyEntered " + dataSnapshot.toString());
 
                                 DoctorPerfil rider = dataSnapshot.getValue(DoctorPerfil.class);
                                 //add Driver to map

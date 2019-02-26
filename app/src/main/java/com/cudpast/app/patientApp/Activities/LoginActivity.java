@@ -166,7 +166,11 @@ public class LoginActivity extends AppCompatActivity {
 
 
                 //-->Login
-                auth.signInWithEmailAndPassword(edtEmail.getText().toString(), edtPassword.getText().toString())
+                String email ="luis.j.cueva@gmail.com";
+                String pwd = "MUNDOverde20";
+
+             //   auth.signInWithEmailAndPassword(edtEmail.getText().toString(), edtPassword.getText().toString())
+                auth.signInWithEmailAndPassword(email, pwd)
                         .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                             @Override
                             public void onSuccess(AuthResult authResult) {
