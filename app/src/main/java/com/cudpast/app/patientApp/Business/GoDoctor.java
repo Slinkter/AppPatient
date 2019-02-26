@@ -36,6 +36,7 @@ import com.firebase.geofire.LocationCallback;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -52,6 +53,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -63,6 +65,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -106,6 +109,9 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
     Button btnStartTrip;
     Location pickupLocation;
 
+    private FusedLocationProviderClient ubicacion;
+    private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +120,8 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
         //
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapGoDoctor);
         mapFragment.getMapAsync(this);
+
+        ubicacion = LocationServices.getFusedLocationProviderClient(this);
 
         //.Recibir de la notificacion
         if (getIntent() != null) {
@@ -195,7 +203,6 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
         }
 
 
-
     }
 
 
@@ -215,64 +222,81 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
     //.
     private void displayLocation() {
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-        ) {
+//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+//                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+//        ) {
+//            return;
+//        }
+        if (
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(GoDoctor.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+
+
             return;
         }
 
-        Common.mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiCliente);
+        ubicacion
+                .getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
 
-        if (Common.mLastLocation != null) {
-            final double latitude = Common.mLastLocation.getLatitude();
-            final double longitud = Common.mLastLocation.getLongitude();
-
-            if (pacienteMarker != null && direction != null) {
-                pacienteMarker.remove();
-                direction.remove();
-            }
-            if (direction != null) {
-                direction.remove();//remote old direction
-            }
-
-            LatLng pacientelatlng = new LatLng(latitude, longitud);
-            MarkerOptions pacienteMO = new MarkerOptions()
-                    .position(pacientelatlng)
-                    .title("USTED")
-                    .icon(BitmapDoctorApp(GoDoctor.this, R.drawable.ic_client));
-
-            pacienteMarker = mMap.addMarker(pacienteMO);
-
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pacientelatlng, 17.0f));
+                        if (location != null) {
+                            final double latitude = location.getLatitude();
+                            final double longitud = location.getLongitude();
 
 
-            Log.e(TAG, "displayLocation() :  Common.mLastLocation :" + longitud + " , " + latitude);
+                                if (pacienteMarker != null && direction != null) {
+                                    pacienteMarker.remove();
+                                    direction.remove();
+                                }
+                                if (direction != null) {
+                                    direction.remove();//remote old direction
+                                }
 
-        } else {
-            Log.d(TAG, "displayLocation()  : Error " + "Cannot get your location");
-        }
+                                LatLng pacientelatlng = new LatLng(latitude, longitud);
+                                MarkerOptions pacienteMO = new MarkerOptions()
+                                        .position(pacientelatlng)
+                                        .title("USTED")
+                                        .icon(BitmapDoctorApp(GoDoctor.this, R.drawable.ic_client));
 
-        getDirection();
+                                pacienteMarker = mMap.addMarker(pacienteMO);
+
+                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pacientelatlng, 17.0f));
+
+
+                                Log.e(TAG, "displayLocation() :  Common.mLastLocation :" + longitud + " , " + latitude);
+
+
+                            getDirection(latitude, longitud);
+
+
+
+
+                        }
+                    }
+                });
+
+
+
+
+
+
 
     }
 
-    private void getDirection() {
+    private void getDirection(double latitude, double longitud) {
         Log.e(TAG, "=============================================================");
         Log.e(TAG, "                     getDirection()                          ");
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return;
-        }
 
-
-        Common.mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiCliente);
+        final LatLng currentPosition = new LatLng(latitude, longitud);
         geoFire.getLocation(firebaseDoctorUID, new LocationCallback() {
             @Override
             public void onLocationResult(String key, GeoLocation location) {
                 if (location != null) {
 
-                    final LatLng currentPosition = new LatLng(Common.mLastLocation.getLatitude(), Common.mLastLocation.getLongitude());
+
                     //set marker to display on map
                     doctorLat = location.latitude;
                     doctorLng = location.longitude;
@@ -337,47 +361,46 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
         });
 
 
-        GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(doctorLat,doctorLng),0.05f);
+        GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(doctorLat, doctorLng), 0.05f);
         geoQuery.addGeoQueryDataEventListener(new GeoQueryDataEventListener() {
             @Override
             public void onDataEntered(DataSnapshot dataSnapshot, GeoLocation location) {
-                Log.e(TAG, " =================================") ;
-                Log.e(TAG, " dataSnapshot" + dataSnapshot) ;
-                Log.e(TAG, " onDataEntered" + location) ;
+                Log.e(TAG, " =================================");
+                Log.e(TAG, " dataSnapshot" + dataSnapshot);
+                Log.e(TAG, " onDataEntered" + location);
             }
 
             @Override
             public void onDataExited(DataSnapshot dataSnapshot) {
-                Log.e(TAG, " =================================") ;
-                Log.e(TAG, " onDataExited" + dataSnapshot) ;
+                Log.e(TAG, " =================================");
+                Log.e(TAG, " onDataExited" + dataSnapshot);
             }
 
             @Override
             public void onDataMoved(DataSnapshot dataSnapshot, GeoLocation location) {
-                Log.e(TAG, " =================================") ;
-                Log.e(TAG, " dataSnapshot" + dataSnapshot) ;
-                Log.e(TAG, " onDataMoved" + location) ;
+                Log.e(TAG, " =================================");
+                Log.e(TAG, " dataSnapshot" + dataSnapshot);
+                Log.e(TAG, " onDataMoved" + location);
             }
 
             @Override
             public void onDataChanged(DataSnapshot dataSnapshot, GeoLocation location) {
-                Log.e(TAG, " =================================") ;
-                Log.e(TAG, " dataSnapshot" + dataSnapshot) ;
-                Log.e(TAG, " onDataChanged" + location) ;
+                Log.e(TAG, " =================================");
+                Log.e(TAG, " dataSnapshot" + dataSnapshot);
+                Log.e(TAG, " onDataChanged" + location);
             }
 
             @Override
             public void onGeoQueryReady() {
-                Log.e(TAG, " onGeoQueryReady") ;
+                Log.e(TAG, " onGeoQueryReady");
 
             }
 
             @Override
             public void onGeoQueryError(DatabaseError error) {
-                Log.e(TAG, " onGeoQueryError") ;
+                Log.e(TAG, " onGeoQueryError");
             }
         });
-
 
 
     }
@@ -412,7 +435,7 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
     public void onLocationChanged(Location location) {
         Common.mLastLocation = location;
         displayLocation();
-        getDirection();
+
     }
 
 
