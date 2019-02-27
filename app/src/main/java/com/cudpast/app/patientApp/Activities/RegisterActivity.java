@@ -16,7 +16,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -28,8 +27,6 @@ import com.cudpast.app.patientApp.Common.Common;
 import com.cudpast.app.patientApp.Model.User;
 import com.cudpast.app.patientApp.R;
 import com.cudpast.app.patientApp.Soporte.VolleyRP;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -82,7 +79,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         //---------------Instancia de Firebase
         auth = FirebaseAuth.getInstance();
-        tb_Info_Paciente = FirebaseDatabase.getInstance().getReference(Common.tb_Info_Paciente);
+        tb_Info_Paciente = FirebaseDatabase.getInstance().getReference(Common.TB_INFO_PACIENTE);
         //--------------->Servidor
         volleyRP = VolleyRP.getInstance(this);
         mRequest = volleyRP.getRequestQueue();

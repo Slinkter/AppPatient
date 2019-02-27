@@ -19,10 +19,10 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.cudpast.app.patientApp.Common.Common;
+import com.cudpast.app.patientApp.Model.DoctorPerfil;
 import com.cudpast.app.patientApp.R;
 import com.cudpast.app.patientApp.Remote.IFCMService;
 import com.cudpast.app.patientApp.Remote.IGoogleAPI;
@@ -46,7 +46,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
@@ -58,6 +57,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -65,11 +65,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.cudpast.app.patientApp.Common.Common.mLastLocation;
 
 public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.OnConnectionFailedListener,
@@ -78,8 +79,6 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
 
     private GoogleMap mMap;
     public static final String TAG = GoDoctor.class.getSimpleName();
-
-    //
     //Google Play Service -->
     private static final int PLAY_SERVICE_RES_REQUEST = 7001;
     private GoogleApiClient mGoogleApiCliente;
@@ -87,16 +86,14 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
     private static int UPDATE_INTERVAL = 5000;
     private static int FATEST_INTERVAL = 3000;
     private static int DISPLACEMENT = 10;
-
     //Google Play Service <--
-
-
     public double doctorLat, doctorLng;
     public String firebaseDoctorUID;
 
-    public Circle doctorMarker;
     private Marker marketDoctorCurrent;
     public Marker pacienteMarker;
+
+    private int distance = 5;   // 3km
 
     Polyline direction;
     IGoogleAPI mService;
@@ -106,8 +103,7 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
     private DatabaseReference FirebaseDB_drivers;
 
     String requestApi = null;
-    Button btnStartTrip;
-    Location pickupLocation;
+
 
     private FusedLocationProviderClient ubicacion;
     private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1;
@@ -123,6 +119,7 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
 
         ubicacion = LocationServices.getFusedLocationProviderClient(this);
 
+
         //.Recibir de la notificacion
         if (getIntent() != null) {
             firebaseDoctorUID = getIntent().getStringExtra("firebaseDoctorUID");
@@ -133,7 +130,7 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
         mFCMService = Common.getIFCMService();
         setUpLocation();
 
-        FirebaseDB_drivers = FirebaseDatabase.getInstance().getReference(Common.tb_Business_Doctor);
+        FirebaseDB_drivers = FirebaseDatabase.getInstance().getReference(Common.TB_AVAILABLE_DOCTOR);
         FirebaseDB_drivers.keepSynced(true);
         geoFire = new GeoFire(FirebaseDB_drivers);
 
@@ -220,7 +217,7 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
     }
 
     //.
-    private void displayLocation() {
+    private void displayLocation2() {
 
 //        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
 //                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -285,6 +282,122 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
 
 
     }
+
+    private void displayLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return;
+        }
+        //Obtener GPS desde googleApiCliente
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiCliente);
+
+        if (mLastLocation != null) {
+            Double latitud = mLastLocation.getLatitude();
+            Double longitude = mLastLocation.getLongitude();
+            final LatLng pacienteLocation = new LatLng(latitud, longitude);
+            //crear un de atencion al cliente
+            FirebaseDB_drivers.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    Log.e(TAG, "319 : displayLocation() --> FirebaseDB_doctorAvailable --> pacienteLocation  " + pacienteLocation);
+                    loadDoctorAvailableOnMap(pacienteLocation);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.d(TAG, "ERROR : " + "Cannot get your location");
+                }
+            });
+            loadDoctorAvailableOnMap(pacienteLocation);
+        } else {
+            Log.d("ERROR", "Cannot get your location");
+        }
+    }
+
+
+    private void loadDoctorAvailableOnMap(final LatLng pacienteLocation) {
+        //.
+        mMap.clear();
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pacienteLocation, 14.99f));
+
+        //.Obtener a todos los doctores desde Firebase
+//        DatabaseReference listDoctorLocation = FirebaseDatabase.getInstance().getReference(Common.TB_AVAILABLE_DOCTOR);
+        GeoFire gf = new GeoFire(FirebaseDB_drivers);
+        //.
+        GeoLocation pacienetGeo = new GeoLocation(pacienteLocation.latitude, pacienteLocation.longitude);
+        GeoQuery geoQuery = gf.queryAtLocation(pacienetGeo, distance);
+        geoQuery.removeAllListeners();
+        geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
+            @Override
+            public void onKeyEntered(String key, final GeoLocation location) {
+                //use key to get email from table users
+                //table users is table when driver register account and update infomation
+                // just open your driver to check this table name
+                FirebaseDatabase
+                        .getInstance()
+                        .getReference(Common.TB_AVAILABLE_DOCTOR)
+                        .child(key)
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                // because rider and user model is same properties
+                                // so we can user Rider model to get user here
+                                //  Log.e(TAG, "onKeyEntered " + dataSnapshot.toString());
+
+                                DoctorPerfil rider = dataSnapshot.getValue(DoctorPerfil.class);
+                                //add Driver to map
+
+                                mMap.addMarker(new MarkerOptions()
+                                        .position(new LatLng(location.latitude, location.longitude))
+                                        .flat(true)
+                                        .title(rider.getFirstname() + " " + rider.getLastname())
+                                        .snippet(rider.getUid())
+                                        .icon(bitmapDescriptorFromVector(GoDoctor.this, R.drawable.ic_doctoraapp))
+                                );
+
+                                //  mMap.setInfoWindowAdapter(new CustomInfoWindow(getApplicationContext()));
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+
+            }
+
+            @Override
+            public void onKeyExited(String key) {
+
+            }
+
+            @Override
+            public void onKeyMoved(String key, GeoLocation location) {
+
+            }
+
+            @Override
+            public void onGeoQueryReady() {
+//                if (distance <= LIMIT) {
+//                    distance++;
+//                    loadDoctorAvailableOnMap(pacienteLocation);
+//                }
+            }
+
+            @Override
+            public void onGeoQueryError(DatabaseError error) {
+
+            }
+        });
+
+    }
+
+
+
+
+
 
     private void getDirection(double latitude, double longitud) {
         Log.e(TAG, "=============================================================");
@@ -433,7 +546,7 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
 
     @Override
     public void onLocationChanged(Location location) {
-        Common.mLastLocation = location;
+        mLastLocation = location;
         displayLocation();
 
     }
@@ -495,5 +608,18 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
 
 
         }
+    }
+
+
+    private BitmapDescriptor bitmapDescriptorFromVector(Context context, @DrawableRes int vectorDrawableResourceId) {
+        Drawable background = ContextCompat.getDrawable(context, vectorDrawableResourceId);
+        background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight());
+        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId);
+        vectorDrawable.setBounds(40, 20, vectorDrawable.getIntrinsicWidth() + 40, vectorDrawable.getIntrinsicHeight() + 20);
+        Bitmap bitmap = Bitmap.createBitmap(background.getIntrinsicWidth(), background.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        background.draw(canvas);
+        vectorDrawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 }

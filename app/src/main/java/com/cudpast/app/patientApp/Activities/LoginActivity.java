@@ -182,7 +182,7 @@ public class LoginActivity extends AppCompatActivity {
                                     Log.e(TAG, "isEmailVerified");
                                     updateUI(user);
                                     String user_Uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                                    String tabla_paciente = Common.tb_Info_Paciente;
+                                    String tabla_paciente = Common.TB_INFO_PACIENTE;
                                     FirebaseDatabase
                                             .getInstance()
                                             .getReference(tabla_paciente)

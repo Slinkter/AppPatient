@@ -18,15 +18,11 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.cudpast.app.patientApp.Adapter.CustomInfoWindow;
 import com.cudpast.app.patientApp.Common.Common;
 import com.cudpast.app.patientApp.Model.DoctorPerfil;
 import com.cudpast.app.patientApp.R;
 import com.cudpast.app.patientApp.Remote.IFCMService;
 import com.cudpast.app.patientApp.Adapter.BSRFDoctor;
-import com.cudpast.app.patientApp.helper.FCMResponse;
-import com.cudpast.app.patientApp.helper.Notification;
-import com.cudpast.app.patientApp.helper.Sender;
 import com.cudpast.app.patientApp.helper.Token;
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
@@ -59,11 +55,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.gson.Gson;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class UbicacionActivity extends FragmentActivity implements
         OnMapReadyCallback,
@@ -147,7 +138,7 @@ public class UbicacionActivity extends FragmentActivity implements
 
         //
         mService = Common.getIFCMService();
-        FirebaseDB_doctorAvailable = FirebaseDatabase.getInstance().getReference(Common.tb_Business_Doctor);
+        FirebaseDB_doctorAvailable = FirebaseDatabase.getInstance().getReference(Common.TB_AVAILABLE_DOCTOR);
 
         setUpLocation();
         updateFirebaseToken();
@@ -192,7 +183,7 @@ public class UbicacionActivity extends FragmentActivity implements
     //.
     private void findDriver() {
 
-        final DatabaseReference drivers = FirebaseDatabase.getInstance().getReference(Common.tb_Business_Doctor);
+        final DatabaseReference drivers = FirebaseDatabase.getInstance().getReference(Common.TB_AVAILABLE_DOCTOR);
         GeoFire gfDrivers = new GeoFire(drivers);
 
         GeoQuery geoQuery = gfDrivers.queryAtLocation(new GeoLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude()), radius);
@@ -259,7 +250,7 @@ public class UbicacionActivity extends FragmentActivity implements
             Double longitude = mLastLocation.getLongitude();
             final LatLng pacienteLocation = new LatLng(latitud, longitude);
 
-            FirebaseDB_doctorAvailable = FirebaseDatabase.getInstance().getReference(Common.tb_Business_Doctor);
+            FirebaseDB_doctorAvailable = FirebaseDatabase.getInstance().getReference(Common.TB_AVAILABLE_DOCTOR);
             FirebaseDB_doctorAvailable.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -285,7 +276,7 @@ public class UbicacionActivity extends FragmentActivity implements
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pacienteLocation, 14.99f));
 
         //.Obtener a todos los doctores desde Firebase
-        DatabaseReference listDoctorLocation = FirebaseDatabase.getInstance().getReference(Common.tb_Business_Doctor);
+        DatabaseReference listDoctorLocation = FirebaseDatabase.getInstance().getReference(Common.TB_AVAILABLE_DOCTOR);
         GeoFire gf = new GeoFire(listDoctorLocation);
         //.
         GeoLocation pacienetGeo = new GeoLocation(pacienteLocation.latitude, pacienteLocation.longitude);
@@ -299,7 +290,7 @@ public class UbicacionActivity extends FragmentActivity implements
                 // just open your driver to check this table name
                 FirebaseDatabase
                         .getInstance()
-                        .getReference(Common.tb_Info_Doctor)
+                        .getReference(Common.TB_INFO_DOCTOR)
                         .child(key)
                         .addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override

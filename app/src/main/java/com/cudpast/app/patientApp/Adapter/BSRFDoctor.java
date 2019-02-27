@@ -126,7 +126,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
         // Construct a FusedLocationProviderClient.
 
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("tb_Info_Doctor");
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("TB_INFO_DOCTOR");
         mDatabase.keepSynced(true);
 
         // llenar to_do el xml
