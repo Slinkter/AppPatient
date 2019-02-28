@@ -79,7 +79,7 @@ public class UbicacionActivity extends FragmentActivity implements
     Location mLastLocation;
     IFCMService mService;
 
-    private DatabaseReference FirebaseDB_doctorAvailable;
+    private DatabaseReference DatabaseReference_TB_AVAILABLE_DOCTOR;
     private Marker mUserMarker;
     private Button btnPickupRequest;
     private boolean isDriverFound = false;
@@ -138,7 +138,7 @@ public class UbicacionActivity extends FragmentActivity implements
 
         //
         mService = Common.getIFCMService();
-        FirebaseDB_doctorAvailable = FirebaseDatabase.getInstance().getReference(Common.TB_AVAILABLE_DOCTOR);
+        DatabaseReference_TB_AVAILABLE_DOCTOR = FirebaseDatabase.getInstance().getReference(Common.TB_AVAILABLE_DOCTOR);
 
         setUpLocation();
         updateFirebaseToken();
@@ -170,7 +170,6 @@ public class UbicacionActivity extends FragmentActivity implements
             }
         }
     }
-
     //.
     private void updateFirebaseToken() {
         FirebaseDatabase db = FirebaseDatabase.getInstance();
@@ -178,67 +177,15 @@ public class UbicacionActivity extends FragmentActivity implements
         Token token = new Token(FirebaseInstanceId.getInstance().getToken());
         tokens.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(token);
     }
-
-
     //.
-    private void findDriver() {
 
-        final DatabaseReference drivers = FirebaseDatabase.getInstance().getReference(Common.TB_AVAILABLE_DOCTOR);
-        GeoFire gfDrivers = new GeoFire(drivers);
-
-        GeoQuery geoQuery = gfDrivers.queryAtLocation(new GeoLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude()), radius);
-
-        geoQuery.removeAllListeners();
-        geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
-            @Override
-            public void onKeyEntered(String key, GeoLocation location) {
-
-                if (!isDriverFound) {
-                    isDriverFound = true;
-                    driverID = key;
-                    btnPickupRequest.setText("Llamar al Doctor");
-                    Log.e(TAG, "findDriver() : " + key);
-
-                }
-            }
-
-            @Override
-            public void onKeyExited(String key) {
-
-            }
-
-            @Override
-            public void onKeyMoved(String key, GeoLocation location) {
-
-            }
-
-            @Override
-            public void onGeoQueryReady() {
-                //aumetar el km si no doctor hay disponble
-                if (!isDriverFound && radius < LIMIT) {
-                    radius++;
-                    findDriver();
-                } else {
-                    Toast.makeText(UbicacionActivity.this, "No hay doctores en tu zona", Toast.LENGTH_SHORT).show();
-                    // btnPickupRequest.setText("BUSCAR DE NUEVO");
-                }
-            }
-
-            @Override
-            public void onGeoQueryError(DatabaseError error) {
-
-            }
-        });
-
-    }
 
 
 
     //.DisplayLocation
     private void displayLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-        ) {
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED        ) {
             return;
         }
         //Obtener GPS desde googleApiCliente
@@ -250,11 +197,10 @@ public class UbicacionActivity extends FragmentActivity implements
             Double longitude = mLastLocation.getLongitude();
             final LatLng pacienteLocation = new LatLng(latitud, longitude);
 
-            FirebaseDB_doctorAvailable = FirebaseDatabase.getInstance().getReference(Common.TB_AVAILABLE_DOCTOR);
-            FirebaseDB_doctorAvailable.addValueEventListener(new ValueEventListener() {
+            DatabaseReference_TB_AVAILABLE_DOCTOR.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    Log.e(TAG, "319 : displayLocation() --> FirebaseDB_doctorAvailable --> pacienteLocation  " + pacienteLocation);
+                    Log.e(TAG, "319 : displayLocation() --> DatabaseReference_TB_AVAILABLE_DOCTOR --> pacienteLocation  " + pacienteLocation);
                     loadDoctorAvailableOnMap(pacienteLocation);
                 }
 
@@ -276,8 +222,8 @@ public class UbicacionActivity extends FragmentActivity implements
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pacienteLocation, 14.99f));
 
         //.Obtener a todos los doctores desde Firebase
-        DatabaseReference listDoctorLocation = FirebaseDatabase.getInstance().getReference(Common.TB_AVAILABLE_DOCTOR);
-        GeoFire gf = new GeoFire(listDoctorLocation);
+
+        GeoFire gf = new GeoFire(DatabaseReference_TB_AVAILABLE_DOCTOR);
         //.
         GeoLocation pacienetGeo = new GeoLocation(pacienteLocation.latitude, pacienteLocation.longitude);
         GeoQuery geoQuery = gf.queryAtLocation(pacienetGeo, distance);

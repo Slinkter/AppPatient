@@ -100,7 +100,8 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
     IFCMService mFCMService;
     GeoFire geoFire;
 
-    private DatabaseReference FirebaseDB_drivers;
+    private DatabaseReference DatabaseReference_doctorAvailable;
+
 
     String requestApi = null;
 
@@ -130,9 +131,9 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
         mFCMService = Common.getIFCMService();
         setUpLocation();
 
-        FirebaseDB_drivers = FirebaseDatabase.getInstance().getReference(Common.TB_AVAILABLE_DOCTOR);
-        FirebaseDB_drivers.keepSynced(true);
-        geoFire = new GeoFire(FirebaseDB_drivers);
+        DatabaseReference_doctorAvailable = FirebaseDatabase.getInstance().getReference(Common.TB_SERVICIO_DOCTOR_PACIENTE);
+        DatabaseReference_doctorAvailable.keepSynced(true);
+        geoFire = new GeoFire(DatabaseReference_doctorAvailable);
 
 
     }
@@ -283,6 +284,8 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
 
     }
 
+
+    //.DisplayLocation
     private void displayLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -293,14 +296,16 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiCliente);
 
         if (mLastLocation != null) {
+
             Double latitud = mLastLocation.getLatitude();
             Double longitude = mLastLocation.getLongitude();
             final LatLng pacienteLocation = new LatLng(latitud, longitude);
-            //crear un de atencion al cliente
-            FirebaseDB_drivers.addValueEventListener(new ValueEventListener() {
+
+            DatabaseReference_doctorAvailable.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    Log.e(TAG, "319 : displayLocation() --> FirebaseDB_doctorAvailable --> pacienteLocation  " + pacienteLocation);
+                    Log.e(TAG, "319 : displayLocation() --> DatabaseReference_doctorAvailable --> pacienteLocation  " + pacienteLocation);
+                    //cada evento de cambio vuelve a llamar a loadDoctorAvailableOnMap
                     loadDoctorAvailableOnMap(pacienteLocation);
                 }
 
@@ -316,14 +321,16 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
     }
 
 
+
+    // . loadAllAvailableDriver - loadDoctorAvailableOnMap
     private void loadDoctorAvailableOnMap(final LatLng pacienteLocation) {
         //.
         mMap.clear();
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pacienteLocation, 14.99f));
 
         //.Obtener a todos los doctores desde Firebase
-//        DatabaseReference listDoctorLocation = FirebaseDatabase.getInstance().getReference(Common.TB_AVAILABLE_DOCTOR);
-        GeoFire gf = new GeoFire(FirebaseDB_drivers);
+
+        GeoFire gf = new GeoFire(DatabaseReference_doctorAvailable);
         //.
         GeoLocation pacienetGeo = new GeoLocation(pacienteLocation.latitude, pacienteLocation.longitude);
         GeoQuery geoQuery = gf.queryAtLocation(pacienetGeo, distance);
@@ -336,7 +343,7 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
                 // just open your driver to check this table name
                 FirebaseDatabase
                         .getInstance()
-                        .getReference(Common.TB_AVAILABLE_DOCTOR)
+                        .getReference(Common.TB_INFO_DOCTOR)
                         .child(key)
                         .addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
@@ -380,10 +387,7 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
 
             @Override
             public void onGeoQueryReady() {
-//                if (distance <= LIMIT) {
-//                    distance++;
-//                    loadDoctorAvailableOnMap(pacienteLocation);
-//                }
+
             }
 
             @Override
