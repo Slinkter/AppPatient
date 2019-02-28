@@ -87,6 +87,7 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
     private static int FATEST_INTERVAL = 3000;
     private static int DISPLACEMENT = 10;
     //Google Play Service <--
+
     public double doctorLat, doctorLng;
     public String firebaseDoctorUID;
 
@@ -96,6 +97,8 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
     private int distance = 5;   // 3km
 
     Polyline direction;
+
+
     IGoogleAPI mService;
     IFCMService mFCMService;
     GeoFire geoFire;
@@ -106,7 +109,7 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
     String requestApi = null;
 
 
-    private FusedLocationProviderClient ubicacion;
+    FusedLocationProviderClient ubicacion;
     private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1;
 
 
@@ -217,74 +220,6 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
-    //.
-    private void displayLocation2() {
-
-//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-//                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-//        ) {
-//            return;
-//        }
-        if (
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(GoDoctor.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_READ_CONTACTS);
-
-
-            return;
-        }
-
-        ubicacion
-                .getLastLocation()
-                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-
-                        if (location != null) {
-                            final double latitude = location.getLatitude();
-                            final double longitud = location.getLongitude();
-
-
-                                if (pacienteMarker != null && direction != null) {
-                                    pacienteMarker.remove();
-                                    direction.remove();
-                                }
-                                if (direction != null) {
-                                    direction.remove();//remote old direction
-                                }
-
-                                LatLng pacientelatlng = new LatLng(latitude, longitud);
-                                MarkerOptions pacienteMO = new MarkerOptions()
-                                        .position(pacientelatlng)
-                                        .title("USTED")
-                                        .icon(BitmapDoctorApp(GoDoctor.this, R.drawable.ic_client));
-
-                                pacienteMarker = mMap.addMarker(pacienteMO);
-
-                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pacientelatlng, 17.0f));
-
-
-                                Log.e(TAG, "displayLocation() :  Common.mLastLocation :" + longitud + " , " + latitude);
-
-
-                            getDirection(latitude, longitud);
-
-
-
-
-                        }
-                    }
-                });
-
-
-
-
-
-
-
-    }
-
-
     //.DisplayLocation
     private void displayLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -338,9 +273,7 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
         geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
             @Override
             public void onKeyEntered(String key, final GeoLocation location) {
-                //use key to get email from table users
-                //table users is table when driver register account and update infomation
-                // just open your driver to check this table name
+
                 FirebaseDatabase
                         .getInstance()
                         .getReference(Common.TB_INFO_DOCTOR)
@@ -348,12 +281,9 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
                         .addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                // because rider and user model is same properties
-                                // so we can user Rider model to get user here
-                                //  Log.e(TAG, "onKeyEntered " + dataSnapshot.toString());
+
 
                                 DoctorPerfil rider = dataSnapshot.getValue(DoctorPerfil.class);
-                                //add Driver to map
 
                                 mMap.addMarker(new MarkerOptions()
                                         .position(new LatLng(location.latitude, location.longitude))
@@ -521,41 +451,6 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
 
 
     }
-
-
-    private void startLocationUpdate() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return;
-        }
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiCliente, mLocationRequest, this);
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        displayLocation();
-        startLocationUpdate();
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        mGoogleApiCliente.connect();
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        mLastLocation = location;
-        displayLocation();
-
-    }
-
-
     //.
     private class getDireccionParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
 
@@ -625,5 +520,36 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
         background.draw(canvas);
         vectorDrawable.draw(canvas);
         return BitmapDescriptorFactory.fromBitmap(bitmap);
+    }
+
+    private void startLocationUpdate() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return;
+        }
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiCliente, mLocationRequest, this);
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        displayLocation();
+        startLocationUpdate();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        mGoogleApiCliente.connect();
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        mLastLocation = location;
+        displayLocation();
+
     }
 }
