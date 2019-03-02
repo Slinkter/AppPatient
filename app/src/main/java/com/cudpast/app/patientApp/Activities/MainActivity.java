@@ -28,29 +28,24 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
 
-
         nameTextView = findViewById(R.id.nameTextView);
         emailTextView = findViewById(R.id.emailTextView);
         auth = FirebaseAuth.getInstance();
 
-
         // Buttons
         findViewById(R.id.btnMedicos).setOnClickListener(this);
         findViewById(R.id.btnEspecialidad).setOnClickListener(this);
-
         findViewById(R.id.btnHistorial).setOnClickListener(this);
         findViewById(R.id.btnUpdateInfo).setOnClickListener(this);
         findViewById(R.id.btnUbicacion).setOnClickListener(this);
         findViewById(R.id.btnCerra_sesion).setOnClickListener(this);
 
-
     }
 
-    //1.Metodo Principal
+    //.Metodo Principal
     @Override
     protected void onStart() {
         super.onStart();
-        //commo.user.
         User currentUser = Common.currentUser;
         updateUI(currentUser);
     }
@@ -104,15 +99,13 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
-    //4.LOGIN_ACTIVITY
+    //.
     private void goLogIngScreen() {
         Intent intent = new Intent(this, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | intent.FLAG_ACTIVITY_CLEAR_TASK | intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
-
-
-
+    //.
     private void signOut() {
         auth.signOut();
         updateUI(null);

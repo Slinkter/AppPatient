@@ -164,6 +164,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                             Log.e("driverID", driverID);
                             DoctorPerfil doctorPerfil;
                             for (DataSnapshot post : dataSnapshot.getChildren()) {
+
                                 doctorPerfil = post.getValue(DoctorPerfil.class);
                                 Log.e("doctorPerfil.uid:", doctorPerfil.getUid());
                                 Log.e("doctorPerfil", doctorPerfil.toString());
@@ -194,20 +195,17 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
             myDialog.findViewById(R.id.animation_view);
             final TextView mTextViewCountDown = myDialog.findViewById(R.id.text_view_countDown);
 
-
+            //.------------------->
             btn_yes.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    Toast.makeText(getContext(), "si", Toast.LENGTH_SHORT).show();
-                    Log.e("driverID", driverID);
                     sendRequestToDriver(driverID);
+
+                    Toast.makeText(getContext(), "Enviando ...", Toast.LENGTH_SHORT).show();
+                    Log.e("driverID", driverID);
+
                     dismiss();
-                    //
-//                    myDialog = new Dialog(getContext());
-//                    myDialog.setContentView(R.layout.pop_up_doctor);
-//                    myDialog.findViewById(R.id.animation_view);
-//                    final TextView mTextViewCountDown = myDialog.findViewById(R.id.text_view_countDown);
 
                     new CountDownTimer(mTimeLeftInMillis, 500) {
                         @Override
@@ -223,37 +221,25 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                         public void onFinish() {
                             myDialog.dismiss();
                             mTimeLeftInMillis = START_TIME_IN_MILLS;
-
                         }
                     }.start();
-
-
-                    Log.e("BSTFDoctor", "myDialog" + myDialog.getContext());
-                    Log.e("BSTFDoctor", "myDialog.findViewById(R.id.animation_view) <-- " + myDialog.findViewById(R.id.animation_view));
-                    //
-
                     myDialog.show();
-
-
-
-
                 }
             });
-
+            //.------------------->
             Button btn_s_cancelar;
             btn_s_cancelar = myDialog.findViewById(R.id.btn_s_cancelar);
             btn_s_cancelar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(myDialog.getContext(), "sadadsdad", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(myDialog.getContext(), "Cancelado", Toast.LENGTH_SHORT).show();
                     mTextViewCountDown.setText("");
                     myDialog.dismiss();
-                    //todo : debe ir un intent para cancelar hacia ---
                     cancelRequestToDriver(driverID);
 
                 }
             });
-
+            //.------------------->
             btn_no.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -269,11 +255,11 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
 
     //.
     private void sendRequestToDriver(String doctorUID) {
-
+        Log.e(TAG, "======================================================");
+        Log.e(TAG, "             sendRequestToDriver                    ");
         DatabaseReference tokens = FirebaseDatabase.getInstance().getReference(Common.token_tbl);
-
         Log.e(TAG, "TOKEN : -->" + tokens.toString());
-        //Buscar a driver por su id
+        //Buscar a doctor por su id
         tokens
                 .orderByKey()
                 .equalTo(doctorUID)
@@ -282,8 +268,6 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot postSnapShot : dataSnapshot.getChildren()) {
                             //convert to LatLng to json.
-                            Log.e(TAG, "======================================================");
-                            Log.e(TAG, "             sendRequestToDriver                    ");
                             LatLng userGeo = new LatLng(pacienteLatitude, pacienteLongitud);
                             Token tokenDoctor = postSnapShot.getValue(Token.class);
                             //Get token doctor and paciente
@@ -293,7 +277,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                             //Notification
                             Notification notification = new Notification("CUDPAST", "Usted tiene una solicutud de atención");// envia la ubicacion lat y lng  hacia Doctor APP
                             //Data
-                            Data data = new Data(pToken, json_lat_lng,dToken);
+                            Data data = new Data(pToken, json_lat_lng, dToken);
                             //Log
                             Log.e(TAG, "doctorToken : " + dToken);
                             Log.e(TAG, "pacienteToken : " + pToken);
@@ -315,9 +299,6 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                                             Log.e(TAG, "onFailure : " + t.getMessage());
                                         }
                                     });
-
-
-                            Log.e(TAG, "======================================================");
                         }
                     }
 
@@ -327,15 +308,14 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                     }
                 });
 
-
+        Log.e(TAG, "======================================================");
     }
 
     private void cancelRequestToDriver(String driverID) {
 
         DatabaseReference tokens = FirebaseDatabase.getInstance().getReference(Common.token_tbl);
-
         Log.e(TAG, "TOKEN : -->" + tokens.toString());
-        //Buscar a driver por su id
+        //Buscar a doctor por su id
         tokens
                 .orderByKey()
                 .equalTo(driverID)
@@ -356,10 +336,6 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                             Notification notification = new Notification("el usuario ha cancelado", "el usuario ha cancelado");// envia la ubicacion lat y lng  hacia Doctor APP
                             //Data
                             Data data = new Data(pToken, json_lat_lng);
-                            //Log
-                            Log.e(TAG, "doctorToken : " + dToken);
-                            Log.e(TAG, "pacienteToken : " + pToken);
-                            Log.e(TAG, "ubicacion de paciente: " + json_lat_lng);
                             //Sender (to, Notification)
                             Sender sender = new Sender(dToken, notification, data);
                             mFCMService
@@ -371,15 +347,11 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                                                 Log.e(TAG, "onResponse: success");
                                             }
                                         }
-
                                         @Override
                                         public void onFailure(Call<FCMResponse> call, Throwable t) {
                                             Log.e(TAG, "onFailure : " + t.getMessage());
                                         }
                                     });
-
-
-                            Log.e(TAG, "======================================================");
                         }
                     }
 
@@ -389,7 +361,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                     }
                 });
 
-
+        Log.e(TAG, "======================================================");
     }
 
 
