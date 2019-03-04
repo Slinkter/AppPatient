@@ -76,7 +76,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
     long START_TIME_IN_MILLS = 60000;
     long mTimeLeftInMillis = START_TIME_IN_MILLS;
 
-    //parte 11 mejora de diseño
+
 
 
     @Override

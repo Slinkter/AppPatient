@@ -27,46 +27,48 @@ import com.google.gson.Gson;
 
 public class MyFirebaseMessaging extends FirebaseMessagingService {
 
+    private static String TAG = MyFirebaseMessaging.class.getSimpleName();
 
     @Override
     public void onMessageReceived(final RemoteMessage remoteMessage) {
 
-        if (remoteMessage.getNotification() != null && remoteMessage.getData().size() > 0) {
+        if (remoteMessage.getNotification() != null ) {
+            Log.e(TAG, "==========================================");
+            Log.e(TAG, "          MyFirebaseMessaging             ");
 
             String rpta = remoteMessage.getNotification().getTitle();
-            Log.e("rpta", rpta);
-            if (rpta.equals("Cancel")) {
+            Log.e(TAG, " rpta : "+ rpta);
+
+            if (rpta.equalsIgnoreCase("Cancel")) {
                 showCancelNotification(remoteMessage.getNotification().getBody());
-            } else if (rpta.equals("Arrived")) {
+            } else if (rpta.equalsIgnoreCase("Arrived")) {
                 showArrivedNotification(remoteMessage.getNotification().getBody());
-            } else if (rpta.equals("Acepta")) {
-                Log.e("rpta -------------->", remoteMessage.getData().get("extra"));
-                String firebaseDoctorUID = remoteMessage.getData().get("extra").toString();
-                Intent intent = new Intent(getBaseContext(), GoDoctor.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("firebaseDoctorUID", firebaseDoctorUID);//
-                startActivity(intent);
+            } else if (rpta.equalsIgnoreCase("Acepta")) {
+                showAceptNotification(remoteMessage.getData().get("extra").toString());
             }
         }
 
-
     }
 
+    private void showCancelNotification(final String cancel) {
+        //todo En la appDoctor , el doctor se pone off pero en appPaciente no actualiza esto
+        Log.e(TAG, "          showCancelNotification             ");
 
-    @Override
-    public void onNewToken(String s) {
-        super.onNewToken(s);
-        DatabaseReference tb_tokens = FirebaseDatabase.getInstance().getReference(Common.token_tbl);
-        Token token = new Token(s);
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            tb_tokens.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(token);
-        }
-
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(MyFirebaseMessaging.this, "" + cancel, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), UbicacionActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
     }
-
     private void showArrivedNotification(String body) {
         //Only version 25
         //Create Canal de Notificacion > 26
+        Log.e(TAG, "          showArrivedNotification             ");
         PendingIntent contentIntent = PendingIntent.getActivity(getBaseContext(), 0, new Intent(), PendingIntent.FLAG_ONE_SHOT);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext());
 
@@ -82,17 +84,33 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
 
     }
 
-    private void showCancelNotification(final String cancel) {
-        //todo En la appDoctor , el doctor se pone off pero en appPaciente no actualiza esto
-        Handler handler = new Handler(Looper.getMainLooper());
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(MyFirebaseMessaging.this, "" + cancel, Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), UbicacionActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
-        });
+    private void showAceptNotification(String extra) {
+        Log.e(TAG, "          showAceptNotification             ");
+        String firebaseDoctorUID = extra;
+
+        Intent intent = new Intent(getBaseContext(), GoDoctor.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("firebaseDoctorUID", firebaseDoctorUID);//
+        startActivity(intent);
     }
+
+
+
+
+
+
+
+
+    @Override
+    public void onNewToken(String s) {
+        super.onNewToken(s);
+        DatabaseReference tb_tokens = FirebaseDatabase.getInstance().getReference(Common.token_tbl);
+        Token token = new Token(s);
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            tb_tokens.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(token);
+        }
+
+    }
+
+
 }
