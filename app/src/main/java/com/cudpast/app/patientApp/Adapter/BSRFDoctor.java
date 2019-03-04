@@ -221,8 +221,14 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
 
                         @Override
                         public void onFinish() {
-                            myDialog.dismiss();
-                            mTimeLeftInMillis = START_TIME_IN_MILLS;
+                            try{
+                                mTimeLeftInMillis = START_TIME_IN_MILLS;
+                                myDialog.dismiss();
+
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+
                         }
                     }.start();
                     myDialog.show();
