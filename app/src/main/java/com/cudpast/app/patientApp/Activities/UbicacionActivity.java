@@ -350,6 +350,7 @@ public class UbicacionActivity extends FragmentActivity implements
         }
 
         updateLocationUI();
+        //todo problem
 
     }
 
@@ -497,7 +498,7 @@ public class UbicacionActivity extends FragmentActivity implements
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             mLocationPermissionGranted = true;
-        } else {
+        } else {//todo promblem 2
             ActivityCompat.requestPermissions(this,
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
                     PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
@@ -520,6 +521,7 @@ public class UbicacionActivity extends FragmentActivity implements
             } else {
                 mMap.setMyLocationEnabled(false);
                 mMap.getUiSettings().setMyLocationButtonEnabled(false);
+                //todo problem 3
                 mLastKnownLocation = null;
                 getLocationPermission();
             }

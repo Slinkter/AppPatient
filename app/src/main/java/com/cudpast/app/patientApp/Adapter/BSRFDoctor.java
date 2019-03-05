@@ -77,8 +77,6 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
     long mTimeLeftInMillis = START_TIME_IN_MILLS;
 
 
-
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
