@@ -55,7 +55,7 @@ import retrofit2.Response;
 public class BSRFDoctor extends BottomSheetDialogFragment implements LocationListener {
 
     private static final String TAG = BSRFDoctor.class.getSimpleName();
-    private String mTitle, mSnippet;
+    private String mTitle, doctorUID;
     private Double mLatitude, mLongitud, pacienteLongitud, pacienteLatitude;
     boolean isTapOnMap;
     private DatabaseReference mDatabase;
@@ -77,36 +77,56 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
     long mTimeLeftInMillis = START_TIME_IN_MILLS;
 
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
-        mTitle = getArguments().getString("title");
-        mSnippet = getArguments().getString("snippet");
-        isTapOnMap = getArguments().getBoolean("isTapOnMap");
-        mLatitude = getArguments().getDouble("latitude");
-        mLongitud = getArguments().getDouble("longitud");
-
-        pacienteLatitude = getArguments().getDouble("pacienteLatitude");
-        pacienteLongitud = getArguments().getDouble("pacienteLongitud");
-
-
-    }
 
     //Constructor
-    public static BSRFDoctor newInstance(String title, String snippet, boolean isTapOnMap, Double doctorLatitude, Double doctorLongitud, Double pacienteLatitude, Double pacienteLongitud) {
+    public static BSRFDoctor newInstance(String title, String doctorUID, boolean isTapOnMap, Double doctorLatitude, Double doctorLongitud, Double pacienteLatitude, Double pacienteLongitud) {
         BSRFDoctor f = new BSRFDoctor();
         Bundle args = new Bundle();
+
         args.putString("title", title);
-        args.putString("snippet", snippet);
+        args.putString("doctorUID", doctorUID);//<---
+
         args.putBoolean("isTapOnMap", isTapOnMap);
+
         args.putDouble("doctorLatitude", doctorLatitude);
         args.putDouble("doctorLongitud", doctorLongitud);
+
         args.putDouble("pacienteLatitude", pacienteLatitude);
         args.putDouble("pacienteLongitud", pacienteLongitud);
 
         f.setArguments(args);
         return f;
+
+    }
+
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mTitle = getArguments().getString("title");
+        doctorUID = getArguments().getString("doctorUID");
+
+        isTapOnMap = getArguments().getBoolean("isTapOnMap");
+
+        mLatitude = getArguments().getDouble("doctorLatitude");
+        mLongitud = getArguments().getDouble("doctorLongitud");
+
+        pacienteLatitude = getArguments().getDouble("pacienteLatitude");
+        pacienteLongitud = getArguments().getDouble("pacienteLongitud");
+
+
+        Log.e(TAG, "title " + title);
+        Log.e(TAG, "doctorUID " + doctorUID);
+
+        Log.e(TAG, "doctorLatitude " + mLatitude);
+        Log.e(TAG, "doctorLongitud " + mLongitud);
+
+        Log.e(TAG, "pacienteLatitude " + pacienteLatitude);
+        Log.e(TAG, "pacienteLongitud " + pacienteLongitud);
+
 
     }
 
@@ -126,7 +146,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
         // Construct a FusedLocationProviderClient.
 
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("TB_INFO_DOCTOR");
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("tb_Info_Doctor");
         mDatabase.keepSynced(true);
 
         // llenar to_do el xml
@@ -144,51 +164,57 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
 
         mFCMService = Common.getIFCMService();
 
-        driverID = mSnippet;
+
 
 
         Log.e(TAG, "pacienteLatitude " + pacienteLatitude);
         Log.e(TAG, "pacienteLongitud " + pacienteLongitud);
 
+        driverID = doctorUID;
 
         if (!isTapOnMap) {
 
         } else {
+            try {
+                mDatabase
+                        .orderByKey()
+                        .equalTo(driverID)
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                Log.e("driverID", driverID);
+                                DoctorPerfil doctorPerfil;
+                                for (DataSnapshot post : dataSnapshot.getChildren()) {
 
-            mDatabase
-                    .orderByKey()
-                    .equalTo(driverID)
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            Log.e("driverID", driverID);
-                            DoctorPerfil doctorPerfil;
-                            for (DataSnapshot post : dataSnapshot.getChildren()) {
+                                    doctorPerfil = post.getValue(DoctorPerfil.class);
+                                    Log.e("doctorPerfil.uid:", doctorPerfil.getUid());
+                                    Log.e("doctorPerfil", doctorPerfil.toString());
 
-                                doctorPerfil = post.getValue(DoctorPerfil.class);
-                                Log.e("doctorPerfil.uid:", doctorPerfil.getUid());
-                                Log.e("doctorPerfil", doctorPerfil.toString());
+                                    title.setText(doctorPerfil.getFirstname());
+                                    snippet.setText(doctorPerfil.getCorreoG());
 
-                                title.setText(doctorPerfil.getFirstname());
-                                snippet.setText(doctorPerfil.getCorreoG());
-
-                                post_firstName.setText(doctorPerfil.getFirstname());
-                                post_lastName.setText(doctorPerfil.getLastname());
-                                post_phone.setText(doctorPerfil.getNumphone());
-                                post_especialidad.setText(doctorPerfil.getEspecialidad());
-                                Picasso.with(getContext())
-                                        .load(doctorPerfil.getImage())
-                                        .resize(300, 300)
-                                        .centerInside().
-                                        into(post_image);
+                                    post_firstName.setText(doctorPerfil.getFirstname());
+                                    post_lastName.setText(doctorPerfil.getLastname());
+                                    post_phone.setText(doctorPerfil.getNumphone());
+                                    post_especialidad.setText(doctorPerfil.getEspecialidad());
+                                    Picasso.with(getContext())
+                                            .load(doctorPerfil.getImage())
+                                            .resize(300, 300)
+                                            .centerInside().
+                                            into(post_image);
+                                }
                             }
-                        }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                        }
-                    });
+                            }
+                        });
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+
 
             myDialog = new Dialog(getContext());
             myDialog.setContentView(R.layout.pop_up_doctor);
@@ -264,7 +290,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
         Log.e(TAG, "======================================================");
         Log.e(TAG, "             sendRequestToDriver                    ");
         DatabaseReference tokens = FirebaseDatabase.getInstance().getReference(Common.token_tbl);
-        Log.e(TAG, "TOKEN : -->" + tokens.toString());
+        Log.e(TAG, "DatabaseReference TOKEN : -->" + tokens.toString());
         //Buscar a doctor por su id
         tokens
                 .orderByKey()

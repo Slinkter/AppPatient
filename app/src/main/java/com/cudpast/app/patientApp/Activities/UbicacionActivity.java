@@ -80,6 +80,7 @@ public class UbicacionActivity extends FragmentActivity implements
     IFCMService mService;
 
     private DatabaseReference DatabaseReference_TB_AVAILABLE_DOCTOR;
+    private DatabaseReference DatabaseReference_TB_INFO_DOCTOR;
     private Marker mUserMarker;
     private Button btnPickupRequest;
     private boolean isDriverFound = false;
@@ -139,7 +140,7 @@ public class UbicacionActivity extends FragmentActivity implements
         //
         mService = Common.getIFCMService();
         DatabaseReference_TB_AVAILABLE_DOCTOR = FirebaseDatabase.getInstance().getReference(Common.TB_AVAILABLE_DOCTOR);
-
+        DatabaseReference_TB_INFO_DOCTOR = FirebaseDatabase.getInstance().getReference(Common.TB_INFO_DOCTOR);
         setUpLocation();
         updateFirebaseToken();
 
@@ -243,9 +244,15 @@ public class UbicacionActivity extends FragmentActivity implements
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 // because rider and user model is same properties
                                 // so we can user Rider model to get user here
-                              //  Log.e(TAG, "onKeyEntered " + dataSnapshot.toString());
+                                Log.e(TAG, "==========================================");
+                                Log.e(TAG, "        onDataChange        " );
+                                Log.e(TAG, "onKeyEntered " + dataSnapshot.toString());
 
                                 DoctorPerfil rider = dataSnapshot.getValue(DoctorPerfil.class);
+                                Log.e(TAG, " rider.getDni()  " + rider.getFirstname());
+                                Log.e(TAG, " rider.getDni()  " + rider.getLastname());
+                                Log.e(TAG, " rider.getDni()  " + rider.getUid());
+                                Log.e(TAG, " rider.getDni()  " + rider.getDni());
                                 //add Driver to map
 
                                 mMap.addMarker(new MarkerOptions()
@@ -378,14 +385,22 @@ public class UbicacionActivity extends FragmentActivity implements
 
                 Double pacienteLatitude = mLastLocation.getLatitude();
                 Double pacienteLongitud  = mLastLocation.getLongitude();
+
+                String title = marker.getTitle();
+                String doctorUID = marker.getSnippet();//pasar el uid
+
+                Log.e(TAG, "title " + title);
+                Log.e(TAG, "doctorUID " + doctorUID);
+
                 Log.e(TAG, "doctorLatitude " + doctorLatitude);
                 Log.e(TAG, "doctorLongitud " + doctorLongitud);
+
                 Log.e(TAG, "pacienteLatitude " + pacienteLatitude);
                 Log.e(TAG, "pacienteLongitud " + pacienteLongitud);
-                String title = marker.getTitle();
-                String snippet = marker.getSnippet();//pasar el uid 
-                BSRFDoctor mBottomSheet = BSRFDoctor.newInstance(title, snippet, true, doctorLatitude, doctorLongitud,pacienteLatitude , pacienteLongitud);
-                Log.e(TAG,"BSRFDoctor : " + "mBottomSheet.getTag() <-- " + mBottomSheet.getTag());
+
+
+                BSRFDoctor mBottomSheet = BSRFDoctor.newInstance(title, doctorUID, true, doctorLatitude, doctorLongitud,pacienteLatitude , pacienteLongitud);
+
                 mBottomSheet.show(getSupportFragmentManager(), mBottomSheet.getTag());
                 marker.showInfoWindow();
                 return true;
@@ -529,6 +544,9 @@ public class UbicacionActivity extends FragmentActivity implements
             Log.e("Exception: %s", e.getMessage());
         }
     }
+
+
+
 
 
 }
