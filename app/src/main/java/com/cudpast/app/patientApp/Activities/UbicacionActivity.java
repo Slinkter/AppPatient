@@ -15,7 +15,9 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cudpast.app.patientApp.Common.Common;
@@ -55,6 +57,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
+
+import org.w3c.dom.Text;
 
 public class UbicacionActivity extends FragmentActivity implements
         OnMapReadyCallback,
@@ -118,7 +122,6 @@ public class UbicacionActivity extends FragmentActivity implements
     private static final String KEY_LOCATION = "location";
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -171,6 +174,7 @@ public class UbicacionActivity extends FragmentActivity implements
             }
         }
     }
+
     //.
     private void updateFirebaseToken() {
         FirebaseDatabase db = FirebaseDatabase.getInstance();
@@ -181,12 +185,10 @@ public class UbicacionActivity extends FragmentActivity implements
     //.
 
 
-
-
     //.DisplayLocation
     private void displayLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED        ) {
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         //Obtener GPS desde googleApiCliente
@@ -245,7 +247,7 @@ public class UbicacionActivity extends FragmentActivity implements
                                 // because rider and user model is same properties
                                 // so we can user Rider model to get user here
                                 Log.e(TAG, "==========================================");
-                                Log.e(TAG, "        onDataChange        " );
+                                Log.e(TAG, "        onDataChange        ");
                                 Log.e(TAG, "onKeyEntered " + dataSnapshot.toString());
 
                                 DoctorPerfil rider = dataSnapshot.getValue(DoctorPerfil.class);
@@ -263,7 +265,26 @@ public class UbicacionActivity extends FragmentActivity implements
                                         .icon(bitmapDescriptorFromVector(UbicacionActivity.this, R.drawable.ic_doctoraapp))
                                 );
 
-                              //  mMap.setInfoWindowAdapter(new CustomInfoWindow(getApplicationContext()));
+                                mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+                                    @Override
+                                    public View getInfoWindow(Marker marker) {
+                                        return null;
+                                    }
+
+                                    @Override
+                                    public View getInfoContents(Marker marker) {
+
+                                        View view = getLayoutInflater().inflate(R.layout.custom_ider_info_patient, null);
+
+                                        TextView txt_PickupTitle = (view.findViewById(R.id.txtPickupInfo));
+                                        txt_PickupTitle.setText(marker.getTitle());
+
+                                        TextView txt_PickupSnippet = (view.findViewById(R.id.txtPickupSnippet));
+                                        txt_PickupSnippet.setText(marker.getSnippet());
+
+                                        return view;
+                                    }
+                                });
                             }
 
                             @Override
@@ -384,7 +405,7 @@ public class UbicacionActivity extends FragmentActivity implements
 
 
                 Double pacienteLatitude = mLastLocation.getLatitude();
-                Double pacienteLongitud  = mLastLocation.getLongitude();
+                Double pacienteLongitud = mLastLocation.getLongitude();
 
                 String title = marker.getTitle();
                 String doctorUID = marker.getSnippet();//pasar el uid
@@ -399,10 +420,10 @@ public class UbicacionActivity extends FragmentActivity implements
                 Log.e(TAG, "pacienteLongitud " + pacienteLongitud);
 
 
-                BSRFDoctor mBottomSheet = BSRFDoctor.newInstance(title, doctorUID, true, doctorLatitude, doctorLongitud,pacienteLatitude , pacienteLongitud);
+                BSRFDoctor mBottomSheet = BSRFDoctor.newInstance(title, doctorUID, true, doctorLatitude, doctorLongitud, pacienteLatitude, pacienteLongitud);
 
                 mBottomSheet.show(getSupportFragmentManager(), mBottomSheet.getTag());
-                marker.showInfoWindow();
+//                marker.showInfoWindow();
                 return true;
             }
         });
@@ -544,9 +565,6 @@ public class UbicacionActivity extends FragmentActivity implements
             Log.e("Exception: %s", e.getMessage());
         }
     }
-
-
-
 
 
 }
