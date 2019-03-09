@@ -86,15 +86,11 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
 
         args.putString("title", title);
         args.putString("doctorUID", doctorUID);//<---
-
         args.putBoolean("isTapOnMap", isTapOnMap);
-
         args.putDouble("doctorLatitude", doctorLatitude);
         args.putDouble("doctorLongitud", doctorLongitud);
-
         args.putDouble("pacienteLatitude", pacienteLatitude);
         args.putDouble("pacienteLongitud", pacienteLongitud);
-
         f.setArguments(args);
         return f;
 

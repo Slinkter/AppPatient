@@ -262,7 +262,7 @@ public class UbicacionActivity extends FragmentActivity implements
                                         .flat(true)
                                         .title(rider.getFirstname() + " " + rider.getLastname())
                                         .snippet(rider.getUid())
-                                        .icon(bitmapDescriptorFromVector(UbicacionActivity.this, R.drawable.ic_doctoraapp))
+                                        .icon(bitmapDescriptorFromVector(UbicacionActivity.this, R.drawable.ic_doctorapp))
                                 );
 
                                 mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
