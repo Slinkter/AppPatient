@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.cudpast.app.patientApp.Activities.MainActivity;
 import com.cudpast.app.patientApp.Activities.UbicacionActivity;
+import com.cudpast.app.patientApp.Business.FinActivity;
 import com.cudpast.app.patientApp.Business.GoDoctor;
 import com.cudpast.app.patientApp.Common.Common;
 import com.cudpast.app.patientApp.R;
@@ -32,12 +33,12 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(final RemoteMessage remoteMessage) {
 
-        if (remoteMessage.getNotification() != null ) {
+        if (remoteMessage.getNotification() != null) {
             Log.e(TAG, "==========================================");
             Log.e(TAG, "          MyFirebaseMessaging             ");
 
             String rpta = remoteMessage.getNotification().getTitle();
-            Log.e(TAG, " rpta : "+ rpta);
+            Log.e(TAG, " rpta : " + rpta);
 
             if (rpta.equalsIgnoreCase("Cancel")) {
                 showCancelNotification(remoteMessage.getNotification().getBody());
@@ -60,45 +61,48 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
             public void run() {
                 Toast.makeText(MyFirebaseMessaging.this, "" + cancel, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), UbicacionActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
         });
     }
+
     private void showArrivedNotification(String body) {
         //Only version 25
         //Create Canal de Notificacion > 26
+        //parte013-->
         Log.e(TAG, "          showArrivedNotification             ");
-        PendingIntent contentIntent = PendingIntent.getActivity(getBaseContext(), 0, new Intent(), PendingIntent.FLAG_ONE_SHOT);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext());
+//        PendingIntent contentIntent = PendingIntent.getActivity(getBaseContext(), 0, new Intent(), PendingIntent.FLAG_ONE_SHOT);
+//        NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext());
+//
+//        builder.setAutoCancel(true)
+//                .setDefaults(android.app.Notification.DEFAULT_LIGHTS | android.app.Notification.DEFAULT_SOUND)
+//                .setWhen(System.currentTimeMillis())
+//                .setSmallIcon(R.mipmap.ic_launcher_round)
+//                .setContentTitle("El Doctor ha llegado")
+//                .setContentText(body)
+//                .setContentIntent(contentIntent);
+//        NotificationManager manager = (NotificationManager) getBaseContext().getSystemService(Context.NOTIFICATION_SERVICE);
+//        manager.notify(1, builder.build());
+        //parte013<--
 
-        builder.setAutoCancel(true)
-                .setDefaults(android.app.Notification.DEFAULT_LIGHTS | android.app.Notification.DEFAULT_SOUND)
-                .setWhen(System.currentTimeMillis())
-                .setSmallIcon(R.mipmap.ic_launcher_round)
-                .setContentTitle("Arriver")
-                .setContentText(body)
-                .setContentIntent(contentIntent);
-        NotificationManager manager = (NotificationManager) getBaseContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        manager.notify(1, builder.build());
+
+        Intent intent = new Intent(MyFirebaseMessaging.this, FinActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+
 
     }
 
     private void showAceptNotification(String extra) {
         Log.e(TAG, "          showAceptNotification             ");
         String firebaseDoctorUID = extra;
-
-        Intent intent = new Intent(getBaseContext(), GoDoctor.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Intent intent = new Intent(MyFirebaseMessaging.this, GoDoctor.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("firebaseDoctorUID", firebaseDoctorUID);//
         startActivity(intent);
+
     }
-
-
-
-
-
-
 
 
     @Override

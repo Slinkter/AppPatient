@@ -77,8 +77,6 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
     long mTimeLeftInMillis = START_TIME_IN_MILLS;
 
 
-
-
     //Constructor
     public static BSRFDoctor newInstance(String title, String doctorUID, boolean isTapOnMap, Double doctorLatitude, Double doctorLongitud, Double pacienteLatitude, Double pacienteLongitud) {
         BSRFDoctor f = new BSRFDoctor();
@@ -95,7 +93,6 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
         return f;
 
     }
-
 
 
     @Override
@@ -161,8 +158,6 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
         mFCMService = Common.getIFCMService();
 
 
-
-
         Log.e(TAG, "pacienteLatitude " + pacienteLatitude);
         Log.e(TAG, "pacienteLongitud " + pacienteLongitud);
 
@@ -206,10 +201,9 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
 
                             }
                         });
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-
 
 
             myDialog = new Dialog(getContext());
@@ -241,11 +235,11 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
 
                         @Override
                         public void onFinish() {
-                            try{
+                            try {
                                 mTimeLeftInMillis = START_TIME_IN_MILLS;
                                 myDialog.dismiss();
 
-                            }catch (Exception e){
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
 
@@ -340,7 +334,8 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
     }
 
     private void cancelRequestToDriver(String driverID) {
-
+        Log.e(TAG, "======================================================");
+        Log.e(TAG, "             cancelRequestToDriver                    ");
         DatabaseReference tokens = FirebaseDatabase.getInstance().getReference(Common.token_tbl);
         Log.e(TAG, "TOKEN : -->" + tokens.toString());
         //Buscar a doctor por su id
@@ -352,8 +347,6 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot postSnapShot : dataSnapshot.getChildren()) {
                             //convert to LatLng to json.
-                            Log.e(TAG, "======================================================");
-                            Log.e(TAG, "             sendRequestToDriver                    ");
                             LatLng userGeo = new LatLng(pacienteLatitude, pacienteLongitud);
                             Token tokenDoctor = postSnapShot.getValue(Token.class);
                             //Get token doctor and paciente
@@ -375,6 +368,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                                                 Log.e(TAG, "onResponse: success");
                                             }
                                         }
+
                                         @Override
                                         public void onFailure(Call<FCMResponse> call, Throwable t) {
                                             Log.e(TAG, "onFailure : " + t.getMessage());
