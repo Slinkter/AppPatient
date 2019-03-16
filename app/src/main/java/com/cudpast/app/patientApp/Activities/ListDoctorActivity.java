@@ -30,6 +30,7 @@ public class ListDoctorActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         mDatabase = FirebaseDatabase.getInstance().getReference().child("db_doctor_consulta");
         mDatabase.keepSynced(true);
+        mDatabase.orderByKey();
 
         mBlogList = findViewById(R.id.myrecycleview);
         mBlogList.setHasFixedSize(true);

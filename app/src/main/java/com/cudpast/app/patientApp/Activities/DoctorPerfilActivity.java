@@ -15,6 +15,7 @@ public class DoctorPerfilActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_doctor_perfil);
         getSupportActionBar().hide();
+
         String img = getIntent().getExtras().getString("doctor_img");
         String firstName = getIntent().getExtras().getString("doctor_name");
         String lastname = getIntent().getExtras().getString("doctor_last");
@@ -38,6 +39,16 @@ public class DoctorPerfilActivity extends AppCompatActivity {
         post_phone.setText(numPhone);
         post_especialidad.setText(especialidad);
 
-        Picasso.with(this).load(img).into(imgdoc);
+        Picasso
+                .with(this)
+                .load(img)
+                .resize(500, 500)
+                .centerInside()
+                .placeholder(R.drawable.ic_doctorapp)
+                .error(R.drawable.ic_doctorapp)
+                .into(imgdoc);
+
+
+
     }
 }

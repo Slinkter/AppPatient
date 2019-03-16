@@ -348,6 +348,11 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private boolean checkNumPhone() {
+
+        if (signupNumPhone.getText().toString().trim().isEmpty()){
+            signupNumPhone.setError("debes ingresar tu numero ");
+            return  false;
+        }
         if (signupNumPhone.length() < 8) {
             signupNumPhone.setError("son 9 digitos  ");
             return false;

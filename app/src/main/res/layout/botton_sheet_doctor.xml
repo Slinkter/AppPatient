@@ -21,30 +21,35 @@
             android:layout_marginTop="?attr/actionBarSize"
             app:cardBackgroundColor="@color/color_white"
             app:cardCornerRadius="25dp"
-            app:cardElevation="8dp"
+            app:cardElevation="5dp"
             app:cardUseCompatPadding="true">
 
             <LinearLayout
+
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_marginTop="20dp"
+                    android:id="@+id/bs_doctorEspecialidad"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:gravity="center"
-                    android:text="Medico"
-                    android:textSize="44sp"
+                    android:layout_marginBottom="5dp"
+                    android:paddingTop="5dp"
+                    android:text="Especialidad"
+                    android:textColor="@color/startblue"
+                    android:textSize="25sp"
                     android:textStyle="bold" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/bs_doctorImage"
                     android:layout_width="105dp"
                     android:layout_height="105dp"
-                    android:layout_margin="6dp" />
+                    android:layout_margin="6dp"
+                    app:civ_border_color="@color/startblue"
+                    app:civ_border_width="3dp" />
 
                 <TextView
                     android:id="@+id/bs_doctorFirstName"
@@ -52,6 +57,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:text="firstname "
+
                     android:textColor="@color/startblue"
                     android:textSize="20sp" />
 
@@ -61,28 +67,20 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:text="lastname"
+                    android:layout_marginBottom="40dp"
                     android:textColor="@color/startblue"
                     android:textSize="20sp" />
 
-                <TextView
-                    android:id="@+id/bs_doctorEspecialidad"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:paddingTop="5dp"
-                    android:text="Especialidad"
-                    android:textColor="@color/startblue"
-                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/bs_doctorPhone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="50dp"
                     android:paddingTop="5dp"
                     android:text="999-999-999"
                     android:textColor="@color/startblue"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:visibility="gone" />
 
             </LinearLayout>
         </android.support.v7.widget.CardView>
@@ -90,11 +88,13 @@
 
 
         <android.support.v7.widget.CardView
-            android:layout_width="175dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
             app:cardBackgroundColor="@color/color_white"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="8dp"
+            app:cardCornerRadius="25dp"
+            app:cardElevation="5dp"
             app:cardUseCompatPadding="true">
 
             <LinearLayout
@@ -114,7 +114,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="Consulta"
-                        android:textColor="#1B404F"
+
                         android:textSize="22dp"
                         android:textStyle="bold" />
 
