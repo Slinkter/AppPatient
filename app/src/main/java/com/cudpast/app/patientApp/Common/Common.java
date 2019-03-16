@@ -2,6 +2,7 @@ package com.cudpast.app.patientApp.Common;
 
 import android.location.Location;
 
+import com.cudpast.app.patientApp.Model.DoctorPerfil;
 import com.cudpast.app.patientApp.Model.User;
 import com.cudpast.app.patientApp.Remote.FCMClient;
 import com.cudpast.app.patientApp.Remote.GoogleMapApi;
@@ -17,6 +18,7 @@ public class Common {
     public static final String token_tbl = "Tokens";
 
     public static User currentUser;
+    public static DoctorPerfil currentDoctor;
 
     public static Location mLastLocation;
 

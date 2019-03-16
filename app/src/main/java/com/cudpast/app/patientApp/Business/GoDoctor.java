@@ -69,6 +69,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.cudpast.app.patientApp.Common.Common.currentDoctor;
 import static com.cudpast.app.patientApp.Common.Common.mLastLocation;
 
 public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
@@ -228,7 +229,7 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
                 .icon(bitmapDescriptorFromVector(GoDoctor.this, R.drawable.ic_client)));
 
 
-        //.Obtener a todos los doctores desde Firebase
+        //.
         GeoLocation pacienetGeo = new GeoLocation(pacienteLocation.latitude, pacienteLocation.longitude);
         Log.e(TAG, "loadRutaDoctorOnMap : pacienetGeo" + pacienetGeo);
         GeoQuery geoQuery = geoFire.queryAtLocation(pacienetGeo, distance);
@@ -253,19 +254,20 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
                                 .addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        DoctorPerfil rider = dataSnapshot.getValue(DoctorPerfil.class);
+                                        DoctorPerfil doctorPerfil = dataSnapshot.getValue(DoctorPerfil.class);
+                                        currentDoctor = doctorPerfil;
 
                                         mMap.addMarker(new MarkerOptions()
                                                 .position(new LatLng(location.latitude, location.longitude))
                                                 .flat(true)
-                                                .title(rider.getFirstname() + " " + rider.getLastname())
-                                                .snippet(rider.getUid())
+                                                .title(doctorPerfil.getFirstname() + " " + doctorPerfil.getLastname())
+                                                .snippet(doctorPerfil.getUid())
                                                 .icon(bitmapDescriptorFromVector(GoDoctor.this, R.drawable.ic_doctoraapp))
                                         );
 
                                         getDirection();
 
-                                        //  mMap.setInfoWindowAdapter(new CustomInfoWindow(getApplicationContext()));
+
                                     }
 
                                     @Override
