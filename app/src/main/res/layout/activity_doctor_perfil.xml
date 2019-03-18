@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
@@ -9,9 +8,9 @@
     tools:context=".Activities.DoctorPerfilActivity">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -19,12 +18,11 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="350dp"
+                android:layout_height="340dp"
                 android:background="@drawable/gradientbackground"
                 android:orientation="vertical">
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/aa_thumbnail"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
@@ -32,8 +30,7 @@
                     android:layout_marginTop="45dp"
                     android:scaleType="centerCrop"
                     app:civ_border_color="#ffffff"
-                    app:civ_border_width="1dp"
-                    />
+                    app:civ_border_width="1dp" />
 
                 <TextView
                     android:id="@+id/aa_firstname"
@@ -45,12 +42,13 @@
                     android:textColor="#fff"
                     android:textSize="21sp"
                     android:textStyle="bold" />
+
                 <TextView
                     android:id="@+id/aa_lastname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="5dp"
                     android:text="lastname"
                     android:textColor="#fff"
                     android:textSize="21sp"
@@ -58,18 +56,25 @@
             </LinearLayout>
 
             <android.support.v7.widget.CardView
-                android:layout_width="400dp"
-                android:layout_height="120dp"
+                android:layout_width="match_parent"
+                android:layout_height="130dp"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="275dp">
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="275dp"
+                android:layout_marginRight="8dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="5dp"
+                app:cardUseCompatPadding="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
+
                     android:weightSum="3">
 
                     <LinearLayout
+
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -103,14 +108,14 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Puntuación"
+                            android:text="Consulta"
                             android:textSize="20sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingTop="10dp"
-                            android:text="1205"
+                            android:text="40 Soles"
                             android:textColor="@color/startblue"
                             android:textSize="20sp"
                             android:textStyle="bold" />
@@ -127,19 +132,21 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="tarifa"
+                            android:text="Puntuación"
                             android:textSize="20sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingTop="10dp"
-                            android:text="40 Soles"
+                            android:text="1205"
                             android:textColor="@color/startblue"
                             android:textSize="20sp"
                             android:textStyle="bold" />
 
                     </LinearLayout>
+
+
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
@@ -147,13 +154,13 @@
 
 
         <LinearLayout
-            android:paddingLeft="19dp"
-            android:paddingRight="19dp"
             android:layout_width="360dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="45dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingLeft="19dp"
+            android:paddingRight="19dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -172,7 +179,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:paddingLeft="20dp"
-
+                    android:text="Name Doctor"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -194,7 +201,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:paddingLeft="20dp"
-
+                    android:text="999-999-999"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -208,19 +215,20 @@
                 <ImageView
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    android:src="@drawable/ic_specialist_user" />
+                    android:src="@drawable/ic_horariodoctor" />
 
                 <TextView
-                    android:layout_width="wrap_content"
                     android:id="@+id/aa_description"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:paddingLeft="20dp"
-                    android:text="otros"
+                    android:text="L - V : 4 p.m. - 6 p.m."
                     android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
@@ -234,21 +242,24 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:paddingLeft="20dp"
-                    android:text="otros"
+                    android:text="Atención"
                     android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
 
         <Button
+            android:id="@+id/btn_phoneDoctor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="35dp"
-            android:background="@drawable/buttonstyle"
+            android:layout_marginBottom="50dp"
+            android:background="@drawable/custom_botton_1"
+            android:paddingLeft="50dp"
+            android:paddingRight="50dp"
             android:text="Contactar"
             android:textColor="#fff" />
 

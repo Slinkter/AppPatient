@@ -18,7 +18,8 @@
         android:roundIcon="@drawable/ic_ambulance"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Business.FinActivity"></activity>
+        <activity android:name=".Activities.Extra.UpdateProfilePacienteActivity"></activity>
+        <activity android:name=".Business.FinActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -26,7 +27,7 @@
 
         <activity
             android:name=".Business.GoDoctor"
-            android:label="@string/title_activity_go_doctor"></activity>
+            android:label="@string/title_activity_go_doctor" />
         <activity android:name=".Business.DoctorGoActivity" />
         <activity android:name=".Activities.SplashActivity">
             <intent-filter>

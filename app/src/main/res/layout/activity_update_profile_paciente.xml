@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    tools:context=".Activities.Extra.UpdateProfilePacienteActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingTop="36dp"
+        android:paddingRight="10dp">
+
+        <ImageView
+            android:layout_width="95dp"
+            android:layout_height="95dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="5dp"
+            android:contentDescription="nada"
+            android:src="@drawable/ic_ambulance" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
+            android:text="ACTUALIZAR PERFIL "
+            android:textColor="@color/colorAmarillo"
+            android:textSize="20sp" />
+
+
+        <android.support.v7.widget.CardView
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/color_white"
+            app:cardCornerRadius="25dp"
+            app:cardElevation="8dp"
+            app:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="18dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="18dp"
+                android:layout_marginBottom="30dp"
+                android:orientation="vertical">
+
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/updatePacienteName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:hint="Nombres"
+                    android:inputType="textPersonName"
+                    android:text=""
+                    android:textColor="@color/colorPrimary"
+                    android:textColorHint="@color/colorPrimary"
+                    android:textSize="@dimen/textSize_registro"
+                    app:met_baseColor="@color/colorPrimary"
+                    app:met_floatingLabel="highlight"
+                    app:met_primaryColor="@color/colorPrimary"
+                    app:met_singleLineEllipsis="false" />
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/updatePacienteLast"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:hint="Apellidos"
+                    android:inputType="textPersonName"
+                    android:text=""
+                    android:textColor="@color/colorPrimary"
+                    android:textColorHint="@color/colorPrimary"
+                    android:textSize="@dimen/textSize_registro"
+                    app:met_baseColor="@color/colorPrimary"
+                    app:met_floatingLabel="highlight"
+                    app:met_primaryColor="@color/colorPrimary"
+                    app:met_singleLineEllipsis="false" />
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/updatePacientePhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:hint="Telefono"
+                    android:inputType="none|numberSigned"
+                    android:maxLength="9"
+                    android:text=""
+                    android:textColor="@color/colorPrimary"
+                    android:textColorHint="@color/colorPrimary"
+                    android:textSize="@dimen/textSize_registro"
+                    app:met_baseColor="@color/colorPrimary"
+                    app:met_floatingLabel="highlight"
+                    app:met_primaryColor="@color/colorPrimary"
+                    app:met_singleLineEllipsis="false" />
+
+
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/updatePacienteAnddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:hint="Dirección"
+                    android:inputType="textPersonName"
+                    android:text=""
+                    android:textColor="@color/colorPrimary"
+                    android:textColorHint="@color/colorPrimary"
+                    android:textSize="@dimen/textSize_registro"
+                    app:met_baseColor="@color/colorPrimary"
+                    app:met_floatingLabel="highlight"
+                    app:met_primaryColor="@color/colorPrimary"
+                    app:met_singleLineEllipsis="false" />
+
+
+
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btn_UpdateInfoUpdate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginBottom="50dp"
+                android:background="@drawable/custom_botton_1"
+                android:text="Guardar"
+                android:textColor="@color/color_white" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</ScrollView>

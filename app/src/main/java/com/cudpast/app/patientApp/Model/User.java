@@ -1,14 +1,14 @@
 package com.cudpast.app.patientApp.Model;
 
 public class User {
-    private String dni,correo,password,nombre,apellido,telefono,fecha,direecion;
+    private String dni,correo,password,nombre,apellido,telefono,fecha, direcion;
 
 
     public User(){
 
     }
 
-    public User(String dni, String correo, String password, String nombre, String apellido, String telefono, String fecha,String direecion) {
+    public User(String dni, String correo, String password, String nombre, String apellido, String telefono, String fecha,String direcion) {
         this.dni = dni;
         this.correo = correo;
         this.password = password;
@@ -16,7 +16,7 @@ public class User {
         this.apellido = apellido;
         this.telefono = telefono;
         this.fecha = fecha;
-        this.direecion = direecion;
+        this.direcion = direcion;
 
     }
 
@@ -68,12 +68,12 @@ public class User {
         this.telefono = telefono;
     }
 
-    public String getDireecion() {
-        return direecion;
+    public String getDirecion() {
+        return direcion;
     }
 
-    public void setDireecion(String direecion) {
-        this.direecion = direecion;
+    public void setDirecion(String direcion) {
+        this.direcion = direcion;
     }
 
     public String getFecha() {

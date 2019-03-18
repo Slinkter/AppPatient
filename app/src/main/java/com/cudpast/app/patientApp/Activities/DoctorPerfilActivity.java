@@ -1,7 +1,11 @@
 package com.cudpast.app.patientApp.Activities;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -9,6 +13,8 @@ import com.cudpast.app.patientApp.R;
 import com.squareup.picasso.Picasso;
 
 public class DoctorPerfilActivity extends AppCompatActivity {
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +53,17 @@ public class DoctorPerfilActivity extends AppCompatActivity {
                 .placeholder(R.drawable.ic_doctorapp)
                 .error(R.drawable.ic_doctorapp)
                 .into(imgdoc);
+
+
+        Button btnsgi = findViewById(R.id.btn_phoneDoctor);
+        btnsgi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:930472478"));
+                startActivity(intent);
+            }
+        });
 
 
 

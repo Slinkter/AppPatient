@@ -193,6 +193,7 @@ public class LoginActivity extends AppCompatActivity {
                                                     waitingDialog.dismiss();
                                                     User user001= dataSnapshot.getValue(User.class);
                                                     Common.currentUser = user001;
+
                                                     Log.e(TAG, "currentUser ------>" + Common.currentUser.getNombre() );
                                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

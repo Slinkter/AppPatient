@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.cudpast.app.patientApp.Activities.Extra.UpdateProfilePacienteActivity;
 import com.cudpast.app.patientApp.Common.Common;
 import com.cudpast.app.patientApp.Model.User;
 import com.cudpast.app.patientApp.R;
@@ -71,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements
             Intent intent = new Intent(MainActivity.this, UbicacionActivity.class);
             startActivity(intent);
         } else if (i == R.id.btnUpdateInfo) {
-            Intent intent = new Intent(MainActivity.this, UbicacionActivity.class);
+            Intent intent = new Intent(MainActivity.this, UpdateProfilePacienteActivity.class);
             startActivity(intent);
         } else if (i == R.id.btnUbicacion) {
             Intent intent = new Intent(MainActivity.this, UbicacionActivity.class);

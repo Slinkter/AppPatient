@@ -143,7 +143,7 @@ public class RegisterActivity extends AppCompatActivity {
                 user.setCorreo(signupEmail.getText().toString());
                 user.setPassword(signupPassword.getText().toString());
                 user.setFecha(signupDate.getText().toString());
-                user.setDireecion(signupAnddress.getText().toString());
+                user.setDirecion(signupAnddress.getText().toString());
 
                 if (submitForm()) {
 
@@ -153,7 +153,7 @@ public class RegisterActivity extends AppCompatActivity {
                     waitingDialog.show();
 
                     //Guardar en GoDaddy
-                    if (registrarWebGoDaddy(user.getDni(), user.getCorreo(), user.getPassword(), user.getNombre(), user.getApellido(), user.getTelefono(), user.getFecha(), user.getDireecion())) {
+                    if (registrarWebGoDaddy(user.getDni(), user.getCorreo(), user.getPassword(), user.getNombre(), user.getApellido(), user.getTelefono(), user.getFecha(), user.getDirecion())) {
                         //Guardar en firebase
                         auth.createUserWithEmailAndPassword(mail, pwd)
                                 .addOnSuccessListener(new OnSuccessListener<AuthResult>() {

@@ -74,6 +74,7 @@
                 android:textColor="@color/color_white" />
 
             <Button
+                android:visibility="gone"
                 android:id="@+id/btnHistorial"
                 android:layout_width="@dimen/button_width_main"
                 android:layout_height="wrap_content"
