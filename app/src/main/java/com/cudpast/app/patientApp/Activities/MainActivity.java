@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements
         try {
 
             User usuario = Common.currentUser;
-            nameTextView.setText(usuario.getNombre() +"" +  usuario.getApellido() );
+            nameTextView.setText(usuario.getNombre() +" "+  usuario.getApellido() );
             emailTextView.setText(usuario.getCorreo());
             idTextView.setText(usuario.getDni());
 

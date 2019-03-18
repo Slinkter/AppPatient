@@ -28,25 +28,21 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp"
                 android:text="Bienvenido"
-                android:textColor="@color/grey_white_1000"
-                android:textSize="42dp"
-                android:textStyle="bold" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
 
 
             <TextView
-                android:visibility="gone"
                 android:id="@+id/nameTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="USUARIO"
-                android:textSize="24sp" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
 
             <TextView
                 android:id="@+id/emailTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="USUARIO"
-
                 android:textSize="18sp"
                 android:visibility="gone" />
 
@@ -63,7 +59,6 @@
                 android:textColor="@color/color_white" />
 
             <Button
-                android:visibility="gone"
                 android:id="@+id/btnEspecialidad"
                 android:layout_width="@dimen/button_width_main"
                 android:layout_height="wrap_content"
@@ -71,10 +66,10 @@
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/custom_botton_1"
                 android:text="Especialidad "
-                android:textColor="@color/color_white" />
+                android:textColor="@color/color_white"
+                android:visibility="gone" />
 
             <Button
-                android:visibility="gone"
                 android:id="@+id/btnHistorial"
                 android:layout_width="@dimen/button_width_main"
                 android:layout_height="wrap_content"
@@ -82,6 +77,17 @@
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/custom_botton_1"
                 android:text="Historial "
+                android:textColor="@color/color_white"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/btnUbicacion"
+                android:layout_width="@dimen/button_width_main"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/custom_botton_1"
+                android:text="Ubicación "
                 android:textColor="@color/color_white" />
 
             <Button
@@ -95,24 +101,14 @@
                 android:textColor="@color/color_white" />
 
             <Button
-                android:id="@+id/btnUbicacion"
-                android:layout_width="@dimen/button_width_main"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="20dp"
-                android:background="@drawable/custom_botton_1"
-                android:text="Ubicación "
-                android:textColor="@color/color_white" />
-
-            <Button
                 android:id="@+id/btnCerra_sesion"
                 android:layout_width="@dimen/button_width_main"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/custom_botton_2"
-                android:textColor="@color/colorRed"
-                android:text="Cerra Sesión" />
+                android:text="Cerra Sesión"
+                android:textColor="@color/colorRed" />
 
 
         </LinearLayout>
