@@ -34,6 +34,7 @@ import com.cudpast.app.patientApp.helper.Token;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.model.LatLng;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -55,7 +56,7 @@ import retrofit2.Response;
 public class BSRFDoctor extends BottomSheetDialogFragment implements LocationListener {
 
     private static final String TAG = BSRFDoctor.class.getSimpleName();
-    private String mTitle, doctorUID;
+    private String mTitle, doctorUID, pacienteUID;
     private Double mLatitude, mLongitud, pacienteLongitud, pacienteLatitude;
     boolean isTapOnMap;
     private DatabaseReference mDatabase;
@@ -69,6 +70,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
     Location mLastLocation;
     IFCMService mFCMService;
     String driverID;
+    private FirebaseAuth auth;
 
     //.GIF Dialog
     Dialog myDialog;
@@ -110,10 +112,13 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
         pacienteLatitude = getArguments().getDouble("pacienteLatitude");
         pacienteLongitud = getArguments().getDouble("pacienteLongitud");
 
+        auth = FirebaseAuth.getInstance();
+        pacienteUID = auth.getCurrentUser().getUid();
+
 
         Log.e(TAG, "title " + title);
         Log.e(TAG, "doctorUID " + doctorUID);
-
+        Log.e(TAG, "pacienteUID " + pacienteUID);
         Log.e(TAG, "doctorLatitude " + mLatitude);
         Log.e(TAG, "doctorLongitud " + mLongitud);
 
@@ -296,14 +301,17 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                             String dToken = tokenDoctor.getToken();
                             String pToken = FirebaseInstanceId.getInstance().getToken();
                             String json_lat_lng = new Gson().toJson(userGeo);
+
                             //Notification
                             Notification notification = new Notification("CUDPAST", "Usted tiene una solicutud de atención");// envia la ubicacion lat y lng  hacia Doctor APP
                             //Data
-                            Data data = new Data(pToken, json_lat_lng, dToken);
+                            Data data = new Data(pToken, json_lat_lng, dToken, pacienteUID);
                             //Log
                             Log.e(TAG, "doctorToken : " + dToken);
                             Log.e(TAG, "pacienteToken : " + pToken);
-                            Log.e(TAG, "ubicacion de paciente: " + json_lat_lng);
+                            Log.e(TAG, "ubicacion de paciente : " + json_lat_lng);
+                            Log.e(TAG, "pacienteUID : " + pacienteUID);
+
                             //Sender (to, Notification,data)
                             Sender sender = new Sender(dToken, notification, data);
                             mFCMService

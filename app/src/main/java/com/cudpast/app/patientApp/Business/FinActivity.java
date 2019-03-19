@@ -87,12 +87,12 @@ public class FinActivity extends AppCompatActivity {
                     .error(R.drawable.ic_doctorapp)
                     .into(image_doctor);
 
-            Picasso
-                    .with(this)
-                    .load(currentDoctor.getImage())
-                    .placeholder(R.drawable.ic_client)
-                    .error(R.drawable.ic_client)
-                    .into(image_doctor);
+//            Picasso
+//                    .with(this)
+//                    .load(currentDoctor.getImage())
+//                    .placeholder(R.drawable.ic_client)
+//                    .error(R.drawable.ic_client)
+//                    .into(image_doctor);
 
 
 

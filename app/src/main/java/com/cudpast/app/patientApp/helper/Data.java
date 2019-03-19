@@ -4,6 +4,7 @@ public class Data {
     public String title;
     public String descripcion;
     public String extradata;
+    public String uidPaciente;
 
     public Data() {
     }
@@ -18,6 +19,21 @@ public class Data {
         this.title = title;
         this.descripcion = descripcion;
         this.extradata = extradata;
+    }
+
+    public Data(String title, String descripcion, String extradata, String uidPaciente) {
+        this.title = title;
+        this.descripcion = descripcion;
+        this.extradata = extradata;
+        this.uidPaciente = uidPaciente;
+    }
+
+    public String getUidPaciente() {
+        return uidPaciente;
+    }
+
+    public void setUidPaciente(String uidPaciente) {
+        this.uidPaciente = uidPaciente;
     }
 
     public String getTitle() {
