@@ -52,10 +52,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-
 public class BSRFDoctor extends BottomSheetDialogFragment implements LocationListener {
 
     private static final String TAG = BSRFDoctor.class.getSimpleName();
+
     private String mTitle, doctorUID, pacienteUID;
     private Double mLatitude, mLongitud, pacienteLongitud, pacienteLatitude;
     boolean isTapOnMap;
@@ -75,7 +75,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
     //.GIF Dialog
     Dialog myDialog;
     LottieAnimationView animationView;
-    long START_TIME_IN_MILLS = 60000;
+    long START_TIME_IN_MILLS = 60 * 1000 * 5; // 60 s  5min
     long mTimeLeftInMillis = START_TIME_IN_MILLS;
 
 

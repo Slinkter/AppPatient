@@ -261,6 +261,7 @@ public class UbicacionActivity extends FragmentActivity implements
             if (mLocationPermissionGranted) {
                 mMap.setMyLocationEnabled(true);
                 mMap.getUiSettings().setMyLocationButtonEnabled(true);
+
             } else {
                 mMap.setMyLocationEnabled(false);
                 mMap.getUiSettings().setMyLocationButtonEnabled(false);

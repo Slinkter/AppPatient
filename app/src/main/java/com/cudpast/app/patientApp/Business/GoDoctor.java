@@ -352,7 +352,7 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
             public void onLocationResult(String key, GeoLocation location) {
                 if (location != null) {
 
-                    mLastLocation.getLongitude();
+
 
 
                     //set marker to display on map
