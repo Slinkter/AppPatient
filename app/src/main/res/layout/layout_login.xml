@@ -30,7 +30,7 @@
             android:gravity="center"
             android:hint="Correo"
             android:inputType="textEmailAddress"
-            android:text="luis.j.cueva@gmail.com"
+
             android:textColor="@color/colorCeleste"
             android:textColorHint="@color/colorRed"
             android:textSize="20sp"
@@ -46,7 +46,7 @@
             android:gravity="center"
             android:hint="Contraseña"
             android:inputType="textPassword"
-            android:text="MUNDOverde20"
+
             android:textColor="@color/colorCeleste"
             android:textColorHint="@color/colorRed"
             android:textSize="20sp"

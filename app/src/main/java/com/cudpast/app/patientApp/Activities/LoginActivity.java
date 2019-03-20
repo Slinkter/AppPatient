@@ -92,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(final DialogInterface dialogInterface, int i) {
 
-                final SpotsDialog waitingDialog = new SpotsDialog(LoginActivity.this,R.style.DialogLogin);
+                final SpotsDialog waitingDialog = new SpotsDialog(LoginActivity.this, R.style.DialogLogin);
                 waitingDialog.show();
 
                 auth.sendPasswordResetEmail(editEmail.getText().toString().trim())
@@ -148,7 +148,6 @@ public class LoginActivity extends AppCompatActivity {
                 if (TextUtils.isEmpty(edtEmail.getText().toString())) {
                     waitingDialog.dismiss();
                     Snackbar.make(root, "Error : Usuario o contraseña incorrecto", Snackbar.LENGTH_SHORT).show();
-
                     return;
                 }
 
@@ -163,14 +162,12 @@ public class LoginActivity extends AppCompatActivity {
                     Snackbar.make(root, "Error : Contraseña muy Corta", Snackbar.LENGTH_SHORT).show();
                     return;
                 }
-
-
                 //-->Login
-                String email ="luis.j.cueva@gmail.com";
-                String pwd = "MUNDOverde20";
+                String email = edtEmail.getText().toString();
+                String pwd = edtPassword.getText().toString();
 
-             //   auth.signInWithEmailAndPassword(edtEmail.getText().toString(), edtPassword.getText().toString())
-                auth.signInWithEmailAndPassword(email, pwd)
+                auth
+                        .signInWithEmailAndPassword(email, pwd)
                         .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                             @Override
                             public void onSuccess(AuthResult authResult) {
@@ -178,7 +175,7 @@ public class LoginActivity extends AppCompatActivity {
                                 Log.e(TAG, "onSuccess");
                                 final FirebaseUser user = auth.getCurrentUser();
 
-                                if (user.isEmailVerified()){
+                                if (user.isEmailVerified()) {
                                     Log.e(TAG, "isEmailVerified");
                                     updateUI(user);
                                     String user_Uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -191,16 +188,14 @@ public class LoginActivity extends AppCompatActivity {
                                                 @Override
                                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                                     waitingDialog.dismiss();
-                                                    User user001= dataSnapshot.getValue(User.class);
+                                                    User user001 = dataSnapshot.getValue(User.class);
                                                     Common.currentUser = user001;
 
-                                                    Log.e(TAG, "currentUser ------>" + Common.currentUser.getNombre() );
+                                                    Log.e(TAG, "currentUser ------>" + Common.currentUser.getNombre());
                                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                                     startActivity(intent);
                                                     finish();
-
-
                                                 }
 
                                                 @Override
@@ -211,25 +206,23 @@ public class LoginActivity extends AppCompatActivity {
                                                 }
                                             });
 
-                                }else {
+                                } else {
                                     waitingDialog.dismiss();
                                     Log.e(TAG, "NotIsEmailVerified");
                                     updateUI(null);
                                 }
-
                             }
                         }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                               // Snackbar.make(root, "Failed" + e.getMessage(), Snackbar.LENGTH_SHORT).show();
-                                Log.e("LoginActivity " , "onFailure : " + e.getMessage());
-                                Snackbar.make(root, "Usuario o Contraseña Incorrecta", Snackbar.LENGTH_SHORT).show();
-                                waitingDialog.dismiss();
-                            }
-                        });
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Snackbar.make(root, "Failed" + e.getMessage(), Snackbar.LENGTH_SHORT).show();
+                        Log.e("LoginActivity ", "onFailure : " + e.getMessage());
+                        Snackbar.make(root, "Usuario o Contraseña Incorrecta", Snackbar.LENGTH_SHORT).show();
+                        waitingDialog.dismiss();
+                    }
+                });
             }
         });
-
         dialog.setNegativeButton("Salir", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -237,19 +230,18 @@ public class LoginActivity extends AppCompatActivity {
                 waitingDialog.dismiss();
             }
         });
-
         dialog.show();
     }
 
     private void updateUI(FirebaseUser user) {
-        if (user !=null){
-            if (user.isEmailVerified() )   {
+        if (user != null) {
+            if (user.isEmailVerified()) {
                 Toast.makeText(this, "Correo verificado", Toast.LENGTH_SHORT).show();
-           //     Snackbar.make(root, "Correo verificado", Snackbar.LENGTH_SHORT).show();
+                //     Snackbar.make(root, "Correo verificado", Snackbar.LENGTH_SHORT).show();
             }
-        }else {
+        } else {
             Toast.makeText(this, "correo no verificado", Toast.LENGTH_SHORT).show();
-           // Snackbar.make(root, "correo no verificado", Snackbar.LENGTH_SHORT).show();
+            // Snackbar.make(root, "correo no verificado", Snackbar.LENGTH_SHORT).show();
         }
     }
 
@@ -258,8 +250,6 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
-
-
 
 
 }
