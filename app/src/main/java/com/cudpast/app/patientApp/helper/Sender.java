@@ -16,6 +16,12 @@ public class Sender {
         this.data = data;
     }
 
+    public Sender(String to, Notification notification) {
+        this.to = to;
+        this.notification = notification;
+
+    }
+
     public String getTo() {
         return to;
     }

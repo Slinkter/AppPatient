@@ -21,6 +21,7 @@ public class Common {
     public static DoctorPerfil currentDoctor;
 
     public static Location mLastLocation;
+    public static  String token_doctor ;
 
 
     public static final String googleAPIUrl = "https://maps.googleapis.com";

@@ -75,7 +75,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
     //.GIF Dialog
     Dialog myDialog;
     LottieAnimationView animationView;
-    long START_TIME_IN_MILLS = 60 * 1000 * 5; // 60 s  5min
+    long START_TIME_IN_MILLS = 60 * 1000 * 2; // 60 s  5min
     long mTimeLeftInMillis = START_TIME_IN_MILLS;
 
 
@@ -222,7 +222,12 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                 public void onClick(View v) {
 
                     sendRequestToDriver(driverID);
-
+                    //
+                    Common.token_doctor = driverID;
+                    Log.e(TAG, "============================================== ");
+                    Log.e(TAG, " tokenDoctor  : " + Common.token_doctor);
+                    Log.e(TAG, "============================================== ");
+                    //
                     Toast.makeText(getContext(), "Enviando ...", Toast.LENGTH_SHORT).show();
                     Log.e("driverID", driverID);
 
@@ -263,7 +268,6 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                     mTextViewCountDown.setText("");
                     myDialog.dismiss();
                     cancelRequestToDriver(driverID);
-
                 }
             });
             //.------------------->
@@ -297,6 +301,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                             //convert to LatLng to json.
                             LatLng userGeo = new LatLng(pacienteLatitude, pacienteLongitud);
                             Token tokenDoctor = postSnapShot.getValue(Token.class);
+
                             //Get token doctor and paciente
                             String dToken = tokenDoctor.getToken();
                             String pToken = FirebaseInstanceId.getInstance().getToken();
@@ -311,6 +316,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                             Log.e(TAG, "pacienteToken : " + pToken);
                             Log.e(TAG, "ubicacion de paciente : " + json_lat_lng);
                             Log.e(TAG, "pacienteUID : " + pacienteUID);
+
 
                             //Sender (to, Notification,data)
                             Sender sender = new Sender(dToken, notification, data);
@@ -392,6 +398,16 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                 });
 
         Log.e(TAG, "======================================================");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 
 
