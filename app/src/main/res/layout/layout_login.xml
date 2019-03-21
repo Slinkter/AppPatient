@@ -30,7 +30,6 @@
             android:gravity="center"
             android:hint="Correo"
             android:inputType="textEmailAddress"
-
             android:textColor="@color/colorCeleste"
             android:textColorHint="@color/colorRed"
             android:textSize="20sp"
@@ -46,7 +45,6 @@
             android:gravity="center"
             android:hint="Contraseña"
             android:inputType="textPassword"
-
             android:textColor="@color/colorCeleste"
             android:textColorHint="@color/colorRed"
             android:textSize="20sp"

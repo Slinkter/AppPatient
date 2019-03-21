@@ -42,9 +42,6 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".Business.DoctorGoActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".Activities.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>

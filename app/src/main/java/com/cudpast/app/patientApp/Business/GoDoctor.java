@@ -196,10 +196,10 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
                     .addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            //cada evento de cambio vuelve a llamar a loadRutaDoctorOnMap
+                            //cada evento de cambio vuelve a llamar a loadRoadDoctorOnMap
                             Log.e(TAG, "onDataChange --> pacienteLocation  " + pacienteLocation);
                             Log.e(TAG, "onDataChange --> DataSnapshot  " + dataSnapshot);
-                            loadRutaDoctorOnMap(pacienteLocation);
+                            loadRoadDoctorOnMap(pacienteLocation);
                         }
 
                         @Override
@@ -208,7 +208,7 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
                         }
                     });
             //.2
-            loadRutaDoctorOnMap(pacienteLocation);
+            loadRoadDoctorOnMap(pacienteLocation);
         } else {
             Log.e("ERROR", "Cannot get your location");
         }
@@ -217,23 +217,19 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
     }
 
     //.
-    private void loadRutaDoctorOnMap(final LatLng pacienteLocation) {
+    private void loadRoadDoctorOnMap(final LatLng pacienteLocation) {
         Log.e(TAG, "==========================================================");
-        Log.e(TAG, "                   loadRutaDoctorOnMap                     ");
+        Log.e(TAG, "                   loadRoadDoctorOnMap                     ");
         mMap.clear();
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pacienteLocation, 15.0f));
-
-
         mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(pacienteLocation.latitude, pacienteLocation.longitude))
-                .icon(bitmapDescriptorFromVector(GoDoctor.this, R.drawable.ic_client)));
-
-
+                .icon(BitmapDoctorApp(GoDoctor.this, R.drawable.ic_client)));
         //.
         GeoLocation pacienetGeo = new GeoLocation(pacienteLocation.latitude, pacienteLocation.longitude);
-        Log.e(TAG, "loadRutaDoctorOnMap : pacienetGeo" + pacienetGeo);
+        Log.e(TAG, "loadRoadDoctorOnMap : pacienetGeo" + pacienetGeo);
         GeoQuery geoQuery = geoFire.queryAtLocation(pacienetGeo, distance);
-        Log.e(TAG, "loadRutaDoctorOnMap : geoQuery" + geoQuery);
+        Log.e(TAG, "loadRoadDoctorOnMap : geoQuery" + geoQuery);
         geoQuery.removeAllListeners();
         geoQuery
                 .addGeoQueryEventListener(new GeoQueryEventListener() {
@@ -241,13 +237,6 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
                     public void onKeyEntered(String key, final GeoLocation location) {
                         Log.e(TAG, "onKeyEntered : key  " + key);
                         Log.e(TAG, "onKeyEntered : location  " + location);
-
-                        /*
-                         * TB_AVAILABLE_DOCTOR : se usa le key para localizar en tb_Info_Doctor
-                         * la información del doctor , TB_AVAILABLE_DOCTOR te da la UID(key)
-                         * y tambien te la location y escucha cada vez que cambia la tabla
-                         * TB_AVAILABLE_DOCTOR
-                         * */
 
                         referenceTbDoctor
                                 .child(key)
@@ -262,11 +251,9 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
                                                 .flat(true)
                                                 .title(doctorPerfil.getFirstname() + " " + doctorPerfil.getLastname())
                                                 .snippet(doctorPerfil.getUid())
-                                                .icon(bitmapDescriptorFromVector(GoDoctor.this, R.drawable.ic_doctoraapp))
+                                                .icon(BitmapDoctorApp(GoDoctor.this, R.drawable.ic_doctoraapp))
                                         );
-
                                         getDirection();
-
 
                                     }
 
@@ -326,8 +313,6 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
 
 
     }
-
-
     //.metodos auxiliar para imagenes .svg
     private BitmapDescriptor BitmapDoctorApp(Context context, @DrawableRes int vectorDrawableResourceId) {
         Drawable background = ContextCompat.getDrawable(context, vectorDrawableResourceId);
@@ -340,8 +325,7 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
         vectorDrawable.draw(canvas);
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
-
-
+    //.
     private void getDirection() {
         Log.e(TAG, "=============================================================");
         Log.e(TAG, "                     getDirection()                          ");
@@ -351,9 +335,6 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
             @Override
             public void onLocationResult(String key, GeoLocation location) {
                 if (location != null) {
-
-
-
 
                     //set marker to display on map
                     doctorLat = location.latitude;
@@ -464,7 +445,6 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
 
 
     }
-
     //.
     private class getDireccionParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
 
@@ -522,20 +502,7 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
 
         }
     }
-
-
-    private BitmapDescriptor bitmapDescriptorFromVector(Context context, @DrawableRes int vectorDrawableResourceId) {
-        Drawable background = ContextCompat.getDrawable(context, vectorDrawableResourceId);
-        background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight());
-        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId);
-        vectorDrawable.setBounds(40, 20, vectorDrawable.getIntrinsicWidth() + 40, vectorDrawable.getIntrinsicHeight() + 20);
-        Bitmap bitmap = Bitmap.createBitmap(background.getIntrinsicWidth(), background.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        background.draw(canvas);
-        vectorDrawable.draw(canvas);
-        return BitmapDescriptorFactory.fromBitmap(bitmap);
-    }
-
+    //.
     private void startLocationUpdate() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
