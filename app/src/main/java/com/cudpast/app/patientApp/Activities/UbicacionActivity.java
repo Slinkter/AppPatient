@@ -263,9 +263,9 @@ public class UbicacionActivity extends FragmentActivity implements
                 mMap.getUiSettings().setMyLocationButtonEnabled(true);
 
             } else {
-                mMap.setMyLocationEnabled(false);
-                mMap.getUiSettings().setMyLocationButtonEnabled(false);
-                mLastKnownLocation = null;
+//                mMap.setMyLocationEnabled(false);
+//                mMap.getUiSettings().setMyLocationButtonEnabled(false);
+//                mLastKnownLocation = null;
                 getLocationPermission();
             }
         } catch (SecurityException e) {
