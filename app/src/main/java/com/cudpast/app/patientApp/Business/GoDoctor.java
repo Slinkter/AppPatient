@@ -72,7 +72,8 @@ import retrofit2.Response;
 import static com.cudpast.app.patientApp.Common.Common.currentDoctor;
 import static com.cudpast.app.patientApp.Common.Common.mLastLocation;
 
-public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
+public class GoDoctor extends FragmentActivity implements
+        OnMapReadyCallback,
         GoogleApiClient.OnConnectionFailedListener,
         GoogleApiClient.ConnectionCallbacks,
         LocationListener {
@@ -218,6 +219,9 @@ public class GoDoctor extends FragmentActivity implements OnMapReadyCallback,
 
     //.
     private void loadRoadDoctorOnMap(final LatLng pacienteLocation) {
+        //todo : cuando el doctor esta en ruta , la hacer click se cambia el icono a doctora y se muestra
+        // todo : crear por xml un layout para info del doctor y con click de cancelar
+
         Log.e(TAG, "==========================================================");
         Log.e(TAG, "                   loadRoadDoctorOnMap                     ");
         mMap.clear();
