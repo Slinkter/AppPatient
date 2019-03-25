@@ -250,13 +250,13 @@ public class GoDoctor extends FragmentActivity implements
                                         DoctorPerfil doctorPerfil = dataSnapshot.getValue(DoctorPerfil.class);
                                         currentDoctor = doctorPerfil;
 
-                                        mMap.addMarker(new MarkerOptions()
-                                                .position(new LatLng(location.latitude, location.longitude))
-                                                .flat(true)
-                                                .title(doctorPerfil.getFirstname() + " " + doctorPerfil.getLastname())
-                                                .snippet(doctorPerfil.getUid())
-                                                .icon(BitmapDoctorApp(GoDoctor.this, R.drawable.ic_doctoraapp))
-                                        );
+//                                        mMap.addMarker(new MarkerOptions()
+//                                                .position(new LatLng(location.latitude, location.longitude))
+//                                                .flat(true)
+//                                                .title(doctorPerfil.getFirstname() + " " + doctorPerfil.getLastname())
+//                                                .snippet(doctorPerfil.getUid())
+//                                                .icon(BitmapDoctorApp(GoDoctor.this, R.drawable.ic_doctoraapp))
+//                                        );
                                         getDirection();
 
                                     }
@@ -317,6 +317,7 @@ public class GoDoctor extends FragmentActivity implements
 
 
     }
+
     //.metodos auxiliar para imagenes .svg
     private BitmapDescriptor BitmapDoctorApp(Context context, @DrawableRes int vectorDrawableResourceId) {
         Drawable background = ContextCompat.getDrawable(context, vectorDrawableResourceId);
@@ -329,6 +330,7 @@ public class GoDoctor extends FragmentActivity implements
         vectorDrawable.draw(canvas);
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
+
     //.
     private void getDirection() {
         Log.e(TAG, "=============================================================");
@@ -449,6 +451,7 @@ public class GoDoctor extends FragmentActivity implements
 
 
     }
+
     //.
     private class getDireccionParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
 
@@ -506,6 +509,7 @@ public class GoDoctor extends FragmentActivity implements
 
         }
     }
+
     //.
     private void startLocationUpdate() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -537,8 +541,6 @@ public class GoDoctor extends FragmentActivity implements
         displayLocation();
 
     }
-
-
 
 
 }
