@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cudpast.app.patientApp.Activities.MainActivity;
-import com.cudpast.app.patientApp.Adapter.BSRFDoctor;
 import com.cudpast.app.patientApp.Common.Common;
 import com.cudpast.app.patientApp.Model.DoctorPerfil;
 import com.cudpast.app.patientApp.Model.User;
@@ -23,6 +22,8 @@ import com.cudpast.app.patientApp.helper.Notification;
 import com.cudpast.app.patientApp.helper.Sender;
 import com.cudpast.app.patientApp.helper.Token;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,6 +32,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -49,6 +53,11 @@ public class FinActivity extends AppCompatActivity {
 
     private Button btn_fin_atencion;
 
+    private DatabaseReference AppPaciente_history, AppDoctor_history;
+
+    private FirebaseAuth auth;
+
+
     IFCMService mFCMService;
 
 
@@ -57,6 +66,12 @@ public class FinActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fin);
         getSupportActionBar().hide();
+
+        auth = FirebaseAuth.getInstance();
+
+        AppPaciente_history = FirebaseDatabase.getInstance().getReference(Common.AppPaciente_history);
+        AppDoctor_history = FirebaseDatabase.getInstance().getReference(Common.AppDoctor_history);
+
 
         image_doctor = findViewById(R.id.fin_doctorImage);
         tv_doctor_firstname = findViewById(R.id.fin_doctorFirstNameFin);
@@ -76,7 +91,10 @@ public class FinActivity extends AppCompatActivity {
         btn_fin_atencion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendEndAttention2( Common.token_doctor);
+                //
+                sendEndAttention(Common.token_doctor);
+                insertarHistoryPacienteDoctor();
+                //
                 Intent intent = new Intent(FinActivity.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
@@ -116,42 +134,10 @@ public class FinActivity extends AppCompatActivity {
         }
     }
 
-
     //.
-    private void sendEndAttention(String doctorUID) {
+    private void sendEndAttention(String driverID) {
         Log.e(TAG, "======================================================");
-        //Notification
-        Notification notification = new Notification("DoctorFin", "fin de la atención");// envia la ubicacion lat y lng  hacia Doctor APP
-
-        //todo:necesitamos el token del doctor
-        //Sender (to, Notification,data)
-        Sender sender = new Sender(doctorUID, notification);
-        mFCMService
-                .sendMessage(sender)
-                .enqueue(new Callback<FCMResponse>() {
-                    @Override
-                    public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
-                        if (response.body().success == 1) {
-                            Log.e(TAG, "onResponse: success");
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<FCMResponse> call, Throwable t) {
-                        Log.e(TAG, "onFailure : " + t.getMessage());
-                    }
-                });
-
-
-
-        Log.e(TAG, "======================================================");
-    }
-
-
-
-    private void sendEndAttention2(String driverID) {
-        Log.e(TAG, "======================================================");
-        Log.e(TAG, "             sendEndAttention2                    ");
+        Log.e(TAG, "             sendEndAttention                    ");
         DatabaseReference tokens = FirebaseDatabase.getInstance().getReference(Common.token_tbl);
         Log.e(TAG, "driverID : " + driverID);
         //Buscar a doctor por su id
@@ -200,6 +186,51 @@ public class FinActivity extends AppCompatActivity {
                 });
 
         Log.e(TAG, "======================================================");
+    }
+
+    private void insertarHistoryPacienteDoctor() {
+        String fecha = getCurrentTimeStamp();
+        String pacienteUID = auth.getCurrentUser().getUid();
+        String doctorUID = Common.currentDoctor.getUid();
+        Log.e(TAG, "pacienteUID  " + pacienteUID);
+        Log.e(TAG, "doctorUID  " + doctorUID);
+
+
+        AppPaciente_history
+                .child(pacienteUID)
+                .child(fecha)
+                .setValue(Common.currentDoctor)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.e("AppPaciente_history ", "onSuccess ");
+                    }
+                });
+        AppDoctor_history
+                .child(doctorUID)
+                .child(fecha)
+                .setValue(Common.currentUser)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.e("AppDoctor_history ", "onSuccess ");
+                    }
+                });
+
+
+
+    }
+
+
+    public static String getCurrentTimeStamp() {
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String currentTimeStamp = dateFormat.format(new Date());
+            return currentTimeStamp;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 

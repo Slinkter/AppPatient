@@ -75,7 +75,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
     //.GIF Dialog
     Dialog myDialog;
     LottieAnimationView animationView;
-    long START_TIME_IN_MILLS = 60 * 1000 * 2; // 60 s  5min
+    long START_TIME_IN_MILLS = 60 * 1000 * 5; // 60 s  5min
     long mTimeLeftInMillis = START_TIME_IN_MILLS;
 
 

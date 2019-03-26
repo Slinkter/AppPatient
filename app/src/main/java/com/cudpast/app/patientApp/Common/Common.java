@@ -17,6 +17,10 @@ public class Common {
     public static final String TB_SERVICIO_DOCTOR_PACIENTE = "TB_SERVICIO_DOCTOR_PACIENTE";
     public static final String token_tbl = "Tokens";
 
+    public static final String AppPaciente_history= "AppPaciente_history";
+    public static final String AppDoctor_history= "AppDoctor_history";
+
+
     public static User currentUser;
     public static DoctorPerfil currentDoctor;
 
