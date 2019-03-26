@@ -235,17 +235,14 @@ public class GoDoctor extends FragmentActivity implements
         } else {
             Log.e("ERROR", "Cannot get your location");
         }
-
         Log.e(TAG, "                   fin - displayLocation                     ");
     }
 
     //.
     private void loadRoadDoctorOnMap(final LatLng pacienteLocation) {
-        //todo : cuando el doctor esta en ruta , la hacer click se cambia el icono a doctora y se muestra
-        // todo : crear por xml un layout para info del doctor y con click de cancelar
 
         Log.e(TAG, "==========================================================");
-        Log.e(TAG, "                   loadRoadDoctorOnMap                     ");
+        Log.e(TAG, "                   loadRoadDoctorOnMap                    ");
         mMap.clear();
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pacienteLocation, 15.0f));
         mMap.addMarker(new MarkerOptions()
@@ -271,21 +268,11 @@ public class GoDoctor extends FragmentActivity implements
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         DoctorPerfil doctorPerfil = dataSnapshot.getValue(DoctorPerfil.class);
                                         currentDoctor = doctorPerfil;
-
-//                                        mMap.addMarker(new MarkerOptions()
-//                                                .position(new LatLng(location.latitude, location.longitude))
-//                                                .flat(true)
-//                                                .title(doctorPerfil.getFirstname() + " " + doctorPerfil.getLastname())
-//                                                .snippet(doctorPerfil.getUid())
-//                                                .icon(BitmapDoctorApp(GoDoctor.this, R.drawable.ic_doctoraapp))
-//                                        );
                                         getDirection();
-
                                     }
 
                                     @Override
                                     public void onCancelled(@NonNull DatabaseError databaseError) {
-
                                     }
                                 });
 
@@ -642,7 +629,6 @@ public class GoDoctor extends FragmentActivity implements
                 myDialog.dismiss();
             }
         });
-
         myDialog.show();
     }
 
