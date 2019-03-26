@@ -1,6 +1,7 @@
 package com.cudpast.app.patientApp.Business;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -19,6 +20,8 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.cudpast.app.patientApp.Common.Common;
@@ -27,6 +30,11 @@ import com.cudpast.app.patientApp.R;
 import com.cudpast.app.patientApp.Remote.IFCMService;
 import com.cudpast.app.patientApp.Remote.IGoogleAPI;
 import com.cudpast.app.patientApp.Soporte.DirectionJSONParser;
+import com.cudpast.app.patientApp.helper.Data;
+import com.cudpast.app.patientApp.helper.FCMResponse;
+import com.cudpast.app.patientApp.helper.Notification;
+import com.cudpast.app.patientApp.helper.Sender;
+import com.cudpast.app.patientApp.helper.Token;
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
@@ -57,6 +65,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -105,6 +115,9 @@ public class GoDoctor extends FragmentActivity implements
     FusedLocationProviderClient ubicacion;
     public static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1;
 
+    Button btn_ruta_cancelar;
+    Dialog myDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +128,15 @@ public class GoDoctor extends FragmentActivity implements
         mapFragment.getMapAsync(this);
         //*************************************************
         ubicacion = LocationServices.getFusedLocationProviderClient(this);
+        btn_ruta_cancelar = findViewById(R.id.btn_ruta_cancelar);
+        myDialog = new Dialog(this);
+
+        btn_ruta_cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ShowPopupCancelar();
+            }
+        });
 
 
         //.Recibir de la notificacion
@@ -540,6 +562,88 @@ public class GoDoctor extends FragmentActivity implements
         mLastLocation = location;
         displayLocation();
 
+    }
+
+
+    private void cancelBooking(String IdToken) {
+        Log.e(TAG, "======================================================");
+        Log.e(TAG, "             cancelRequestDoctor                    ");
+        DatabaseReference tokens = FirebaseDatabase.getInstance().getReference(Common.token_tbl);
+        Log.e(TAG, "TOKEN : -->" + tokens.toString());
+        //Buscar a doctor por su id
+        tokens
+                .orderByKey()
+                .equalTo(IdToken)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot postSnapShot : dataSnapshot.getChildren()) {
+                            //convert to LatLng to json.
+                            LatLng userGeo = new LatLng(15.0f, 15.0f);
+                            Token tokenDoctor = postSnapShot.getValue(Token.class);
+                            //Get token doctor and paciente
+                            String dToken = tokenDoctor.getToken();
+                            String pToken = FirebaseInstanceId.getInstance().getToken();
+                            String json_lat_lng = new Gson().toJson(userGeo);
+                            //Notification
+                            Notification notification = new Notification("el usuario ha cancelado", "el usuario ha cancelado");// envia la ubicacion lat y lng  hacia Doctor APP
+                            //Data
+                            Data data = new Data(pToken, json_lat_lng);
+                            //Sender (to, Notification)
+                            Sender sender = new Sender(dToken, notification, data);
+                            mFCMService
+                                    .sendMessage(sender)
+                                    .enqueue(new Callback<FCMResponse>() {
+                                        @Override
+                                        public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
+                                            if (response.body().success == 1) {
+                                                Log.e(TAG, "onResponse: success");
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<FCMResponse> call, Throwable t) {
+                                            Log.e(TAG, "onFailure : " + t.getMessage());
+                                        }
+                                    });
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Log.e(TAG, " onCancelled" + databaseError.getMessage());
+                    }
+                });
+
+        Log.e(TAG, "======================================================");
+    }
+
+    //.
+    public void ShowPopupCancelar() {
+        Button btn_accept_cancelar, btn_decline_cancelar;
+
+        myDialog.setContentView(R.layout.pop_up_cancelar);
+        btn_accept_cancelar = myDialog.findViewById(R.id.btn_accept_cancelar);
+        btn_decline_cancelar = myDialog.findViewById(R.id.btn_decline_cancelar);
+
+        btn_accept_cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(), "Confirma cancelar", Toast.LENGTH_SHORT).show();
+                cancelBooking(Common.token_doctor);
+                myDialog.dismiss();
+                finish();
+            }
+        });
+
+        btn_decline_cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myDialog.dismiss();
+            }
+        });
+
+        myDialog.show();
     }
 
 
