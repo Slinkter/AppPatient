@@ -1,4 +1,4 @@
-package com.cudpast.app.patientApp.Activities;
+package com.cudpast.app.patientApp.Activities.Extra;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,28 +11,39 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.cudpast.app.patientApp.Activities.DoctorPerfilActivity;
+import com.cudpast.app.patientApp.Activities.ListDoctorActivity;
+import com.cudpast.app.patientApp.Common.Common;
 import com.cudpast.app.patientApp.Model.Doctor;
+import com.cudpast.app.patientApp.Model.DoctorPerfil;
 import com.cudpast.app.patientApp.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
-public class ListDoctorActivity extends AppCompatActivity {
+public class HistoryActivity extends AppCompatActivity {
 
     private RecyclerView mBlogList;
-    private DatabaseReference mDatabase;
+    private DatabaseReference AppPaciente_history;
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_doctor);
-        getSupportActionBar().hide();
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("db_doctor_consulta");
-        mDatabase.keepSynced(true);
-        mDatabase.orderByKey();
+        setContentView(R.layout.activity_history);
 
-        mBlogList = findViewById(R.id.myrecycleview);
+        auth = FirebaseAuth.getInstance();
+        String userUID = auth.getCurrentUser().getUid();
+
+        AppPaciente_history = FirebaseDatabase.getInstance().getReference(Common.AppPaciente_history).child(userUID);
+
+    //    mDatabase = FirebaseDatabase.getInstance().getReference().child("db_doctor_consulta");
+        AppPaciente_history.keepSynced(true);
+        AppPaciente_history.orderByKey();
+
+        mBlogList = findViewById(R.id.myrecycleviewHistory);
         mBlogList.setHasFixedSize(true);
         mBlogList.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -41,12 +52,11 @@ public class ListDoctorActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        FirebaseRecyclerAdapter<Doctor, BlogViewHolder> firebaseRecyclerAdapter
-                = new FirebaseRecyclerAdapter<Doctor, BlogViewHolder>
-                (Doctor.class, R.layout.doctor_layout_info, BlogViewHolder.class, mDatabase) {
+        FirebaseRecyclerAdapter<DoctorPerfil, BlogViewHolder> firebaseRecyclerAdapter
+                = new FirebaseRecyclerAdapter<DoctorPerfil, BlogViewHolder>  (DoctorPerfil.class, R.layout.doctor_layout_info, BlogViewHolder.class, AppPaciente_history) {
 
             @Override
-            protected void populateViewHolder(final BlogViewHolder viewHolder, final Doctor model, int position) {
+            protected void populateViewHolder(BlogViewHolder viewHolder, DoctorPerfil model, int position) {
 
                 viewHolder.setImage(getApplicationContext(), model.getImage());
                 viewHolder.setFirstName(model.getFirstname());
@@ -54,28 +64,6 @@ public class ListDoctorActivity extends AppCompatActivity {
                 viewHolder.setPhone(model.getNumphone());
                 viewHolder.setEspecialidad(model.getEspecialidad());
 
-
-                final String img = model.getImage();
-                final String firstName = model.getFirstname();
-                final String lastname = model.getLastname();
-                final String numPhone = model.getNumphone();
-                final String especialidad = model.getEspecialidad();
-
-                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent i = new Intent(viewHolder.mView.getContext(), DoctorPerfilActivity.class);
-
-                        i.putExtra("doctor_img", img);
-                        i.putExtra("doctor_name", firstName);
-                        i.putExtra("doctor_last", lastname);
-                        i.putExtra("doctor_phone", numPhone);
-                        i.putExtra("doctor_especilidad", especialidad);
-
-
-                        viewHolder.mView.getContext().startActivity(i);
-                    }
-                });
             }
         };
 

@@ -69,16 +69,7 @@
                 android:textColor="@color/color_white"
                 android:visibility="gone" />
 
-            <Button
-                android:id="@+id/btnHistorial"
-                android:layout_width="@dimen/button_width_main"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="20dp"
-                android:background="@drawable/custom_botton_1"
-                android:text="Historial "
-                android:textColor="@color/color_white"
-                android:visibility="gone" />
+
 
             <Button
                 android:id="@+id/btnUbicacion"
@@ -98,6 +89,15 @@
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/custom_botton_1"
                 android:text="Actualizar Datos "
+                android:textColor="@color/color_white" />
+            <Button
+                android:id="@+id/btnHistorial"
+                android:layout_width="@dimen/button_width_main"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/custom_botton_1"
+                android:text="Historial "
                 android:textColor="@color/color_white" />
 
             <Button

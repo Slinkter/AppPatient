@@ -31,8 +31,6 @@ public class DoctorPerfilActivity extends AppCompatActivity {
 
         // init views
 
-//        CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapsingtoolbar_id);
-//        collapsingToolbarLayout.setTitleEnabled(true);
 
         ImageView imgdoc = findViewById(R.id.aa_thumbnail);
         TextView post_firstName = findViewById(R.id.aa_firstname);
