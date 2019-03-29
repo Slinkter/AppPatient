@@ -67,6 +67,8 @@
             </intent-filter>
         </activity>
         <activity
+
+            android:parentActivityName=".Activities.MainActivity"
             android:name=".Activities.ListDoctorActivity"
             android:screenOrientation="portrait">
             <intent-filter>
