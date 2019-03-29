@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.cudpast.app.patientApp.Activities.Extra.HistoryActivity;
-import com.cudpast.app.patientApp.Activities.Extra.UpdateProfilePacienteActivity;
 import com.cudpast.app.patientApp.Common.Common;
 import com.cudpast.app.patientApp.Model.User;
 import com.cudpast.app.patientApp.R;

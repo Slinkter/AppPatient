@@ -18,7 +18,14 @@
         android:roundIcon="@drawable/ic_ambulance"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.Extra.HistoryActivity"></activity>
+
+
+        <activity
+            android:name=".Activities.HistoryActivity"
+            android:parentActivityName=".Activities.MainActivity"
+            android:screenOrientation="portrait">
+
+        </activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -28,7 +35,8 @@
             android:value="false" />
 
         <activity
-            android:name=".Activities.Extra.UpdateProfilePacienteActivity"
+            android:name=".Activities.UpdateProfilePacienteActivity"
+            android:parentActivityName=".Activities.MainActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Business.FinActivity"
@@ -41,19 +49,20 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".Activities.UbicacionActivity"
+            android:parentActivityName=".Activities.MainActivity"
             android:screenOrientation="portrait" />
         <activity
+
             android:name=".Activities.DoctorPerfilActivity"
+            android:parentActivityName=".Activities.ListDoctorActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -68,8 +77,8 @@
         </activity>
         <activity
 
-            android:parentActivityName=".Activities.MainActivity"
             android:name=".Activities.ListDoctorActivity"
+            android:parentActivityName=".Activities.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

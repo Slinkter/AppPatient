@@ -1,4 +1,4 @@
-package com.cudpast.app.patientApp.Activities.Extra;
+package com.cudpast.app.patientApp.Activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -33,6 +33,9 @@ public class HistoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
+
+        getSupportActionBar().setTitle("Historial");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         auth = FirebaseAuth.getInstance();
         String userUID = auth.getCurrentUser().getUid();
