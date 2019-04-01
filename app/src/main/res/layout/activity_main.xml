@@ -78,7 +78,7 @@
                 android:layout_gravity="center"
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/custom_botton_1"
-                android:text="Ubicación "
+                android:text="Servicio "
                 android:textColor="@color/color_white" />
 
             <Button

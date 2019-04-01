@@ -187,7 +187,7 @@
                         android:clickable="true"
                         android:focusable="false"
                         android:gravity="center"
-                        android:hint="Fecha de naciemiento"
+                        android:hint="Fecha de nacimiento"
                         android:inputType="date"
                         android:maxLines="1"
                         android:textColor="@color/colorPrimary"

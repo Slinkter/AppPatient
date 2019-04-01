@@ -90,6 +90,12 @@ public class UbicacionActivity extends AppCompatActivity implements
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         DatabaseReference_TB_AVAILABLE_DOCTOR = FirebaseDatabase.getInstance().getReference(Common.TB_AVAILABLE_DOCTOR);
         DatabaseReference_TB_INFO_DOCTOR = FirebaseDatabase.getInstance().getReference(Common.TB_INFO_DOCTOR);
+
+        DatabaseReference_TB_AVAILABLE_DOCTOR.keepSynced(true);
+        DatabaseReference_TB_AVAILABLE_DOCTOR.orderByKey();
+
+        DatabaseReference_TB_INFO_DOCTOR.keepSynced(true);
+        DatabaseReference_TB_INFO_DOCTOR.orderByKey();
     }
 
 
