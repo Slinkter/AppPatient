@@ -19,6 +19,7 @@ public class Common {
 
     public static final String AppPaciente_history= "AppPaciente_history";
     public static final String AppDoctor_history= "AppDoctor_history";
+    public static final String AppDoctor_history_Comment= "AppDoctor_history_Comment";
 
 
     public static User currentUser;

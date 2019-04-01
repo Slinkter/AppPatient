@@ -72,7 +72,6 @@ public class UbicacionActivity extends AppCompatActivity implements
     private static final int LIMIT = 10;
 
 
-
     private boolean mPermissionDenied = false;
 
     private GoogleMap mMap;
@@ -93,14 +92,19 @@ public class UbicacionActivity extends AppCompatActivity implements
         DatabaseReference_TB_INFO_DOCTOR = FirebaseDatabase.getInstance().getReference(Common.TB_INFO_DOCTOR);
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+
     @Override
     public void onMapReady(GoogleMap map) {
         mMap = map;
-
         mMap.setOnMyLocationButtonClickListener(this);
         mMap.setOnMyLocationClickListener(this);
         enableMyLocation();
-
 
         try {
             boolean isSuccess = mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.my_map_style));
@@ -164,7 +168,7 @@ public class UbicacionActivity extends AppCompatActivity implements
 
     @Override
     public boolean onMyLocationButtonClick() {
-        Toast.makeText(this, "MyLocation button clicked", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "MyLocation button clicked", Toast.LENGTH_SHORT).show();
         // Return false so that we don't consume the event and the default behavior still occurs
         // (the camera animates to the user's current position).
         return false;
@@ -172,8 +176,8 @@ public class UbicacionActivity extends AppCompatActivity implements
 
     @Override
     public void onMyLocationClick(@NonNull Location location) {
-        Toast.makeText(this, "Current location:\n" + location, Toast.LENGTH_LONG).show();
-        LatLng pacienteGPS = new LatLng(location.getLatitude(),location.getLongitude());
+//        Toast.makeText(this, "Current location:\n" + location, Toast.LENGTH_LONG).show();
+//        LatLng pacienteGPS = new LatLng(location.getLatitude(), location.getLongitude());
 //        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pacienteGPS, DEFAULT_ZOOM));
 
     }
@@ -209,11 +213,12 @@ public class UbicacionActivity extends AppCompatActivity implements
      * Displays a dialog with error message explaining that the location permission is missing.
      */
     private void showMissingPermissionError() {
-        PermissionUtils.PermissionDeniedDialog
-                .newInstance(true).show(getSupportFragmentManager(), "dialog");
+        PermissionUtils
+                .PermissionDeniedDialog
+                .newInstance(true)
+                .show(getSupportFragmentManager(), "dialog");
     }
 
-    // My code
 
     private void getDeviceLocation() {
         /**
@@ -222,42 +227,42 @@ public class UbicacionActivity extends AppCompatActivity implements
          */
         try {
 
-                Task<Location> locationResult = mFusedLocationProviderClient.getLastLocation();
-                locationResult
-                        .addOnCompleteListener(this, new OnCompleteListener<Location>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Location> task) {
-                                if (task.isSuccessful()) {
+            Task<Location> locationResult = mFusedLocationProviderClient.getLastLocation();
+            locationResult
+                    .addOnCompleteListener(this, new OnCompleteListener<Location>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Location> task) {
+                            if (task.isSuccessful()) {
 
 
-                                    Common.mLastLocation = task.getResult();
-                                    Log.e(TAG, "fusedLocationClient : Common.mLastLocation.getLatitude() " + Common.mLastLocation.getLatitude());
-                                    Log.e(TAG, "fusedLocationClient : Common.mLastLocation.getLongitude()" + Common.mLastLocation.getLongitude());
-                                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng( Common.mLastLocation .getLatitude(),  Common.mLastLocation .getLongitude()), DEFAULT_ZOOM));
-                                    pacienteLocation = new LatLng(Common.mLastLocation.getLatitude(), Common.mLastLocation.getLongitude());
-                                    DatabaseReference_TB_AVAILABLE_DOCTOR.addValueEventListener(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                Common.mLastLocation = task.getResult();
+                                Log.e(TAG, "fusedLocationClient : Common.mLastLocation.getLatitude() " + Common.mLastLocation.getLatitude());
+                                Log.e(TAG, "fusedLocationClient : Common.mLastLocation.getLongitude()" + Common.mLastLocation.getLongitude());
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Common.mLastLocation.getLatitude(), Common.mLastLocation.getLongitude()), DEFAULT_ZOOM));
+                                pacienteLocation = new LatLng(Common.mLastLocation.getLatitude(), Common.mLastLocation.getLongitude());
+                                DatabaseReference_TB_AVAILABLE_DOCTOR.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                                            Log.e(TAG, "319 : displayLocation() --> DatabaseReference_TB_AVAILABLE_DOCTOR --> pacienteLocation  " + pacienteLocation);
+                                        Log.e(TAG, "319 : displayLocation() --> DatabaseReference_TB_AVAILABLE_DOCTOR --> pacienteLocation  " + pacienteLocation);
 
-                                            loadDoctorAvailableOnMap(pacienteLocation);
-                                        }
+                                        loadDoctorAvailableOnMap(pacienteLocation);
+                                    }
 
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                                            Log.d(TAG, "ERROR : " + "Cannot get your location");
-                                        }
-                                    });
-                                    loadDoctorAvailableOnMap(pacienteLocation);
-                                } else {
-                                    Log.d(TAG, "Current location is null. Using defaults.");
-                                    Log.e(TAG, "Exception: %s", task.getException());
-                                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
-                                    mMap.getUiSettings().setMyLocationButtonEnabled(false);
-                                }
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                        Log.d(TAG, "ERROR : " + "Cannot get your location");
+                                    }
+                                });
+                                loadDoctorAvailableOnMap(pacienteLocation);
+                            } else {
+                                Log.d(TAG, "Current location is null. Using defaults.");
+                                Log.e(TAG, "Exception: %s", task.getException());
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
+                                mMap.getUiSettings().setMyLocationButtonEnabled(false);
                             }
-                        });
+                        }
+                    });
 
         } catch (SecurityException e) {
             Log.e("Exception: %s", e.getMessage());

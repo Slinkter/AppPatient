@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".Business.FinActivity">
+    tools:context=".Business.FinDoctor">
 
 
     <TextView
@@ -124,6 +124,7 @@
 
 
     <LinearLayout
+        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp">
@@ -210,6 +211,15 @@
 
 
         </RelativeLayout>
+
+        <EditText
+            android:id="@+id/id_paciente_comment"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:hint="Escriba algun comentario "
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
     <Button

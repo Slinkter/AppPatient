@@ -1,30 +1,21 @@
 package com.cudpast.app.patientApp.Service;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.cudpast.app.patientApp.Activities.MainActivity;
 import com.cudpast.app.patientApp.Activities.UbicacionActivity;
-import com.cudpast.app.patientApp.Business.FinActivity;
+import com.cudpast.app.patientApp.Business.FinDoctor;
 import com.cudpast.app.patientApp.Business.GoDoctor;
 import com.cudpast.app.patientApp.Common.Common;
-import com.cudpast.app.patientApp.R;
 import com.cudpast.app.patientApp.helper.Token;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.google.gson.Gson;
 
 public class MyFirebaseMessaging extends FirebaseMessagingService {
 
@@ -87,7 +78,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         //parte013<--
 
 
-        Intent intent = new Intent(MyFirebaseMessaging.this, FinActivity.class);
+        Intent intent = new Intent(MyFirebaseMessaging.this, FinDoctor.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
 

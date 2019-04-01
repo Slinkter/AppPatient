@@ -29,10 +29,11 @@ public class ListDoctorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list_doctor);
         getSupportActionBar().setTitle("Lista de Medicos");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //1.Hacer la referencia a la tabla
         mDatabase = FirebaseDatabase.getInstance().getReference().child("db_doctor_consulta");
         mDatabase.keepSynced(true);
         mDatabase.orderByKey();
-
+        //2.
         mBlogList = findViewById(R.id.myrecycleview);
         mBlogList.setHasFixedSize(true);
         mBlogList.setLayoutManager(new LinearLayoutManager(this));
@@ -41,10 +42,8 @@ public class ListDoctorActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
-        FirebaseRecyclerAdapter<Doctor, BlogViewHolder> firebaseRecyclerAdapter
-                = new FirebaseRecyclerAdapter<Doctor, BlogViewHolder>
-                (Doctor.class, R.layout.doctor_layout_info, BlogViewHolder.class, mDatabase) {
+        FirebaseRecyclerAdapter<Doctor, BlogViewHolder> adapter;
+        adapter = new FirebaseRecyclerAdapter<Doctor, BlogViewHolder>(Doctor.class, R.layout.doctor_layout_info, BlogViewHolder.class, mDatabase) {
 
             @Override
             protected void populateViewHolder(final BlogViewHolder viewHolder, final Doctor model, int position) {
@@ -80,7 +79,7 @@ public class ListDoctorActivity extends AppCompatActivity {
             }
         };
 
-        mBlogList.setAdapter(firebaseRecyclerAdapter);
+        mBlogList.setAdapter(adapter);
     }
 
     public static class BlogViewHolder extends RecyclerView.ViewHolder {

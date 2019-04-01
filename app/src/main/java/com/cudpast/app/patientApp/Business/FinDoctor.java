@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -40,21 +41,22 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class FinActivity extends AppCompatActivity {
+public class FinDoctor extends AppCompatActivity {
 
-    private static final String TAG = FinActivity.class.getSimpleName();
+    private static final String TAG = FinDoctor.class.getSimpleName();
 
     private ImageView image_doctor;
     private TextView tv_doctor_firstname;
     private TextView tv_doctor_lastName, c_especialidad, c_tiempo, c_servicio;
+
+    private EditText id_paciente_comment;
 
     private TextView tv_paciente_firstname;
     private TextView tv_paciente_lastName;
 
     private Button btn_fin_atencion;
 
-    private DatabaseReference AppPaciente_history, AppDoctor_history;
-
+    private DatabaseReference AppPaciente_history, AppDoctor_history,AppDoctor_history_Comment;
     private FirebaseAuth auth;
 
 
@@ -71,11 +73,14 @@ public class FinActivity extends AppCompatActivity {
 
         AppPaciente_history = FirebaseDatabase.getInstance().getReference(Common.AppPaciente_history);
         AppDoctor_history = FirebaseDatabase.getInstance().getReference(Common.AppDoctor_history);
+        AppDoctor_history_Comment = FirebaseDatabase.getInstance().getReference(Common.AppDoctor_history_Comment);
 
 
         image_doctor = findViewById(R.id.fin_doctorImage);
         tv_doctor_firstname = findViewById(R.id.fin_doctorFirstNameFin);
         tv_doctor_lastName = findViewById(R.id.fin_doctorLastNameFin);
+
+        id_paciente_comment = findViewById(R.id.id_paciente_comment);
 
         c_especialidad = findViewById(R.id.c_especialidad);
         c_tiempo = findViewById(R.id.c_tiempo);
@@ -95,7 +100,7 @@ public class FinActivity extends AppCompatActivity {
                 sendEndAttention(Common.token_doctor);
                 insertarHistoryPacienteDoctor();
                 //
-                Intent intent = new Intent(FinActivity.this, MainActivity.class);
+                Intent intent = new Intent(FinDoctor.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();
@@ -214,6 +219,19 @@ public class FinActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.e("AppDoctor_history ", "onSuccess ");
+                    }
+                });
+
+        String commnet = id_paciente_comment.getText().toString();
+
+        AppDoctor_history_Comment
+                .child(doctorUID)
+                .child(fecha)
+                .setValue(commnet)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.e("AppDoctor_history ", "AppDoctor_history_Comment ");
                     }
                 });
 
