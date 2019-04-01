@@ -165,7 +165,7 @@ public class RegisterActivity extends AppCompatActivity {
                                                 public void onSuccess(Void aVoid) {
                                                     waitingDialog.dismiss();
                                                     Log.e(TAG, " : onSuccess ");
-                                                    Toast.makeText(RegisterActivity.this, "Usuario Registrado", Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(RegisterActivity.this, "Usuario Registrado , espere correo de Verificacion", Toast.LENGTH_SHORT).show();
                                                     sendEmailVerification();
                                                     goToLoginActivity();
 
