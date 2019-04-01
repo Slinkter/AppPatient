@@ -139,15 +139,15 @@ public class RegisterActivity extends AppCompatActivity {
                 user.setApellido(signupLast.getText().toString());
                 user.setTelefono(signupNumPhone.getText().toString());
                 user.setDni(signupDNI.getText().toString());
-                user.setCorreo(signupEmail.getText().toString());
+                user.setCorreo(signupEmail.getText().toString().trim());
 //                user.setPassword(signupPassword.getText().toString()); <--Cuando era con Godaddy
                 user.setFecha(signupDate.getText().toString());
                 user.setDirecion(signupAnddress.getText().toString());
 
                 if (submitForm()) {
 
-                    String mail = signupEmail.getText().toString();
-                    String pwd = signupPassword.getText().toString();
+                    String mail = signupEmail.getText().toString().trim();
+                    String pwd = signupPassword.getText().toString().trim();
 
                     final SpotsDialog waitingDialog = new SpotsDialog(RegisterActivity.this, R.style.RegsiterActivity);
                     waitingDialog.show();
