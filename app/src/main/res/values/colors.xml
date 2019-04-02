@@ -22,4 +22,7 @@
     <color name="colorCeleste">#039BE5</color>
     <color name="colorCelesteDark">#0288D1</color>
     <color name="colorAmarillo">#FFA000</color>
+    <color name="bs_acepta">#28a745</color>
+
+
 </resources>

@@ -83,17 +83,17 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
     public static BSRFDoctor newInstance(String title, String doctorUID, boolean isTapOnMap, Double doctorLatitude, Double doctorLongitud, Double pacienteLatitude, Double pacienteLongitud) {
         BSRFDoctor f = new BSRFDoctor();
         Bundle args = new Bundle();
-
+        //--->
         args.putString("title", title);
-        args.putString("doctorUID", doctorUID);//<---
+        args.putString("doctorUID", doctorUID);
         args.putBoolean("isTapOnMap", isTapOnMap);
         args.putDouble("doctorLatitude", doctorLatitude);
         args.putDouble("doctorLongitud", doctorLongitud);
         args.putDouble("pacienteLatitude", pacienteLatitude);
         args.putDouble("pacienteLongitud", pacienteLongitud);
+        //<---
         f.setArguments(args);
         return f;
-
     }
 
 
@@ -115,10 +115,11 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
         auth = FirebaseAuth.getInstance();
         pacienteUID = auth.getCurrentUser().getUid();
 
-
         Log.e(TAG, "title " + title);
+
         Log.e(TAG, "doctorUID " + doctorUID);
         Log.e(TAG, "pacienteUID " + pacienteUID);
+
         Log.e(TAG, "doctorLatitude " + mLatitude);
         Log.e(TAG, "doctorLongitud " + mLongitud);
 
@@ -142,8 +143,6 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
         View view = inflater.inflate(R.layout.botton_sheet_doctor, container, false);
 
         // Construct a FusedLocationProviderClient.
-
-
         mDatabase = FirebaseDatabase.getInstance().getReference().child("tb_Info_Doctor");
         mDatabase.keepSynced(true);
 

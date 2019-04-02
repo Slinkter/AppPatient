@@ -26,7 +26,7 @@ public class DoctorPerfilActivity extends AppCompatActivity {
         String img = getIntent().getExtras().getString("doctor_img");
         String firstName = getIntent().getExtras().getString("doctor_name");
         String lastname = getIntent().getExtras().getString("doctor_last");
-        String numPhone = getIntent().getExtras().getString("doctor_phone") ;
+        final String numPhone = getIntent().getExtras().getString("doctor_phone") ;
         String especialidad = getIntent().getExtras().getString("doctor_especilidad");
 
 
@@ -59,7 +59,7 @@ public class DoctorPerfilActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse("tel:930472478"));
+                intent.setData(Uri.parse("tel:"+numPhone));
                 startActivity(intent);
             }
         });

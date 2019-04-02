@@ -270,7 +270,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_weight="1"
-                    android:background="@drawable/custome_bottom_5"
+                    android:background="@drawable/custom_botton_accept"
                     android:text="Salir"
                     android:textColor="@color/color_white"
 

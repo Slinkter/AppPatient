@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     android:orientation="vertical"
     tools:context=".Activities.MainActivity">
 
@@ -21,6 +22,8 @@
             android:gravity="center"
             android:orientation="vertical">
 
+
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -30,13 +33,22 @@
                 android:text="Bienvenido"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
 
+            <ImageView
+
+                android:id="@+id/icon"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/ic_ambulance" />
 
             <TextView
                 android:id="@+id/nameTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="USUARIO"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+                android:textSize="15dp"
+                android:visibility="gone"
+                 />
 
             <TextView
                 android:id="@+id/emailTextView"
@@ -54,8 +66,8 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
-                android:background="@drawable/custom_botton_1"
-                android:text="Ver medicos "
+                android:background="@drawable/custom_botton_accept"
+                android:text="Medicos "
                 android:textColor="@color/color_white" />
 
             <Button
@@ -77,8 +89,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="20dp"
-                android:background="@drawable/custom_botton_1"
-                android:text="Servicio "
+                android:background="@drawable/custom_botton_accept"
+                android:text="Ubicació"
                 android:textColor="@color/color_white" />
 
             <Button
@@ -87,7 +99,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="20dp"
-                android:background="@drawable/custom_botton_1"
+                android:background="@drawable/custom_botton_accept"
                 android:text="Actualizar Datos "
                 android:textColor="@color/color_white" />
             <Button
@@ -96,7 +108,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="20dp"
-                android:background="@drawable/custom_botton_1"
+                android:background="@drawable/custom_botton_accept"
                 android:text="Historial "
                 android:textColor="@color/color_white" />
 
@@ -106,9 +118,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="20dp"
-                android:background="@drawable/custom_botton_2"
+                android:background="@drawable/custom_botton_decline"
                 android:text="Cerra Sesión"
-                android:textColor="@color/colorRed" />
+                android:textColor="@color/color_white"  />
 
 
         </LinearLayout>

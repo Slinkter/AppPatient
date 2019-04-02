@@ -4,9 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#F5F5F5"
+    android:background="@drawable/custom_botton_accept"
     android:fitsSystemWindows="false">
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,124 +13,188 @@
         android:gravity="center"
         android:orientation="vertical">
         <!--nuevo -->
-        <android.support.v7.widget.CardView
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginTop="?attr/actionBarSize"
-            app:cardBackgroundColor="@color/color_white"
-            app:cardCornerRadius="25dp"
-            app:cardElevation="5dp"
-            app:cardUseCompatPadding="true">
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_margin="30dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
-            <LinearLayout
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/bs_doctorImage"
+                android:layout_width="105dp"
+                android:layout_height="105dp"
+                android:layout_margin="6dp"
+                app:civ_border_color="@color/color_white"
+                app:civ_border_width="3dp" />
 
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical">
+            <TextView
+                android:id="@+id/bs_doctorFirstName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="firstname "
+                android:textColor="@color/color_white"
+                android:textSize="22dp"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:layout_marginTop="20dp"
-                    android:id="@+id/bs_doctorEspecialidad"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:paddingTop="5dp"
-                    android:text="Especialidad"
-                    android:textColor="@color/startblue"
-                    android:textSize="25sp"
-                    android:textStyle="bold" />
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/bs_doctorImage"
-                    android:layout_width="105dp"
-                    android:layout_height="105dp"
-                    android:layout_margin="6dp"
-                    app:civ_border_color="@color/startblue"
-                    app:civ_border_width="3dp" />
-
-                <TextView
-                    android:id="@+id/bs_doctorFirstName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="firstname "
-
-                    android:textColor="@color/startblue"
-                    android:textSize="20sp" />
-
-                <TextView
-                    android:id="@+id/bs_doctorLastName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="lastname"
-                    android:layout_marginBottom="40dp"
-                    android:textColor="@color/startblue"
-                    android:textSize="20sp" />
+            <TextView
+                android:id="@+id/bs_doctorLastName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="lastname"
+                android:textColor="@color/color_white"
+                android:textSize="22dp"
+                android:textStyle="bold" />
 
 
-                <TextView
-                    android:id="@+id/bs_doctorPhone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="5dp"
-                    android:text="999-999-999"
-                    android:textColor="@color/startblue"
-                    android:textSize="20sp"
-                    android:visibility="gone" />
+        </LinearLayout>
 
-            </LinearLayout>
-        </android.support.v7.widget.CardView>
-        <!--viejo -->
 
+        <!--Bloques -->
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="50dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
             app:cardBackgroundColor="@color/color_white"
-            app:cardCornerRadius="25dp"
+            app:cardCornerRadius="15dp"
             app:cardElevation="5dp"
             app:cardUseCompatPadding="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
                 android:orientation="horizontal">
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content">
 
                     <TextView
+                        android:id="@+id/especialidad"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="40sp"
+                        android:layout_marginRight="40sp"
+                        android:text="Especialidad"
+                        android:textSize="18dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/bs_doctorEspecialidad"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="Consulta"
+                        android:layout_alignRight="@+id/especialidad"
+                        android:text="c_especialidad"
+                        android:textSize="18dp"
+                        android:textStyle="normal" />
 
-                        android:textSize="22dp"
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            app:cardBackgroundColor="@color/color_white"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="5dp"
+            app:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/bs_consulta"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="40sp"
+                        android:layout_marginRight="40sp"
+                        android:text="Consulta "
+                        android:textSize="18dp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="-9dp"
-                        android:layout_marginBottom="10dp"
-                        android:paddingTop="10dp"
-                        android:text="40 Soles"
-                        android:textColor="@color/startblue"
-                        android:textSize="18dp" />
-                </LinearLayout>
+                        android:layout_alignRight="@+id/bs_consulta"
+                        android:text="S/ 40.00"
+                        android:textSize="18dp"
+                        android:textStyle="normal" />
+
+
+                </RelativeLayout>
+
             </LinearLayout>
 
         </android.support.v7.widget.CardView>
 
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            app:cardBackgroundColor="@color/color_white"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="5dp"
+            app:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/bs_telefono"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="40sp"
+                        android:layout_marginRight="40sp"
+                        android:text="Telefono"
+                        android:textSize="18dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/bs_doctorPhone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignRight="@+id/bs_telefono"
+                        android:text="999-999-999"
+                        android:textSize="18dp"
+                        android:textStyle="normal" />
+
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
 
         <!--Butones de si y no -->
         <LinearLayout
@@ -155,6 +218,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:text="¿Desea llamar al medico?"
+                    android:textColor="@color/color_white"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
@@ -185,9 +249,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="20dp"
-                    android:background="@drawable/custome_bottom_5"
-                    android:paddingLeft="50dp"
-                    android:paddingRight="50dp"
+                    android:background="@drawable/custom_botton_1"
+                    android:paddingStart="50dp"
+                    android:paddingEnd="50dp"
                     android:text="Si"
                     android:textColor="#fff"
                     android:textSize="20dp" />
@@ -197,9 +261,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:background="@drawable/custom_botton_3"
-                    android:paddingLeft="50dp"
-                    android:paddingRight="50dp"
+                    android:background="@drawable/custom_botton_decline"
+                    android:paddingStart="50dp"
+                    android:paddingEnd="50dp"
                     android:text="No"
                     android:textColor="#fff"
                     android:textSize="20dp" />
