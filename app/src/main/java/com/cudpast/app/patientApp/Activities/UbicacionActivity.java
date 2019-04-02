@@ -51,7 +51,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 public class UbicacionActivity extends AppCompatActivity implements
         OnMyLocationButtonClickListener,
         OnMyLocationClickListener,
@@ -62,9 +61,10 @@ public class UbicacionActivity extends AppCompatActivity implements
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     LatLng pacienteLocation;
-    private CameraPosition mCameraPosition;
+
     private DatabaseReference DatabaseReference_TB_AVAILABLE_DOCTOR;
     private DatabaseReference DatabaseReference_TB_INFO_DOCTOR;
+
     private static final int DEFAULT_ZOOM = 15;
     private final LatLng mDefaultLocation = new LatLng(-12.071368, -76.962154);
 
@@ -161,11 +161,16 @@ public class UbicacionActivity extends AppCompatActivity implements
      * Enables the My Location layer if the fine location permission has been granted.
      */
     private void enableMyLocation() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat
+                .checkSelfPermission(this,
+                        Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat
+                        .checkSelfPermission(this,
+                                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // Permission to access the location is missing.
-            PermissionUtils.requestPermission(this, LOCATION_PERMISSION_REQUEST_CODE,
-                    Manifest.permission.ACCESS_FINE_LOCATION, true);
+            PermissionUtils
+                    .requestPermission(this, LOCATION_PERMISSION_REQUEST_CODE,
+                            Manifest.permission.ACCESS_FINE_LOCATION, true);
         } else if (mMap != null) {
             // Access to the location has been granted to the app.
             mMap.setMyLocationEnabled(true);
@@ -189,8 +194,7 @@ public class UbicacionActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode != LOCATION_PERMISSION_REQUEST_CODE) {
             return;
         }
