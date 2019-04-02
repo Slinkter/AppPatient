@@ -113,6 +113,34 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Log.e(TAG, "permission was granted");
                     mMap.setMyLocationEnabled(true);
+                    try {
+                        boolean isSuccess = mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.my_map_style));
+                        if (!isSuccess) {
+                            Log.e("ERROR", "El estilo de google map no carga");
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    fusedLocationClient
+                            .getLastLocation()
+                            .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                                @Override
+                                public void onSuccess(Location location) {
+                                    if (location != null) {
+                                        mMap.getUiSettings().setAllGesturesEnabled(true);
+                                        Common.mLastLocation = location;
+                                        mMap
+                                                .moveCamera(CameraUpdateFactory
+                                                        .newLatLngZoom(new LatLng(Common.mLastLocation.getLatitude(), Common.mLastLocation.getLongitude()), 16));
+
+                                    }
+                                }
+                            });
+
+
+
+                    getDeviceLocation();
                 } else {
                     Log.e(TAG, "permission denied");
                     break;
@@ -143,7 +171,6 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
             return;
         }
         mMap.setMyLocationEnabled(true);
-
         try {
             boolean isSuccess = mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.my_map_style));
             if (!isSuccess) {
@@ -153,28 +180,23 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
             e.printStackTrace();
         }
 
+        fusedLocationClient
+                .getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        if (location != null) {
+                            mMap.getUiSettings().setAllGesturesEnabled(true);
+                            Common.mLastLocation = location;
+                            mMap
+                                    .moveCamera(CameraUpdateFactory
+                                            .newLatLngZoom(new LatLng(Common.mLastLocation.getLatitude(), Common.mLastLocation.getLongitude()), 16));
 
-//        fusedLocationClient
-//                .getLastLocation()
-//                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-//                    @Override
-//                    public void onSuccess(Location location) {
-//                        if (location != null) {
-//                            mMap.getUiSettings().setAllGesturesEnabled(true);
-//                            Common.mLastLocation = location;
-//                            Log.e(TAG, "fusedLocationClient : Common.mLastLocation.getLatitude() " + Common.mLastLocation.getLatitude());
-//                            Log.e(TAG, "fusedLocationClient : Common.mLastLocation.getLongitude()" + Common.mLastLocation.getLongitude());
-//                            mMap
-//                                    .addMarker(new MarkerOptions()
-//                                            .position(new LatLng(Common.mLastLocation.getLatitude(), Common.mLastLocation.getLongitude()))
-//                                            .title("USTED")
-//                                            .icon(bitmapDescriptorFromVector(UbicacionActivity.this, R.drawable.ic_client))
-//                                    );
-//
-//
-//                        }
-//                    }
-//                });
+                        }
+                    }
+                });
+
+
 
 
         //
