@@ -25,6 +25,7 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,6 +34,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -51,15 +53,11 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class UbicacionActivity extends AppCompatActivity implements
-        OnMyLocationButtonClickListener,
-        OnMyLocationClickListener,
-        OnMapReadyCallback,
-        ActivityCompat.OnRequestPermissionsResultCallback {
+public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private static final String TAG = UbicacionActivity.class.getSimpleName();
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
-    private FusedLocationProviderClient mFusedLocationProviderClient;
+    private static final int MY_PERMISSION_REQUEST_CODE = 1;
+    private FusedLocationProviderClient fusedLocationClient;
     LatLng pacienteLocation;
 
     private DatabaseReference DatabaseReference_TB_AVAILABLE_DOCTOR;
@@ -87,7 +85,7 @@ public class UbicacionActivity extends AppCompatActivity implements
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         DatabaseReference_TB_AVAILABLE_DOCTOR = FirebaseDatabase.getInstance().getReference(Common.TB_AVAILABLE_DOCTOR);
         DatabaseReference_TB_INFO_DOCTOR = FirebaseDatabase.getInstance().getReference(Common.TB_INFO_DOCTOR);
 
@@ -96,21 +94,55 @@ public class UbicacionActivity extends AppCompatActivity implements
 
         DatabaseReference_TB_INFO_DOCTOR.keepSynced(true);
         DatabaseReference_TB_INFO_DOCTOR.orderByKey();
+
+        setupLocation();
     }
 
+    private void setupLocation() {
 
+
+    }
+
+    @SuppressLint("MissingPermission")
     @Override
-    protected void onResume() {
-        super.onResume();
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case MY_PERMISSION_REQUEST_CODE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.e(TAG, "permission was granted");
+                    mMap.setMyLocationEnabled(true);
+                } else {
+                    Log.e(TAG, "permission denied");
+                    break;
 
+                }
+            }
+        }
     }
 
     @Override
     public void onMapReady(GoogleMap map) {
         mMap = map;
-        mMap.setOnMyLocationButtonClickListener(this);
-        mMap.setOnMyLocationClickListener(this);
-        enableMyLocation();
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        //.Permisos
+        if (ContextCompat
+                .checkSelfPermission(this,
+                        Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat
+                        .checkSelfPermission(this,
+                                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{
+                            Manifest.permission.ACCESS_COARSE_LOCATION,
+                            Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_PERMISSION_REQUEST_CODE);
+
+            return;
+        }
+        mMap.setMyLocationEnabled(true);
 
         try {
             boolean isSuccess = mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.my_map_style));
@@ -120,6 +152,33 @@ public class UbicacionActivity extends AppCompatActivity implements
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
+//        fusedLocationClient
+//                .getLastLocation()
+//                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+//                    @Override
+//                    public void onSuccess(Location location) {
+//                        if (location != null) {
+//                            mMap.getUiSettings().setAllGesturesEnabled(true);
+//                            Common.mLastLocation = location;
+//                            Log.e(TAG, "fusedLocationClient : Common.mLastLocation.getLatitude() " + Common.mLastLocation.getLatitude());
+//                            Log.e(TAG, "fusedLocationClient : Common.mLastLocation.getLongitude()" + Common.mLastLocation.getLongitude());
+//                            mMap
+//                                    .addMarker(new MarkerOptions()
+//                                            .position(new LatLng(Common.mLastLocation.getLatitude(), Common.mLastLocation.getLongitude()))
+//                                            .title("USTED")
+//                                            .icon(bitmapDescriptorFromVector(UbicacionActivity.this, R.drawable.ic_client))
+//                                    );
+//
+//
+//                        }
+//                    }
+//                });
+
+
+        //
+        getDeviceLocation();
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
@@ -153,91 +212,15 @@ public class UbicacionActivity extends AppCompatActivity implements
             }
         });
 
-        getDeviceLocation();
 
-    }
-
-    /**
-     * Enables the My Location layer if the fine location permission has been granted.
-     */
-    private void enableMyLocation() {
-        if (ContextCompat
-                .checkSelfPermission(this,
-                        Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat
-                        .checkSelfPermission(this,
-                                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // Permission to access the location is missing.
-            PermissionUtils
-                    .requestPermission(this, LOCATION_PERMISSION_REQUEST_CODE,
-                            Manifest.permission.ACCESS_FINE_LOCATION, true);
-        } else if (mMap != null) {
-            // Access to the location has been granted to the app.
-            mMap.setMyLocationEnabled(true);
-        }
-    }
-
-    @Override
-    public boolean onMyLocationButtonClick() {
-//        Toast.makeText(this, "MyLocation button clicked", Toast.LENGTH_SHORT).show();
-        // Return false so that we don't consume the event and the default behavior still occurs
-        // (the camera animates to the user's current position).
-        return false;
-    }
-
-    @Override
-    public void onMyLocationClick(@NonNull Location location) {
-//        Toast.makeText(this, "Current location:\n" + location, Toast.LENGTH_LONG).show();
-//        LatLng pacienteGPS = new LatLng(location.getLatitude(), location.getLongitude());
-//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pacienteGPS, DEFAULT_ZOOM));
-
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode != LOCATION_PERMISSION_REQUEST_CODE) {
-            return;
-        }
-
-        if (PermissionUtils.isPermissionGranted(permissions, grantResults,
-                Manifest.permission.ACCESS_FINE_LOCATION)) {
-            // Enable the my location layer if the permission has been granted.
-            enableMyLocation();
-        } else {
-            // Display the missing permission error dialog when the fragments resume.
-            mPermissionDenied = true;
-        }
-    }
-
-    @Override
-    protected void onResumeFragments() {
-        super.onResumeFragments();
-        if (mPermissionDenied) {
-            // Permission was not granted, display error dialog.
-            showMissingPermissionError();
-            mPermissionDenied = false;
-        }
-    }
-
-    /**
-     * Displays a dialog with error message explaining that the location permission is missing.
-     */
-    private void showMissingPermissionError() {
-        PermissionUtils
-                .PermissionDeniedDialog
-                .newInstance(true)
-                .show(getSupportFragmentManager(), "dialog");
     }
 
 
     private void getDeviceLocation() {
-        /**
-         * Get the best and most recent location of the device, which may be null in rare
-         * cases when a location is not available.
-         */
+
         try {
 
-            Task<Location> locationResult = mFusedLocationProviderClient.getLastLocation();
+            Task<Location> locationResult = fusedLocationClient.getLastLocation();
             locationResult
                     .addOnCompleteListener(this, new OnCompleteListener<Location>() {
                         @Override
@@ -283,7 +266,7 @@ public class UbicacionActivity extends AppCompatActivity implements
     private void loadDoctorAvailableOnMap(final LatLng pacienteLocation) {
         //.
         mMap.clear();
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pacienteLocation, 14.99f));
+//        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pacienteLocation, 14.99f));
         //.Obtener a todos los doctores desde Firebase
         GeoFire gf = new GeoFire(DatabaseReference_TB_AVAILABLE_DOCTOR);
         //.
@@ -316,13 +299,14 @@ public class UbicacionActivity extends AppCompatActivity implements
                                 Log.e(TAG, " rider.getDni()  " + rider.getDni());
                                 //add Driver to map
 
-                                mMap.addMarker(new MarkerOptions()
-                                        .position(new LatLng(location.latitude, location.longitude))
-                                        .flat(true)
-                                        .title(rider.getFirstname() + " " + rider.getLastname())
-                                        .snippet(rider.getUid())
-                                        .icon(bitmapDescriptorFromVector(UbicacionActivity.this, R.drawable.ic_doctorapp))
-                                );
+                                mMap
+                                        .addMarker(new MarkerOptions()
+                                                .position(new LatLng(location.latitude, location.longitude))
+                                                .flat(true)
+                                                .title(rider.getFirstname() + " " + rider.getLastname())
+                                                .snippet(rider.getUid())
+                                                .icon(bitmapDescriptorFromVector(UbicacionActivity.this, R.drawable.ic_doctorapp))
+                                        );
 
                                 mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
                                     @Override
@@ -351,8 +335,6 @@ public class UbicacionActivity extends AppCompatActivity implements
 
                             }
                         });
-
-
             }
 
             @Override
@@ -381,6 +363,7 @@ public class UbicacionActivity extends AppCompatActivity implements
 
     }
 
+    //.
     private BitmapDescriptor bitmapDescriptorFromVector(Context context, @DrawableRes int vectorDrawableResourceId) {
         Drawable background = ContextCompat.getDrawable(context, vectorDrawableResourceId);
         background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight());
