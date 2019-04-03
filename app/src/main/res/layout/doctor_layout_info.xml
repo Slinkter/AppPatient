@@ -20,8 +20,8 @@
             android:layout_height="80dp"
             android:padding="1dp"
             android:src="@mipmap/ic_launcher"
-            app:civ_border_color="@color/color_white"
-            app:civ_border_width="3dp" />
+            app:civ_border_color="@color/colorVerdeAzul"
+            app:civ_border_width="2dp" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -30,39 +30,27 @@
             android:padding="5dp">
 
             <TextView
-                android:id="@+id/especialidad"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="especialidad"
-                android:textStyle="bold" />
-
-            <TextView
                 android:id="@+id/firstname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/especialidad"
-                android:gravity="right"
                 android:text="name"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/lastname"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/firstname"
-                android:gravity="right"
-                android:text="last"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/lastname"
-                android:gravity="right"
+                android:layout_below="@+id/firstname"
                 android:text="00000000"
-                android:textStyle="bold" />
+                android:textStyle="" />
 
+            <TextView
+                android:id="@+id/especialidad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/phone"
+                android:text="especialidad "
+                android:textStyle="" />
 
 
         </RelativeLayout>

@@ -62,8 +62,8 @@ public class HistoryActivity extends AppCompatActivity {
             protected void populateViewHolder(BlogViewHolder viewHolder, DoctorPerfil model, int position) {
 
                 viewHolder.setImage(getApplicationContext(), model.getImage());
-                viewHolder.setFirstName(model.getFirstname());
-                viewHolder.setLastName(model.getLastname());
+                viewHolder.setFirstName(model.getFirstname() +" "+ model.getLastname());
+//                viewHolder.setLastName(model.getLastname());
                 viewHolder.setPhone(model.getNumphone());
                 viewHolder.setEspecialidad(model.getEspecialidad());
 
@@ -86,10 +86,10 @@ public class HistoryActivity extends AppCompatActivity {
             post_firstName.setText(firstName);
         }
 
-        public void setLastName(String lastName) {
-            TextView post_lastName = mView.findViewById(R.id.lastname);
-            post_lastName.setText(lastName);
-        }
+//        public void setLastName(String lastName) {
+//            TextView post_lastName = mView.findViewById(R.id.lastname);
+//            post_lastName.setText(lastName);
+//        }
 
         public void setPhone(String phone) {
             TextView post_phone = mView.findViewById(R.id.phone);
