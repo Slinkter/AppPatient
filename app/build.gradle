@@ -67,5 +67,8 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
     // Imagen de GIF de lotti
     implementation "com.airbnb.android:lottie:2.1.0"
+    //login
+
+
 }
 apply plugin: 'com.google.gms.google-services'

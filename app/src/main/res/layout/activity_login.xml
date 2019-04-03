@@ -1,69 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     android:orientation="vertical"
-    tools:context=".Activities.LoginActivity">
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp">
 
     <LinearLayout
-        android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <LinearLayout
+        <ImageView
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/ic_ambulance" />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:hint="Correo"
+            android:inputType="textEmailAddress"
+            android:textColor="@color/colorPrimary"
+            android:textColorHint="@color/colorPrimary"
+            android:textSize="18sp"
+            app:met_baseColor="@color/colorPrimary"
+            app:met_floatingLabel="highlight"
+            app:met_iconLeft="@drawable/ic_email_black_1"
+            app:met_primaryColor="@color/colorPrimary"
+            app:met_singleLineEllipsis="false" />
 
-            <ImageView
-
-                android:id="@+id/icon"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="50dp"
-                android:contentDescription="nada"
-                android:src="@drawable/ic_ambulance" />
-
-            <Button
-                android:id="@+id/login_button"
-                android:layout_width="@dimen/button_width_main"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/icon"
-                android:layout_marginBottom="20dp"
-                android:background="@drawable/custom_botton_decline"
-                android:text="@string/login"
-                android:textColor="@color/color_white" />
-
-            <Button
-                android:id="@+id/register_button"
-                android:layout_width="@dimen/button_width_main"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/login_button"
-                android:layout_marginBottom="20dp"
-                android:background="@drawable/custom_botton_decline"
-                android:onClick="btnregister"
-                android:text="@string/register"
-                android:textColor="@color/color_white" />
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:hint="Contraseña"
+            android:inputType="textPassword"
+            android:textColor="@color/colorPrimary"
+            android:textColorHint="@color/colorPrimary"
+            android:textSize="18sp"
+            app:met_baseColor="@color/colorPrimary"
+            app:met_floatingLabel="highlight"
+            app:met_iconLeft="@drawable/ic_key_black_1"
+            app:met_primaryColor="@color/colorPrimary"
+            app:met_singleLineEllipsis="false" />
 
 
-        </LinearLayout>
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:padding="8dp"
+            android:text="Recordarme " />
+
+        <Button
+            android:id="@+id/btn_login"
+            style="@style/Base.TextAppearance.AppCompat.Body1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/background_login"
+            android:clickable="true"
+            android:padding="16dp"
+            android:text="Login"
+            android:textAllCaps="false"
+            android:textColor="#fff"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/btn_register"
+            style="@style/Base.TextAppearance.AppCompat.Body1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/background_signup"
+            android:clickable="true"
+            android:padding="16dp"
+            android:text="Registrarse"
+            android:textAllCaps="false"
+            android:textColor="#fff"
+            android:textSize="18sp" />
+
+        <TextView
+            style="@style/TextAppearance.AppCompat.Body2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="16dp"
+            android:clickable="true"
+            android:padding="16dp"
+            android:text="Recuperar contraseña" />
+
     </LinearLayout>
-    <TextView
-        android:id="@+id/txt_forgot_password"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
-        android:text="Recuperar contraseña"
-        android:textAlignment="center"
-        android:textColor="@color/colorRed"
-        android:textSize="18sp" />
-</RelativeLayout>
+
+
+</LinearLayout>

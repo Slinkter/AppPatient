@@ -57,24 +57,27 @@ public class LoginActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         db = FirebaseDatabase.getInstance();
         users = db.getReference("db_usuarios");
-        login_button = findViewById(R.id.login_button);
-        root = findViewById(R.id.root);
 
-        login_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showLoginDialog();
-            }
-        });
+//        login_button = findViewById(R.id.login_button);
+//        root = findViewById(R.id.root);
+//
+//        login_button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                showLoginDialog();
+//            }
+//        });
+//
+//        txt_forgot_pwd = findViewById(R.id.txt_forgot_password);
+//        txt_forgot_pwd.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View view, MotionEvent motionEvent) {
+//                showDialogForgotPwd();
+//                return false;
+//            }
+//        });
 
-        txt_forgot_pwd = findViewById(R.id.txt_forgot_password);
-        txt_forgot_pwd.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                showDialogForgotPwd();
-                return false;
-            }
-        });
+
     }
 
     private void showDialogForgotPwd() {
