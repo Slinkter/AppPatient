@@ -42,7 +42,9 @@ public class ListDoctorActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
         FirebaseRecyclerAdapter<Doctor, BlogViewHolder> adapter;
+
         adapter = new FirebaseRecyclerAdapter<Doctor, BlogViewHolder>(Doctor.class, R.layout.doctor_layout_info, BlogViewHolder.class, mDatabase) {
 
             @Override
