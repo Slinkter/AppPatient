@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:gravity="center"
         tools:context=".MainActivity">
 
         <LinearLayout
@@ -22,8 +23,6 @@
             android:gravity="center"
             android:orientation="vertical">
 
-
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -33,13 +32,6 @@
                 android:text="Bienvenido"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
 
-            <ImageView
-
-                android:id="@+id/icon"
-                android:layout_width="65dp"
-                android:layout_height="65dp"
-                android:layout_centerHorizontal="true"
-                android:src="@drawable/ic_ambulance" />
 
             <TextView
                 android:id="@+id/nameTextView"
@@ -47,8 +39,7 @@
                 android:layout_height="wrap_content"
                 android:text="USUARIO"
                 android:textSize="15dp"
-                android:visibility="gone"
-                 />
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/emailTextView"
@@ -67,7 +58,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/custom_botton_accept"
-                android:text="Medicos "
+                android:text="Medicos"
                 android:textColor="@color/color_white" />
 
             <Button
@@ -76,11 +67,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="20dp"
-                android:background="@drawable/custom_botton_1"
+                android:background="@drawable/custom_botton_accept"
                 android:text="Especialidad "
                 android:textColor="@color/color_white"
                 android:visibility="gone" />
-
 
 
             <Button
@@ -102,6 +92,7 @@
                 android:background="@drawable/custom_botton_accept"
                 android:text="Actualizar Datos "
                 android:textColor="@color/color_white" />
+
             <Button
                 android:id="@+id/btnHistorial"
                 android:layout_width="@dimen/button_width_main"
@@ -119,11 +110,19 @@
                 android:layout_gravity="center"
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/custom_botton_decline"
-                android:text="Cerra Sesión"
-                android:textColor="@color/color_white"  />
+                android:text="Cerrar Sesión"
+                android:textColor="@color/color_white" />
+            <TextView
+                android:text="Usuario"
+                android:layout_marginTop="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
 
         </LinearLayout>
+
+
+
 
 
     </LinearLayout>
