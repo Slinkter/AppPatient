@@ -80,9 +80,7 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
         setContentView(R.layout.activity_ubicacion);
         getSupportActionBar().setTitle("Mapas de Doctores");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        SupportMapFragment mapFragment =
-                (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        SupportMapFragment mapFragment =(SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapUbicacion);
         mapFragment.getMapAsync(this);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
