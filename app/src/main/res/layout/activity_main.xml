@@ -11,8 +11,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:gravity="center"
+        android:orientation="vertical"
         tools:context=".MainActivity">
 
         <LinearLayout
@@ -32,15 +32,6 @@
                 android:text="Bienvenido"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
 
-
-            <TextView
-                android:id="@+id/nameTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="USUARIO"
-                android:textSize="15dp"
-                android:visibility="gone" />
-
             <TextView
                 android:id="@+id/emailTextView"
                 android:layout_width="wrap_content"
@@ -48,7 +39,6 @@
                 android:text="USUARIO"
                 android:textSize="18sp"
                 android:visibility="gone" />
-
 
             <Button
                 android:id="@+id/btnMedicos"
@@ -112,20 +102,17 @@
                 android:background="@drawable/custom_botton_decline"
                 android:text="Cerrar Sesión"
                 android:textColor="@color/color_white" />
-            <TextView
-                android:text="Usuario"
-                android:layout_marginTop="20dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
 
+            <TextView
+                android:id="@+id/nameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="USUARIO"
+                android:textSize="14dp" />
 
         </LinearLayout>
 
-
-
-
-
     </LinearLayout>
-
 
 </LinearLayout>
