@@ -39,12 +39,11 @@
 
 
         <android.support.v7.widget.CardView
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardBackgroundColor="@color/color_white"
             app:cardCornerRadius="25dp"
-            app:cardElevation="8dp"
+            app:cardElevation="5dp"
             app:cardUseCompatPadding="true">
 
             <LinearLayout
@@ -110,7 +109,7 @@
             android:layout_height="wrap_content"
             app:cardBackgroundColor="@color/color_white"
             app:cardCornerRadius="25dp"
-            app:cardElevation="8dp"
+            app:cardElevation="5dp"
             app:cardUseCompatPadding="true">
 
             <LinearLayout
@@ -178,7 +177,8 @@
                     android:id="@+id/tilPlannedDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColorHint="@color/colorPrimary">
+                    android:hint="Fecha de nacimiento"
+                    android:textColorHint="@color/colorVerdeAzulBajo"                    >
 
                     <com.rengwuxian.materialedittext.MaterialEditText
                         android:id="@+id/signupDate"
@@ -187,16 +187,14 @@
                         android:clickable="true"
                         android:focusable="false"
                         android:gravity="center"
-                        android:hint="Fecha de nacimiento"
                         android:inputType="date"
-                        android:maxLines="1"
                         android:textColor="@color/colorPrimary"
                         android:textColorHint="@color/colorPrimary"
                         android:textSize="@dimen/textSize_registro"
                         app:met_baseColor="@color/colorPrimary"
                         app:met_floatingLabel="highlight"
                         app:met_primaryColor="@color/colorPrimary"
-                        app:met_singleLineEllipsis="false"  />
+                        app:met_singleLineEllipsis="false" />
                 </android.support.design.widget.TextInputLayout>
 
                 <com.rengwuxian.materialedittext.MaterialEditText
@@ -233,22 +231,20 @@
                     app:met_primaryColor="@color/colorPrimary"
                     app:met_singleLineEllipsis="false" />
 
-
             </LinearLayout>
         </android.support.v7.widget.CardView>
-
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
             android:gravity="center_vertical">
 
             <LinearLayout
                 android:id="@+id/passwordlessButtons"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
                 android:orientation="horizontal"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp">
@@ -257,43 +253,16 @@
                     android:id="@+id/btnGuardar"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="20dp"
                     android:layout_weight="1"
-                    android:background="@drawable/custom_botton_1"
-                    android:text="Guardar"
-                    android:textColor="@color/color_white" />
-
-                <Button
-                    android:visibility="gone"
-                    android:id="@+id/btnSalir"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/custom_botton_accept"
-                    android:text="Salir"
-                    android:textColor="@color/color_white"
-
-                    />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/signedInButtons"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:orientation="horizontal"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:visibility="gone">
-
-                <Button
-                    android:id="@+id/signOutButton"
-                    style="@style/Widget.AppCompat.Button.Colored"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1.0"
-                    android:text="sign_out" />
+                    android:background="@drawable/background_login"
+                    android:clickable="true"
+                    android:padding="16dp"
+                    android:text="GUARDAR"
+                    android:textAllCaps="false"
+                    android:textColor="#fff"
+                    android:textSize="18sp" />
 
             </LinearLayout>
 

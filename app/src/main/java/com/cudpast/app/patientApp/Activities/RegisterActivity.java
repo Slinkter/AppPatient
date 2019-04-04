@@ -48,34 +48,36 @@ import dmax.dialog.SpotsDialog;
 
 public class RegisterActivity extends AppCompatActivity {
 
-
     private static String TAG = "RegisterActivity";
-    private static final String IP_REGISTRAR = "http://www.cudpast.com/AppUsuario/Registro_INSERT.php";
-
     private FirebaseAuth auth;
     private DatabaseReference tb_Info_Paciente;
-
     private RequestQueue mRequest;
     private VolleyRP volleyRP;
+    private Button guardar;
+    private MaterialEditText
+            signupDNI,
+            signupEmail,
+            signupPassword,
+            signupName,
+            signupLast,
+            signupNumPhone,
+            signupDate,
+            signupAnddress;
 
-    private MaterialEditText signupDNI, signupEmail, signupPassword, signupName, signupLast, signupNumPhone, signupDate, signupAnddress;
-
-    private Button guardar, salir;
     //-->fecha
     private EditText msignupDate;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     public int year_n, month_n, day_n;
-    //<--
-    //-->Validacion
+    //-->Validation
     private Animation animation;
     private Vibrator vib;
 
-    //<--
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        getSupportActionBar().hide();
+        getSupportActionBar().setTitle("Nuevo Usuario");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //---------------Instancia de Firebase
         auth = FirebaseAuth.getInstance();
@@ -86,7 +88,6 @@ public class RegisterActivity extends AppCompatActivity {
 
         //--------------->Botones
         guardar = findViewById(R.id.btnGuardar);
-        salir = findViewById(R.id.btnSalir);
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.shake);
         vib = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
@@ -194,12 +195,6 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-        salir.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToLoginActivity();
-            }
-        });
     }
 
     //METODOS
@@ -211,64 +206,6 @@ public class RegisterActivity extends AppCompatActivity {
         finish();
     }
 
-    //2.Insertar en la base de datos de Godaddy
-//    public Boolean registrarWebGoDaddy(String dni, String correo, String password, String nombre, String apellido, String telefono, String fecha, String direecion) {
-//
-//        boolean registro = false;
-//
-//        HashMap<String, String> hashMapRegistro = new HashMap<>();
-//
-//        hashMapRegistro.put("iddni", dni);
-//        hashMapRegistro.put("correo", correo);
-//        hashMapRegistro.put("password", password);
-//        hashMapRegistro.put("nombre", nombre);
-//        hashMapRegistro.put("apellido", apellido);
-//        hashMapRegistro.put("telefono", telefono);
-//        hashMapRegistro.put("birth", fecha);
-//        hashMapRegistro.put("direccion", direecion);
-//
-//        JsonObjectRequest solicitar = new JsonObjectRequest(Request.Method.POST, IP_REGISTRAR, new JSONObject(hashMapRegistro),
-//
-//                new Response.Listener<JSONObject>() {
-//                    @Override
-//                    public void onResponse(JSONObject datos) {
-//                        try {
-//                            String estado = datos.getString("resultado");
-//                            if (estado.equalsIgnoreCase("Datos registrados  :) ")) {
-//                                // Toast.makeText(RegisterActivity.this, estado, Toast.LENGTH_SHORT).show();
-//                                Log.e("registrarWebGoDaddy", "onResponse : ok ");
-//                            } else {
-//                                //  Toast.makeText(RegisterActivity.this, estado, Toast.LENGTH_SHORT).show();
-//                                Log.e("registrarWebGoDaddy", "onResponse : error");
-//                            }
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                            Toast.makeText(RegisterActivity.this, "no se pudo registrar", Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//
-//                Toast.makeText(RegisterActivity.this, "no se pudo registrar", Toast.LENGTH_SHORT).show();
-//                Log.e("registrarWebGoDaddy", " : onErrorResponse" + error.getMessage());
-//            }
-//        });
-//
-//        try {
-//            VolleyRP.addToQueue(solicitar, mRequest, this, volleyRP);
-//            registro = true;
-//            Log.e("registrarWebGoDaddy", "try ok");
-//        } catch (Exception e) {
-//            Log.e("registrarWebGoDaddy", "cathc " + e.getMessage());
-//            e.printStackTrace();
-//            registro = false;
-//        }
-//
-//
-//        return registro;
-//
-//    }
 
     //3.1 Validación de formulario parte 1
 
@@ -387,7 +324,6 @@ public class RegisterActivity extends AppCompatActivity {
         }
         return true;
     }
-
 
     private void sendEmailVerification() {
         final FirebaseUser user = auth.getCurrentUser();

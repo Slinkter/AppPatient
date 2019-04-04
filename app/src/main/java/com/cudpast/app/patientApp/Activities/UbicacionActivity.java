@@ -207,12 +207,11 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
                 Double doctorLatitude = marker.getPosition().latitude;
                 Double doctorLongitud = marker.getPosition().longitude;
 
-
                 Double pacienteLatitude = Common.mLastLocation.getLatitude();
                 Double pacienteLongitud = Common.mLastLocation.getLongitude();
 
                 String title = marker.getTitle();
-                String doctorUID = marker.getSnippet();//pasar el uid
+                String doctorUID = marker.getSnippet();
 
                 Log.e(TAG, "title " + title);
                 Log.e(TAG, "doctorUID " + doctorUID);
@@ -223,20 +222,32 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
                 Log.e(TAG, "pacienteLatitude " + pacienteLatitude);
                 Log.e(TAG, "pacienteLongitud " + pacienteLongitud);
 
-
                 BSRFDoctor mBottomSheet = BSRFDoctor.newInstance(title, doctorUID, true, doctorLatitude, doctorLongitud, pacienteLatitude, pacienteLongitud);
-
                 mBottomSheet.show(getSupportFragmentManager(), mBottomSheet.getTag());
-//                marker.showInfoWindow();
                 return true;
             }
         });
-
 
     }
 
 
     private void getDeviceLocation() {
+
+        if (ContextCompat
+                .checkSelfPermission(this,
+                        Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat
+                        .checkSelfPermission(this,
+                                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{
+                            Manifest.permission.ACCESS_COARSE_LOCATION,
+                            Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_PERMISSION_REQUEST_CODE);
+
+            return;
+        }
 
         try {
 
@@ -246,7 +257,6 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
                         @Override
                         public void onComplete(@NonNull Task<Location> task) {
                             if (task.isSuccessful()) {
-
 
                                 Common.mLastLocation = task.getResult();
                                 Log.e(TAG, "fusedLocationClient : Common.mLastLocation.getLatitude() " + Common.mLastLocation.getLatitude());
