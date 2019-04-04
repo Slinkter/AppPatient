@@ -406,4 +406,5 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
+
 }
