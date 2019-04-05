@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-
-    android:background="@drawable/custom_botton_accept"
+    android:background="@color/colorVerdeAzul"
     android:fitsSystemWindows="false">
 
     <LinearLayout
@@ -19,14 +18,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:layout_margin="30dp"
+            android:layout_margin="20dp"
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/bs_doctorImage"
-                android:layout_width="105dp"
-                android:layout_height="105dp"
+                android:layout_width="155dp"
+                android:layout_height="155dp"
                 android:layout_margin="6dp"
                 app:civ_border_color="@color/color_white"
                 app:civ_border_width="3dp" />
@@ -38,7 +37,7 @@
                 android:layout_marginTop="5dp"
                 android:text="firstname "
                 android:textColor="@color/color_white"
-                android:textSize="22dp"
+                android:textSize="24dp"
                 android:textStyle="bold" />
 
             <TextView
@@ -48,7 +47,7 @@
                 android:layout_marginTop="5dp"
                 android:text="lastname"
                 android:textColor="@color/color_white"
-                android:textSize="22dp"
+                android:textSize="24dp"
                 android:textStyle="bold" />
 
 
@@ -117,8 +116,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
                 android:orientation="horizontal">
 
                 <RelativeLayout
@@ -129,10 +128,10 @@
                         android:id="@+id/bs_consulta"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="40sp"
-                        android:layout_marginRight="40sp"
+                        android:layout_marginLeft="20sp"
+                        android:layout_marginRight="20sp"
                         android:text="Consulta "
-                        android:textSize="18dp"
+                        android:textSize="15dp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -140,7 +139,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignRight="@+id/bs_consulta"
                         android:text="S/ 40.00"
-                        android:textSize="18dp"
+                        android:textSize="15dp"
                         android:textStyle="normal" />
 
 
@@ -163,8 +162,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
                 android:orientation="horizontal">
 
                 <RelativeLayout
@@ -175,10 +174,10 @@
                         android:id="@+id/bs_telefono"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="40sp"
-                        android:layout_marginRight="40sp"
+                        android:layout_marginLeft="20sp"
+                        android:layout_marginRight="20sp"
                         android:text="Telefono"
-                        android:textSize="18dp"
+                        android:textSize="15dp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -187,7 +186,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignRight="@+id/bs_telefono"
                         android:text="999-999-999"
-                        android:textSize="18dp"
+                        android:textSize="15dp"
                         android:textStyle="normal" />
 
 
@@ -214,28 +213,15 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/txtPickupSnippet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:text="¿Desea llamar al medico?"
                     android:textColor="@color/color_white"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
+                />
 
-                <TextView
-                    android:id="@+id/txt_doctor_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textStyle="normal"
-                    android:visibility="gone" />
-
-                <TextView
-                    android:id="@+id/txt_doctor_snippet"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textStyle="normal"
-                    android:visibility="gone" />
             </LinearLayout>
 
             <LinearLayout
@@ -250,24 +236,24 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="20dp"
-                    android:background="@drawable/custom_botton_1"
+                    android:background="@drawable/background_login"
                     android:paddingStart="50dp"
                     android:paddingEnd="50dp"
                     android:text="Si"
                     android:textColor="#fff"
-                    android:textSize="20dp" />
+                    android:textSize="16dp" />
 
                 <Button
                     android:id="@+id/btn_no"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:background="@drawable/custom_botton_decline"
+                    android:background="@drawable/background_signup"
                     android:paddingStart="50dp"
                     android:paddingEnd="50dp"
                     android:text="No"
                     android:textColor="#fff"
-                    android:textSize="20dp" />
+                    android:textSize="16dp" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

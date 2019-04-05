@@ -25,6 +25,7 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -64,7 +65,7 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
     private DatabaseReference DatabaseReference_TB_INFO_DOCTOR;
 
     private static final int DEFAULT_ZOOM = 15;
-    private final LatLng mDefaultLocation = new LatLng(-12.071368, -76.962154);
+    private final LatLng mDefaultLocation = new LatLng(-12.141177, -77.026342);
 
     private int distance = 5;   // 3km
     private static final int LIMIT = 10;
@@ -80,7 +81,7 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
         setContentView(R.layout.activity_ubicacion);
         getSupportActionBar().setTitle("Mapas de Doctores");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        SupportMapFragment mapFragment =(SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapUbicacion);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapUbicacion);
         mapFragment.getMapAsync(this);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -128,14 +129,12 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
                                     if (location != null) {
                                         mMap.getUiSettings().setAllGesturesEnabled(true);
                                         Common.mLastLocation = location;
-                                        mMap
-                                                .moveCamera(CameraUpdateFactory
-                                                        .newLatLngZoom(new LatLng(Common.mLastLocation.getLatitude(), Common.mLastLocation.getLongitude()), 16));
+                                        LatLng p = new LatLng(Common.mLastLocation.getLatitude(), Common.mLastLocation.getLongitude());
+                                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(p, 16.05f));
 
                                     }
                                 }
                             });
-
 
 
                     getDeviceLocation();
@@ -195,8 +194,6 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
                 });
 
 
-
-
         //
         getDeviceLocation();
 
@@ -239,51 +236,50 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
                 ContextCompat
                         .checkSelfPermission(this,
                                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
             ActivityCompat.requestPermissions(this,
                     new String[]{
                             Manifest.permission.ACCESS_COARSE_LOCATION,
                             Manifest.permission.ACCESS_FINE_LOCATION},
                     MY_PERMISSION_REQUEST_CODE);
-
             return;
         }
-
+        Log.e(TAG, " getDeviceLocation()");
         try {
 
-            Task<Location> locationResult = fusedLocationClient.getLastLocation();
-            locationResult
-                    .addOnCompleteListener(this, new OnCompleteListener<Location>() {
+            fusedLocationClient
+                    .getLastLocation()
+                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
                         @Override
-                        public void onComplete(@NonNull Task<Location> task) {
-                            if (task.isSuccessful()) {
-
-                                Common.mLastLocation = task.getResult();
-                                Log.e(TAG, "fusedLocationClient : Common.mLastLocation.getLatitude() " + Common.mLastLocation.getLatitude());
-                                Log.e(TAG, "fusedLocationClient : Common.mLastLocation.getLongitude()" + Common.mLastLocation.getLongitude());
+                        public void onSuccess(Location location) {
+                            if (location != null) {
+                                Common.mLastLocation = location;
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Common.mLastLocation.getLatitude(), Common.mLastLocation.getLongitude()), DEFAULT_ZOOM));
                                 pacienteLocation = new LatLng(Common.mLastLocation.getLatitude(), Common.mLastLocation.getLongitude());
-                                DatabaseReference_TB_AVAILABLE_DOCTOR.addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                DatabaseReference_TB_AVAILABLE_DOCTOR
+                                        .addValueEventListener(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                Log.e(TAG, " onDataChange() : " + dataSnapshot);
+                                                loadDoctorAvailableOnMap(pacienteLocation);
+                                            }
 
-                                        Log.e(TAG, "319 : displayLocation() --> DatabaseReference_TB_AVAILABLE_DOCTOR --> pacienteLocation  " + pacienteLocation);
-
-                                        loadDoctorAvailableOnMap(pacienteLocation);
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                                        Log.d(TAG, "ERROR : " + "Cannot get your location");
-                                    }
-                                });
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                Log.d(TAG, "databaseError" + databaseError.toString());
+                                            }
+                                        });
                                 loadDoctorAvailableOnMap(pacienteLocation);
                             } else {
-                                Log.d(TAG, "Current location is null. Using defaults.");
-                                Log.e(TAG, "Exception: %s", task.getException());
+                                Log.e(TAG, "Current location is null. Using defaults.");
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
                                 mMap.getUiSettings().setMyLocationButtonEnabled(false);
                             }
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.e(TAG, "addOnFailureListener :" + e.getMessage());
                         }
                     });
 
@@ -292,104 +288,103 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
         }
     }
 
-    // . loadAllAvailableDriver - loadDoctorAvailableOnMap
+    // .
     private void loadDoctorAvailableOnMap(final LatLng pacienteLocation) {
         //.
         mMap.clear();
-//        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pacienteLocation, 14.99f));
-        //.Obtener a todos los doctores desde Firebase
         GeoFire gf = new GeoFire(DatabaseReference_TB_AVAILABLE_DOCTOR);
         //.
         GeoLocation pacienetGeo = new GeoLocation(pacienteLocation.latitude, pacienteLocation.longitude);
         GeoQuery geoQuery = gf.queryAtLocation(pacienetGeo, distance);
         geoQuery.removeAllListeners();
-        geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
-            @Override
-            public void onKeyEntered(String key, final GeoLocation location) {
-                //use key to get email from table users
-                //table users is table when driver register account and update infomation
-                // just open your driver to check this table name
-                FirebaseDatabase
-                        .getInstance()
-                        .getReference(Common.TB_INFO_DOCTOR)
-                        .child(key)
-                        .addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                // because rider and user model is same properties
-                                // so we can user Rider model to get user here
-                                Log.e(TAG, "==========================================");
-                                Log.e(TAG, "        onDataChange        ");
-                                Log.e(TAG, "onKeyEntered " + dataSnapshot.toString());
-
-                                DoctorPerfil rider = dataSnapshot.getValue(DoctorPerfil.class);
-                                Log.e(TAG, " rider.getDni()  " + rider.getFirstname());
-                                Log.e(TAG, " rider.getDni()  " + rider.getLastname());
-                                Log.e(TAG, " rider.getDni()  " + rider.getUid());
-                                Log.e(TAG, " rider.getDni()  " + rider.getDni());
-                                //add Driver to map
-
-                                mMap
-                                        .addMarker(new MarkerOptions()
-                                                .position(new LatLng(location.latitude, location.longitude))
-                                                .flat(true)
-                                                .title(rider.getFirstname() + " " + rider.getLastname())
-                                                .snippet(rider.getUid())
-                                                .icon(bitmapDescriptorFromVector(UbicacionActivity.this, R.drawable.ic_doctorapp))
-                                        );
-
-                                mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+        geoQuery
+                .addGeoQueryEventListener(new GeoQueryEventListener() {
+                    @Override
+                    public void onKeyEntered(String key, final GeoLocation location) {
+                        //use key to get email from table users
+                        //table users is table when driver register account and update infomation
+                        // just open your driver to check this table name
+                        FirebaseDatabase
+                                .getInstance()
+                                .getReference(Common.TB_INFO_DOCTOR)
+                                .child(key)
+                                .addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
-                                    public View getInfoWindow(Marker marker) {
-                                        return null;
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        // because doctor_info and user model is same properties
+                                        // so we can user Rider model to get user here
+                                        Log.e(TAG, "==========================================");
+                                        Log.e(TAG, "        onDataChange        ");
+                                        Log.e(TAG, "onKeyEntered " + dataSnapshot.toString());
+
+                                        DoctorPerfil doctor_info = dataSnapshot.getValue(DoctorPerfil.class);
+                                        Log.e(TAG, " doctor_info.getFirstname()  " + doctor_info.getFirstname());
+                                        Log.e(TAG, " doctor_info.getLastname()  " + doctor_info.getLastname());
+                                        Log.e(TAG, " doctor_info.getUid()  " + doctor_info.getUid());
+                                        Log.e(TAG, " doctor_info.getDni()  " + doctor_info.getDni());
+                                        //add Driver to map
+
+                                        mMap
+                                                .addMarker(new MarkerOptions()
+                                                        .position(new LatLng(location.latitude, location.longitude))
+                                                        .flat(true)
+                                                        .title(doctor_info.getFirstname() + " " + doctor_info.getLastname())
+                                                        .snippet(doctor_info.getUid())
+                                                        .icon(bitmapDescriptorFromVector(UbicacionActivity.this, R.drawable.ic_doctorapp))
+                                                );
+
+                                        mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+                                            @Override
+                                            public View getInfoWindow(Marker marker) {
+                                                return null;
+                                            }
+
+                                            @Override
+                                            public View getInfoContents(Marker marker) {
+
+                                                View view = getLayoutInflater().inflate(R.layout.custom_ider_info_patient, null);
+
+                                                TextView txt_PickupTitle = (view.findViewById(R.id.txtPickupInfo));
+                                                txt_PickupTitle.setText(marker.getTitle());
+
+                                                TextView txt_PickupSnippet = (view.findViewById(R.id.txtPickupSnippet));
+                                                txt_PickupSnippet.setText(marker.getSnippet());
+
+                                                return view;
+                                            }
+                                        });
                                     }
 
                                     @Override
-                                    public View getInfoContents(Marker marker) {
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                        View view = getLayoutInflater().inflate(R.layout.custom_ider_info_patient, null);
-
-                                        TextView txt_PickupTitle = (view.findViewById(R.id.txtPickupInfo));
-                                        txt_PickupTitle.setText(marker.getTitle());
-
-                                        TextView txt_PickupSnippet = (view.findViewById(R.id.txtPickupSnippet));
-                                        txt_PickupSnippet.setText(marker.getSnippet());
-
-                                        return view;
                                     }
                                 });
-                            }
+                    }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                    @Override
+                    public void onKeyExited(String key) {
 
-                            }
-                        });
-            }
+                    }
 
-            @Override
-            public void onKeyExited(String key) {
+                    @Override
+                    public void onKeyMoved(String key, GeoLocation location) {
 
-            }
+                    }
 
-            @Override
-            public void onKeyMoved(String key, GeoLocation location) {
+                    @Override
+                    public void onGeoQueryReady() {
+                        if (distance <= LIMIT) {
+                            distance++;
+                            loadDoctorAvailableOnMap(pacienteLocation);
+                        }
+                    }
 
-            }
+                    @Override
+                    public void onGeoQueryError(DatabaseError error) {
 
-            @Override
-            public void onGeoQueryReady() {
-                if (distance <= LIMIT) {
-                    distance++;
-                    loadDoctorAvailableOnMap(pacienteLocation);
-                }
-            }
-
-            @Override
-            public void onGeoQueryError(DatabaseError error) {
-
-            }
-        });
+                    }
+                });
 
     }
 

@@ -59,8 +59,9 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
     private String mTitle, doctorUID, pacienteUID;
     private Double mLatitude, mLongitud, pacienteLongitud, pacienteLatitude;
     boolean isTapOnMap;
-    private DatabaseReference mDatabase;
-    TextView title, snippet;
+    private DatabaseReference DatabaseReference_TB_AVAILABLE_DOCTOR;
+    private FirebaseAuth auth;
+
     Button btn_yes, btn_no;
     TextView post_firstName;
     TextView post_lastName;
@@ -70,12 +71,12 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
     Location mLastLocation;
     IFCMService mFCMService;
     String driverID;
-    private FirebaseAuth auth;
+
 
     //.GIF Dialog
     Dialog myDialog;
     LottieAnimationView animationView;
-    long START_TIME_IN_MILLS = 60 * 1000 * 5; // 60 s  5min
+    long START_TIME_IN_MILLS = 60 * 1000 * 2; // 60 s  5min
     long mTimeLeftInMillis = START_TIME_IN_MILLS;
 
 
@@ -115,7 +116,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
         auth = FirebaseAuth.getInstance();
         pacienteUID = auth.getCurrentUser().getUid();
 
-        Log.e(TAG, "title " + title);
+        Log.e(TAG, "title " + mTitle);
 
         Log.e(TAG, "doctorUID " + doctorUID);
         Log.e(TAG, "pacienteUID " + pacienteUID);
@@ -125,8 +126,6 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
 
         Log.e(TAG, "pacienteLatitude " + pacienteLatitude);
         Log.e(TAG, "pacienteLongitud " + pacienteLongitud);
-
-
     }
 
 
@@ -142,13 +141,10 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
 
         View view = inflater.inflate(R.layout.botton_sheet_doctor, container, false);
 
-        // Construct a FusedLocationProviderClient.
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("tb_Info_Doctor");
-        mDatabase.keepSynced(true);
-
-        // llenar to_do el xml
-        title = (TextView) view.findViewById(R.id.txt_doctor_title);
-        snippet = (TextView) view.findViewById(R.id.txt_doctor_snippet);
+        //.Obtener Toda tabla de doctore online
+        DatabaseReference_TB_AVAILABLE_DOCTOR = FirebaseDatabase.getInstance().getReference().child("tb_Info_Doctor");
+        DatabaseReference_TB_AVAILABLE_DOCTOR.keepSynced(true);
+        //.
 
         btn_yes = view.findViewById(R.id.btn_yes);
         btn_no = view.findViewById(R.id.btn_no);
@@ -169,7 +165,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
 
         if (isTapOnMap) {
 
-            mDatabase
+            DatabaseReference_TB_AVAILABLE_DOCTOR
                     .orderByKey()
                     .equalTo(driverID)
                     .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -183,8 +179,6 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                                 Log.e("doctorPerfil.uid:", doctorPerfil.getUid());
                                 Log.e("doctorPerfil", doctorPerfil.toString());
 
-                                title.setText(doctorPerfil.getFirstname());
-                                snippet.setText(doctorPerfil.getCorreoG());
 
                                 post_firstName.setText(doctorPerfil.getFirstname());
                                 post_lastName.setText(doctorPerfil.getLastname());
@@ -267,7 +261,6 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
         }
 
         return view;
-
     }
 
     //.
