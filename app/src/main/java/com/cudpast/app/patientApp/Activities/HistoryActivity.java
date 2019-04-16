@@ -1,7 +1,6 @@
 package com.cudpast.app.patientApp.Activities;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,10 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.cudpast.app.patientApp.Activities.DoctorPerfilActivity;
-import com.cudpast.app.patientApp.Activities.ListDoctorActivity;
 import com.cudpast.app.patientApp.Common.Common;
-import com.cudpast.app.patientApp.Model.Doctor;
 import com.cudpast.app.patientApp.Model.DoctorPerfil;
 import com.cudpast.app.patientApp.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -42,7 +38,7 @@ public class HistoryActivity extends AppCompatActivity {
 
         AppPaciente_history = FirebaseDatabase.getInstance().getReference(Common.AppPaciente_history).child(userUID);
 
-    //    mDatabase = FirebaseDatabase.getInstance().getReference().child("db_doctor_consulta");
+
         AppPaciente_history.keepSynced(true);
         AppPaciente_history.orderByKey();
 
@@ -82,7 +78,7 @@ public class HistoryActivity extends AppCompatActivity {
         }
 
         public void setFirstName(String firstName) {
-            TextView post_firstName = mView.findViewById(R.id.firstname);
+            TextView post_firstName = mView.findViewById(R.id.profile_doctor_firstname);
             post_firstName.setText(firstName);
         }
 
@@ -92,19 +88,19 @@ public class HistoryActivity extends AppCompatActivity {
 //        }
 
         public void setPhone(String phone) {
-            TextView post_phone = mView.findViewById(R.id.phone);
+            TextView post_phone = mView.findViewById(R.id.profile_doctor_phone);
             post_phone.setText(phone);
 
         }
 
         public void setEspecialidad(String especialidad) {
-            TextView post_especialidad = mView.findViewById(R.id.especialidad);
+            TextView post_especialidad = mView.findViewById(R.id.profile_doctor_especialidad);
             post_especialidad.setText(especialidad);
 
         }
 
         public void setImage(Context context, String image) {
-            ImageView post_image = mView.findViewById(R.id.profile_image);
+            ImageView post_image = mView.findViewById(R.id.profile_doctor_image);
             Picasso.with(context)
                     .load(image)
                     .resize(300, 300)

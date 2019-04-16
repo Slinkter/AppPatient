@@ -235,7 +235,14 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
 
                         }
                     }.start();
-                    myDialog.show();
+                    try {
+                        myDialog.show();
+                    }catch (Exception e ){
+                        e.getMessage();
+                    }finally {
+
+                    }
+
                 }
             });
             //.------------------->

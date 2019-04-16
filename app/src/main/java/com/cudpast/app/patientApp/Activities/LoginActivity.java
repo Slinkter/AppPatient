@@ -1,11 +1,15 @@
 package com.cudpast.app.patientApp.Activities;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -55,6 +59,8 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Com
 
     private TextView txt_forgot_pwd;
 
+    private static final int MY_PERMISSION_REQUEST_CODE = 7000;
+
     //Check
     private MaterialEditText ed_login_email, ed_login_pwd;
     private CheckBox rem_userpass;
@@ -71,6 +77,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Com
         setContentView(R.layout.activity_login);
 
         getSupportActionBar().hide();
+        permisos();
         auth = FirebaseAuth.getInstance();
         db = FirebaseDatabase.getInstance();
         users = db.getReference("db_usuarios");
@@ -123,6 +130,43 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Com
                 return false;
             }
         });
+    }
+
+
+    //permisos
+    public void permisos() {
+        if (ContextCompat
+                .checkSelfPermission(this,
+                        Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat
+                        .checkSelfPermission(this,
+                                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{
+                            Manifest.permission.ACCESS_COARSE_LOCATION,
+                            Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_PERMISSION_REQUEST_CODE);
+        } else {
+            // Si tiene los permisos
+            // verficiar el  checkPlayService
+            Log.e(TAG, "si tiene los permisos");
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        switch (requestCode) {
+            case MY_PERMISSION_REQUEST_CODE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.e(TAG, "si tiene los permisos  v2 ");
+                }
+            }
+        }
+
     }
 
 

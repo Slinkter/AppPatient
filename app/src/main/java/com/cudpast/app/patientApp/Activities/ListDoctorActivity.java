@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.cudpast.app.patientApp.Model.Doctor;
+import com.cudpast.app.patientApp.Model.DoctorPerfil;
 import com.cudpast.app.patientApp.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
@@ -30,7 +30,7 @@ public class ListDoctorActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Lista de Medicos");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //1.Hacer la referencia a la tabla
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("db_doctor_consulta");
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("tb_Info_Doctor");
         mDatabase.keepSynced(true);
         mDatabase.orderByKey();
         //2.
@@ -43,41 +43,49 @@ public class ListDoctorActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        FirebaseRecyclerAdapter<Doctor, BlogViewHolder> adapter;
+        FirebaseRecyclerAdapter<DoctorPerfil, BlogViewHolder> adapter;
 
-        adapter = new FirebaseRecyclerAdapter<Doctor, BlogViewHolder>(Doctor.class, R.layout.doctor_layout_info, BlogViewHolder.class, mDatabase) {
+        adapter = new FirebaseRecyclerAdapter<DoctorPerfil, BlogViewHolder>(DoctorPerfil.class, R.layout.doctor_layout_info, BlogViewHolder.class, mDatabase) {
 
             @Override
-            protected void populateViewHolder(final BlogViewHolder viewHolder, final Doctor model, int position) {
+            protected void populateViewHolder(final BlogViewHolder view, final DoctorPerfil model, int position) {
 
-                viewHolder.setImage(getApplicationContext(), model.getImage());
-                viewHolder.setFirstName(model.getFirstname() +" "+ model.getLastname());
-//                viewHolder.setLastName(model.getLastname());
-                viewHolder.setPhone(model.getNumphone());
-                viewHolder.setEspecialidad(model.getEspecialidad());
+                view.setImage(getApplicationContext(), model.getImage());
+                view.setFirstName(model.getFirstname() + " " + model.getLastname());
+//              view.setLastName(model.getLastname());
+                view.setPhone(model.getNumphone());
+                view.setEspecialidad(model.getEspecialidad());
 
-
-                final String img = model.getImage();
+                final String codmedpe = model.getFirstname();
+                final String correoG = model.getFirstname();
+                final String direccion = model.getFirstname();
+                final String dni = model.getFirstname();
+                final String especialidad = model.getEspecialidad();
+                final String fecha = model.getEspecialidad();
                 final String firstName = model.getFirstname();
+                final String img = model.getImage();
                 final String lastname = model.getLastname();
                 final String numPhone = model.getNumphone();
-                final String especialidad = model.getEspecialidad();
+                final String pwd = model.getNumphone();
+                final String uid = model.getNumphone();
+                //Abrir perfil de doctor
+                view
+                        .mView
+                        .setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent i = new Intent(view.mView.getContext(), DoctorPerfilActivity.class);
 
-                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent i = new Intent(viewHolder.mView.getContext(), DoctorPerfilActivity.class);
-
-                        i.putExtra("doctor_img", img);
-                        i.putExtra("doctor_name", firstName);
-                        i.putExtra("doctor_last", lastname);
-                        i.putExtra("doctor_phone", numPhone);
-                        i.putExtra("doctor_especilidad", especialidad);
+                                i.putExtra("doctor_img", img);
+                                i.putExtra("doctor_name", firstName);
+                                i.putExtra("doctor_last", lastname);
+                                i.putExtra("doctor_phone", numPhone);
+                                i.putExtra("doctor_especilidad", especialidad);
 
 
-                        viewHolder.mView.getContext().startActivity(i);
-                    }
-                });
+                                view.mView.getContext().startActivity(i);
+                            }
+                        });
             }
         };
 
@@ -92,40 +100,79 @@ public class ListDoctorActivity extends AppCompatActivity {
             mView = itemView;
         }
 
-        public void setFirstName(String firstName) {
-            TextView post_firstName = mView.findViewById(R.id.firstname);
-            post_firstName.setText(firstName);
-        }
-
-//        public void setLastName(String lastName) {
-//            TextView post_lastName = mView.findViewById(R.id.lastname);
-//            post_lastName.setText(lastName);
-//        }
-
-        public void setPhone(String phone) {
-            TextView post_phone = mView.findViewById(R.id.phone);
-            post_phone.setText(phone);
-
-        }
-
-        public void setEspecialidad(String especialidad) {
-            TextView post_especialidad = mView.findViewById(R.id.especialidad);
-            post_especialidad.setText(especialidad);
-
-        }
-
         public void setImage(Context context, String image) {
-            ImageView post_image = mView.findViewById(R.id.profile_image);
-            Picasso.with(context)
+            ImageView post_image = mView.findViewById(R.id.profile_doctor_image);
+            Picasso
+                    .with(context)
                     .load(image)
                     .resize(300, 300)
                     .centerInside()
                     .placeholder(R.drawable.ic_doctorapp)
                     .error(R.drawable.ic_doctorapp)
                     .into(post_image);
+        }
 
+        public void setFirstName(String firstName) {
+            TextView post_firstName = mView.findViewById(R.id.profile_doctor_firstname);
+            post_firstName.setText(firstName);
+        }
+
+        public void setEspecialidad(String especialidad) {
+            TextView post_especialidad = mView.findViewById(R.id.profile_doctor_especialidad);
+            post_especialidad.setText(especialidad);
+        }
+
+        public void setPhone(String phone) {
+            TextView post_phone = mView.findViewById(R.id.profile_doctor_phone);
+            post_phone.setText(phone);
         }
 
 
     }
+
+
+//    public void setLastName(String lastName) {
+//        TextView post_lastName = mView.findViewById(R.id.profile_doctor_firstname);
+//        post_lastName.setText(lastName);
+//    }
+//
+//
+//    public void setpwd(String phone) {
+//        TextView post_phone = mView.findViewById(R.id.profile_doctor_phone);
+//        post_phone.setText(phone);
+//
+//    }
+//
+//    public void setuid(String phone) {
+//        TextView post_phone = mView.findViewById(R.id.profile_doctor_phone);
+//        post_phone.setText(phone);
+//
+//    }
+//
+//    public void setCodmedpe(String firstName) {
+//        TextView post_firstName = mView.findViewById(R.id.profile_doctor_firstname);
+//        post_firstName.setText(firstName);
+//    }
+//
+//    public void setCorreoG(String firstName) {
+//        TextView post_firstName = mView.findViewById(R.id.profile_doctor_firstname);
+//        post_firstName.setText(firstName);
+//    }
+//
+//    public void setDireccion(String firstName) {
+//        TextView post_firstName = mView.findViewById(R.id.profile_doctor_firstname);
+//        post_firstName.setText(firstName);
+//    }
+//
+//    public void setDni(String firstName) {
+//        TextView post_firstName = mView.findViewById(R.id.profile_doctor_firstname);
+//        post_firstName.setText(firstName);
+//    }
+//
+//    public void setfecha(String especialidad) {
+//        TextView post_especialidad = mView.findViewById(R.id.profile_doctor_especialidad);
+//        post_especialidad.setText(especialidad);
+//
+//    }
+
 }

@@ -85,7 +85,7 @@
                         android:layout_height="wrap_content">
 
                         <TextView
-                            android:id="@+id/especialidad"
+                            android:id="@+id/profile_doctor_especialidad"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20sp"
@@ -98,7 +98,7 @@
                             android:id="@+id/aa_especialidad"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignRight="@+id/especialidad"
+                            android:layout_alignRight="@+id/profile_doctor_especialidad"
                             android:layout_alignParentBottom="true"
                             android:layout_marginBottom="0dp"
                             android:text="c_especialidad"

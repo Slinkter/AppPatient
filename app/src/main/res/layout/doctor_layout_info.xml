@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="15dp"
-    app:cardElevation="8dp"
+    app:cardElevation="6dp"
     app:cardUseCompatPadding="true">
 
     <LinearLayout
@@ -15,9 +15,9 @@
         android:padding="15dp">
 
         <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/profile_image"
-            android:layout_width="100dp"
-            android:layout_height="80dp"
+            android:id="@+id/profile_doctor_image"
+            android:layout_width="98dp"
+            android:layout_height="78dp"
             android:padding="1dp"
             android:src="@mipmap/ic_launcher"
             app:civ_border_color="@color/colorVerdeAzul"
@@ -26,31 +26,31 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="2dp"
             android:padding="5dp">
 
             <TextView
-                android:id="@+id/firstname"
+                android:id="@+id/profile_doctor_firstname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="name"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/phone"
+                android:id="@+id/profile_doctor_phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/firstname"
+                android:layout_below="@+id/profile_doctor_firstname"
                 android:text="00000000"
                 android:textStyle="" />
 
             <TextView
-                android:id="@+id/especialidad"
+                android:id="@+id/profile_doctor_especialidad"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/phone"
+                android:layout_below="@+id/profile_doctor_phone"
                 android:text="especialidad "
-                android:textStyle="" />
+                android:textStyle="italic" />
 
 
         </RelativeLayout>
