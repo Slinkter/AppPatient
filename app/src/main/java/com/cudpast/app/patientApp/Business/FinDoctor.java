@@ -163,7 +163,7 @@ public class FinDoctor extends AppCompatActivity {
                             //Notification
                             Notification notification = new Notification("DoctorFin", "el usuario ha finalizado");// envia la ubicacion lat y lng  hacia Doctor APP
                             //Data
-                            Data data = new Data(pToken, json_lat_lng);
+                            Data data = new Data();
                             //Sender (to, Notification)
                             Sender sender = new Sender(dToken, notification, data);
                             mFCMService

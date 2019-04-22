@@ -575,7 +575,7 @@ public class GoDoctor extends FragmentActivity implements
                             //Notification
                             Notification notification = new Notification("el usuario ha cancelado", "el usuario ha cancelado");// envia la ubicacion lat y lng  hacia Doctor APP
                             //Data
-                            Data data = new Data(pToken, json_lat_lng);
+                            Data data = new Data();
                             //Sender (to, Notification)
                             Sender sender = new Sender(dToken, notification, data);
                             mFCMService

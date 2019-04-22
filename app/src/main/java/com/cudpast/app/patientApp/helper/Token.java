@@ -1,7 +1,7 @@
 package com.cudpast.app.patientApp.helper;
 
 public class Token {
-    private String token ;
+    private String token;
 
     public Token() {
     }

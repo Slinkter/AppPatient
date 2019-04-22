@@ -237,9 +237,9 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                     }.start();
                     try {
                         myDialog.show();
-                    }catch (Exception e ){
+                    } catch (Exception e) {
                         e.getMessage();
-                    }finally {
+                    } finally {
 
                     }
 
@@ -288,24 +288,27 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                             LatLng userGeo = new LatLng(pacienteLatitude, pacienteLongitud);
                             Token tokenDoctor = postSnapShot.getValue(Token.class);
 
-                            //Get token doctor and paciente
-                            String dToken = tokenDoctor.getToken();
-                            String pToken = FirebaseInstanceId.getInstance().getToken();
+                            // pre-envio-data
+                            String title = "App Doctor";
+                            String body = "Usted tiene una solicutud de atención";
+                            String dToken = tokenDoctor.getToken();//doctor token
+                            String pToken = FirebaseInstanceId.getInstance().getToken(); // paciente token
                             String json_lat_lng = new Gson().toJson(userGeo);
 
                             //Notification
-                            Notification notification = new Notification("CUDPAST", "Usted tiene una solicutud de atención");// envia la ubicacion lat y lng  hacia Doctor APP
+                            Notification notification = new Notification("Atención Medica", "Usted tiene una solicutud de atención");// envia la ubicacion lat y lng  hacia Doctor APP
                             //Data
-                            Data data = new Data(pToken, json_lat_lng, dToken, pacienteUID);
+                            Data data = new Data(title, body, pToken, dToken, json_lat_lng, pacienteUID);
                             //Log
+                            Log.e(TAG, "title : " + title);
+                            Log.e(TAG, "body : " + body);
                             Log.e(TAG, "doctorToken : " + dToken);
                             Log.e(TAG, "pacienteToken : " + pToken);
                             Log.e(TAG, "ubicacion de paciente : " + json_lat_lng);
                             Log.e(TAG, "pacienteUID : " + pacienteUID);
 
-
-                            //Sender (to, Notification,data)
-                            Sender sender = new Sender(dToken, notification, data);
+                            //Sender (to:token,data:informacion_del_paciente)
+                            Sender sender = new Sender(dToken, data);
                             mFCMService
                                     .sendMessage(sender)
                                     .enqueue(new Callback<FCMResponse>() {
@@ -357,9 +360,12 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                             //Notification
                             Notification notification = new Notification("el usuario ha cancelado", "el usuario ha cancelado");// envia la ubicacion lat y lng  hacia Doctor APP
                             //Data
-                            Data data = new Data(pToken, json_lat_lng);
+                            // pre-envio-data
+                            String title = "App Doctor";
+                            String body = "El usuario ha cancelado";
+                            Data data = new Data(title, body, " ", " ", "", "");
                             //Sender (to, Notification)
-                            Sender sender = new Sender(dToken, notification, data);
+                            Sender sender = new Sender(dToken,data);
                             mFCMService
                                     .sendMessage(sender)
                                     .enqueue(new Callback<FCMResponse>() {

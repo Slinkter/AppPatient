@@ -12,6 +12,7 @@ public class FCMResponse {
 
 
     public FCMResponse() {
+
     }
 
     public FCMResponse(long multicast_id, int success, int failure, int canonical_ids, List<Result> results) {

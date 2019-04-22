@@ -10,6 +10,12 @@ public class Sender {
     public Sender() {
     }
 
+    //Booking apointment
+    public Sender(String to, Data data) {
+        this.to = to;
+        this.data = data;
+    }
+
     public Sender(String to, Notification notification, Data data) {
         this.to = to;
         this.notification = notification;
