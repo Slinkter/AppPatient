@@ -10,6 +10,7 @@ import com.cudpast.app.patientApp.Activities.UbicacionActivity;
 import com.cudpast.app.patientApp.Business.FinDoctor;
 import com.cudpast.app.patientApp.Business.GoDoctor;
 import com.cudpast.app.patientApp.Common.Common;
+import com.cudpast.app.patientApp.helper.Notification;
 import com.cudpast.app.patientApp.helper.Token;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -76,6 +77,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
 //        NotificationManager manager = (NotificationManager) getBaseContext().getSystemService(Context.NOTIFICATION_SERVICE);
 //        manager.notify(1, builder.build());
         //parte013<--
+
 
 
         Intent intent = new Intent(MyFirebaseMessaging.this, FinDoctor.class);
