@@ -275,8 +275,6 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
         Log.e(TAG, "======================================================");
         Log.e(TAG, "             sendRequestDoctor                    ");
         DatabaseReference tokens = FirebaseDatabase.getInstance().getReference(Common.token_tbl);
-        Log.e(TAG, "DatabaseReference TOKEN : -->" + tokens.toString());
-        //Buscar a doctor por su id
         tokens
                 .orderByKey()
                 .equalTo(doctorUID)
@@ -287,26 +285,21 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                             //convert to LatLng to json.
                             LatLng userGeo = new LatLng(pacienteLatitude, pacienteLongitud);
                             Token tokenDoctor = postSnapShot.getValue(Token.class);
-
-                            // pre-envio-data
+                            //.Pre-envio-data
                             String title = "App Doctor";
                             String body = "Usted tiene una solicutud de atención";
                             String dToken = tokenDoctor.getToken();//doctor token
                             String pToken = FirebaseInstanceId.getInstance().getToken(); // paciente token
                             String json_lat_lng = new Gson().toJson(userGeo);
-
-                            //Notification
-                            Notification notification = new Notification("Atención Medica", "Usted tiene una solicutud de atención");// envia la ubicacion lat y lng  hacia Doctor APP
-                            //Data
+                            //.Data
                             Data data = new Data(title, body, pToken, dToken, json_lat_lng, pacienteUID);
-                            //Log
+                            //.Log
                             Log.e(TAG, "title : " + title);
                             Log.e(TAG, "body : " + body);
                             Log.e(TAG, "doctorToken : " + dToken);
                             Log.e(TAG, "pacienteToken : " + pToken);
                             Log.e(TAG, "ubicacion de paciente : " + json_lat_lng);
                             Log.e(TAG, "pacienteUID : " + pacienteUID);
-
                             //Sender (to:token,data:informacion_del_paciente)
                             Sender sender = new Sender(dToken, data);
                             mFCMService
@@ -341,8 +334,6 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
         Log.e(TAG, "======================================================");
         Log.e(TAG, "             cancelRequestDoctor                    ");
         DatabaseReference tokens = FirebaseDatabase.getInstance().getReference(Common.token_tbl);
-        Log.e(TAG, "TOKEN : -->" + tokens.toString());
-        //Buscar a doctor por su id
         tokens
                 .orderByKey()
                 .equalTo(driverID)
@@ -351,21 +342,15 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot postSnapShot : dataSnapshot.getChildren()) {
                             //convert to LatLng to json.
-                            LatLng userGeo = new LatLng(pacienteLatitude, pacienteLongitud);
                             Token tokenDoctor = postSnapShot.getValue(Token.class);
-                            //Get token doctor and paciente
-                            String dToken = tokenDoctor.getToken();
-                            String pToken = FirebaseInstanceId.getInstance().getToken();
-                            String json_lat_lng = new Gson().toJson(userGeo);
-                            //Notification
-                            Notification notification = new Notification("el usuario ha cancelado", "el usuario ha cancelado");// envia la ubicacion lat y lng  hacia Doctor APP
-                            //Data
                             // pre-envio-data
+                            String dToken = tokenDoctor.getToken();
                             String title = "App Doctor";
                             String body = "El usuario ha cancelado";
+                            //Data
                             Data data = new Data(title, body, " ", " ", "", "");
-                            //Sender (to, Notification)
-                            Sender sender = new Sender(dToken,data);
+                            //Sender (to, data)
+                            Sender sender = new Sender(dToken, data);
                             mFCMService
                                     .sendMessage(sender)
                                     .enqueue(new Callback<FCMResponse>() {
