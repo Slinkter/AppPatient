@@ -41,9 +41,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class FinDoctor extends AppCompatActivity {
+public class DoctorEnd extends AppCompatActivity {
 
-    private static final String TAG = FinDoctor.class.getSimpleName();
+    private static final String TAG = DoctorEnd.class.getSimpleName();
 
     private ImageView image_doctor;
     private TextView tv_doctor_firstname;
@@ -56,7 +56,7 @@ public class FinDoctor extends AppCompatActivity {
 
     private Button btn_fin_atencion;
 
-    private DatabaseReference AppPaciente_history, AppDoctor_history,AppDoctor_history_Comment;
+    private DatabaseReference AppPaciente_history, AppDoctor_history, AppDoctor_history_Comment;
     private FirebaseAuth auth;
 
 
@@ -100,7 +100,7 @@ public class FinDoctor extends AppCompatActivity {
                 sendEndAttention(Common.token_doctor);
                 insertarHistoryPacienteDoctor();
                 //
-                Intent intent = new Intent(FinDoctor.this, MainActivity.class);
+                Intent intent = new Intent(DoctorEnd.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();
@@ -153,19 +153,15 @@ public class FinDoctor extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot postSnapShot : dataSnapshot.getChildren()) {
-                            //convert to LatLng to json.
-                            LatLng userGeo = new LatLng(15.0f, 15.0f);
-                            Token tokenDoctor = postSnapShot.getValue(Token.class);
                             //Get token doctor and paciente
+                            Token tokenDoctor = postSnapShot.getValue(Token.class);
                             String dToken = tokenDoctor.getToken();
-                            String pToken = FirebaseInstanceId.getInstance().getToken();
-                            String json_lat_lng = new Gson().toJson(userGeo);
-                            //Notification
-                            Notification notification = new Notification("DoctorFin", "el usuario ha finalizado");// envia la ubicacion lat y lng  hacia Doctor APP
+                            String title = "App Doctor";
+                            String body = "El usuario ha cancelado";
                             //Data
-                            Data data = new Data();
-                            //Sender (to, Notification)
-                            Sender sender = new Sender(dToken, notification, data);
+                            Data data = new Data(title, body, " ", " ", "", "");
+                            //Sender (to, data)
+                            Sender sender = new Sender(dToken, data);
                             mFCMService
                                     .sendMessage(sender)
                                     .enqueue(new Callback<FCMResponse>() {
@@ -234,7 +230,6 @@ public class FinDoctor extends AppCompatActivity {
                         Log.e("AppDoctor_history ", "AppDoctor_history_Comment ");
                     }
                 });
-
 
 
     }

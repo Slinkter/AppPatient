@@ -39,10 +39,10 @@
             android:parentActivityName=".Activities.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Business.FinDoctor"
+            android:name=".Business.DoctorEnd"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Business.GoDoctor"
+            android:name=".Business.DoctorRoad"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.SplashActivity"

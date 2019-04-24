@@ -7,10 +7,9 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.cudpast.app.patientApp.Activities.UbicacionActivity;
-import com.cudpast.app.patientApp.Business.FinDoctor;
-import com.cudpast.app.patientApp.Business.GoDoctor;
+import com.cudpast.app.patientApp.Business.DoctorEnd;
+import com.cudpast.app.patientApp.Business.DoctorRoad;
 import com.cudpast.app.patientApp.Common.Common;
-import com.cudpast.app.patientApp.helper.Notification;
 import com.cudpast.app.patientApp.helper.Token;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -80,7 +79,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
 
 
 
-        Intent intent = new Intent(MyFirebaseMessaging.this, FinDoctor.class);
+        Intent intent = new Intent(MyFirebaseMessaging.this, DoctorEnd.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
 
@@ -90,7 +89,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
     private void showAceptNotification(String extra) {
         Log.e(TAG, "          showAceptNotification             ");
         String firebaseDoctorUID = extra;
-        Intent intent = new Intent(MyFirebaseMessaging.this, GoDoctor.class);
+        Intent intent = new Intent(MyFirebaseMessaging.this, DoctorRoad.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("firebaseDoctorUID", firebaseDoctorUID);//
         startActivity(intent);

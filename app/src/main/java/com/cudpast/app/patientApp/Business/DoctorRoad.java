@@ -82,14 +82,14 @@ import retrofit2.Response;
 import static com.cudpast.app.patientApp.Common.Common.currentDoctor;
 import static com.cudpast.app.patientApp.Common.Common.mLastLocation;
 
-public class GoDoctor extends FragmentActivity implements
+public class DoctorRoad extends FragmentActivity implements
         OnMapReadyCallback,
         GoogleApiClient.OnConnectionFailedListener,
         GoogleApiClient.ConnectionCallbacks,
         LocationListener {
 
     private GoogleMap mMap;
-    public static final String TAG = GoDoctor.class.getSimpleName();
+    public static final String TAG = DoctorRoad.class.getSimpleName();
     //Google Play Service -->
     private static final int PLAY_SERVICE_RES_REQUEST = 7001;
     private GoogleApiClient mGoogleApiCliente;
@@ -247,7 +247,7 @@ public class GoDoctor extends FragmentActivity implements
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pacienteLocation, 15.0f));
         mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(pacienteLocation.latitude, pacienteLocation.longitude))
-                .icon(BitmapDoctorApp(GoDoctor.this, R.drawable.ic_client)));
+                .icon(BitmapDoctorApp(DoctorRoad.this, R.drawable.ic_client)));
         //.
         GeoLocation pacienetGeo = new GeoLocation(pacienteLocation.latitude, pacienteLocation.longitude);
         Log.e(TAG, "loadRoadDoctorOnMap : pacienetGeo" + pacienetGeo);
@@ -361,7 +361,7 @@ public class GoDoctor extends FragmentActivity implements
                     MarkerOptions doctorMO = new MarkerOptions()
                             .position(doctorlatlng)
                             .title("Doctor")
-                            .icon(BitmapDoctorApp(GoDoctor.this, R.drawable.ic_doctorapp));
+                            .icon(BitmapDoctorApp(DoctorRoad.this, R.drawable.ic_doctorapp));
 
                     marketDoctorCurrent = mMap.addMarker(doctorMO);
 
@@ -397,7 +397,7 @@ public class GoDoctor extends FragmentActivity implements
 
                                     @Override
                                     public void onFailure(Call<String> call, Throwable t) {
-                                        Toast.makeText(GoDoctor.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(DoctorRoad.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
                                     }
                                 });
                     } catch (Exception e) {
@@ -464,7 +464,7 @@ public class GoDoctor extends FragmentActivity implements
     //.
     private class getDireccionParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
 
-        ProgressDialog mDialog = new ProgressDialog(GoDoctor.this);
+        ProgressDialog mDialog = new ProgressDialog(DoctorRoad.this);
 
         @Override
         protected void onPreExecute() {
@@ -565,19 +565,16 @@ public class GoDoctor extends FragmentActivity implements
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot postSnapShot : dataSnapshot.getChildren()) {
-                            //convert to LatLng to json.
-                            LatLng userGeo = new LatLng(15.0f, 15.0f);
+
                             Token tokenDoctor = postSnapShot.getValue(Token.class);
                             //Get token doctor and paciente
                             String dToken = tokenDoctor.getToken();
-                            String pToken = FirebaseInstanceId.getInstance().getToken();
-                            String json_lat_lng = new Gson().toJson(userGeo);
-                            //Notification
-                            Notification notification = new Notification("el usuario ha cancelado", "el usuario ha cancelado");// envia la ubicacion lat y lng  hacia Doctor APP
+                            String title = "App Doctor";
+                            String body = "El usuario ha cancelado";
                             //Data
-                            Data data = new Data();
-                            //Sender (to, Notification)
-                            Sender sender = new Sender(dToken, notification, data);
+                            Data data =  new Data(title, body, " ", " ", "", "");
+                            //Sender (to, data)
+                            Sender sender = new Sender(dToken,  data);
                             mFCMService
                                     .sendMessage(sender)
                                     .enqueue(new Callback<FCMResponse>() {
@@ -605,7 +602,7 @@ public class GoDoctor extends FragmentActivity implements
         Log.e(TAG, "======================================================");
     }
 
-    //.
+    //.Ventana Emergente al Cancelar DoctorRoad
     public void ShowPopupCancelar() {
         Button btn_accept_cancelar, btn_decline_cancelar;
 
