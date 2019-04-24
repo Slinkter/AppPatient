@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/colorVerdeAzul"
+
     android:fitsSystemWindows="false">
 
     <LinearLayout
@@ -26,17 +26,16 @@
                 android:id="@+id/bs_doctorImage"
                 android:layout_width="155dp"
                 android:layout_height="155dp"
-                android:layout_margin="6dp"
-                app:civ_border_color="@color/color_white"
+                android:layout_margin="2dp"
+                app:civ_border_color="@color/colorVerdeAzul"
                 app:civ_border_width="3dp" />
 
             <TextView
                 android:id="@+id/bs_doctorFirstName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="1dp"
                 android:text="firstname "
-                android:textColor="@color/color_white"
                 android:textSize="24dp"
                 android:textStyle="bold" />
 
@@ -44,9 +43,8 @@
                 android:id="@+id/bs_doctorLastName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="3dp"
                 android:text="lastname"
-                android:textColor="@color/color_white"
                 android:textSize="24dp"
                 android:textStyle="bold" />
 
@@ -63,7 +61,7 @@
             android:layout_marginRight="8dp"
             app:cardBackgroundColor="@color/color_white"
             app:cardCornerRadius="15dp"
-            app:cardElevation="5dp"
+            app:cardElevation="8dp"
             app:cardUseCompatPadding="true">
 
             <LinearLayout
@@ -110,7 +108,7 @@
             android:layout_marginRight="8dp"
             app:cardBackgroundColor="@color/color_white"
             app:cardCornerRadius="15dp"
-            app:cardElevation="5dp"
+            app:cardElevation="8dp"
             app:cardUseCompatPadding="true">
 
             <LinearLayout
@@ -156,7 +154,7 @@
             android:layout_marginRight="8dp"
             app:cardBackgroundColor="@color/color_white"
             app:cardCornerRadius="15dp"
-            app:cardElevation="5dp"
+            app:cardElevation="8dp"
             app:cardUseCompatPadding="true">
 
             <LinearLayout
@@ -198,59 +196,61 @@
 
         <!--Butones de si y no -->
         <LinearLayout
+            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="5dp"
             android:orientation="vertical">
-
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:gravity="center"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
+                    android:layout_margin="5dp"
                     android:text="¿Desea llamar al medico?"
-                    android:textColor="@color/color_white"
                     android:textSize="18sp"
                     android:textStyle="bold" />
-                />
-
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="50dp"
+
+                android:layout_marginBottom="15dp"
                 android:gravity="center"
                 android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/btn_yes"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
                     android:layout_marginRight="20dp"
                     android:background="@drawable/background_login"
-                    android:paddingStart="50dp"
-                    android:paddingEnd="50dp"
+                    android:paddingLeft="40dp"
+                    android:paddingRight="40dp"
                     android:text="Si"
+                    android:clickable="true"
                     android:textColor="#fff"
                     android:textSize="16dp" />
 
                 <Button
                     android:id="@+id/btn_no"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginLeft="20dp"
                     android:background="@drawable/background_signup"
-                    android:paddingStart="50dp"
-                    android:paddingEnd="50dp"
+                    android:paddingLeft="40dp"
+                    android:paddingRight="40dp"
+                    android:clickable="true"
                     android:text="No"
                     android:textColor="#fff"
                     android:textSize="16dp" />
