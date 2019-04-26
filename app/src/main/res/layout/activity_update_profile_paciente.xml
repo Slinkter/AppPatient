@@ -139,7 +139,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="30dp"
                 android:layout_marginBottom="50dp"
-                android:background="@drawable/custom_botton_accept"
+                android:background="@drawable/custom_button_accept"
                 android:text="Guardar"
                 android:textColor="@color/color_white" />
 

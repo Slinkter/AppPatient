@@ -27,7 +27,6 @@ import com.cudpast.app.patientApp.R;
 import com.cudpast.app.patientApp.Remote.IFCMService;
 import com.cudpast.app.patientApp.helper.Data;
 import com.cudpast.app.patientApp.helper.FCMResponse;
-import com.cudpast.app.patientApp.helper.Notification;
 import com.cudpast.app.patientApp.helper.Sender;
 import com.cudpast.app.patientApp.helper.Token;
 
@@ -199,7 +198,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                     });
 
             myDialog = new Dialog(getContext());
-            myDialog.setContentView(R.layout.pop_up_doctor);
+            myDialog.setContentView(R.layout.pop_up_booking);
             myDialog.findViewById(R.id.animation_view);
             final TextView mTextViewCountDown = myDialog.findViewById(R.id.text_view_countDown);
 
