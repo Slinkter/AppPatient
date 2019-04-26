@@ -2,6 +2,8 @@ package com.cudpast.app.patientApp.Adapter;
 
 
 import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -9,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
 
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 import android.view.LayoutInflater;
@@ -58,7 +61,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
     private String mTitle, doctorUID, pacienteUID;
     private Double mLatitude, mLongitud, pacienteLongitud, pacienteLatitude;
     boolean isTapOnMap;
-    private DatabaseReference DatabaseReference_TB_AVAILABLE_DOCTOR;
+    private DatabaseReference TB_AVAILABLE_DOCTOR;
     private FirebaseAuth auth;
 
     Button btn_yes, btn_no;
@@ -96,7 +99,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
         return f;
     }
 
-
+    // Get Info
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,12 +130,10 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
         Log.e(TAG, "pacienteLongitud " + pacienteLongitud);
     }
 
-
     @Override
     public void onLocationChanged(Location location) {
         mLastLocation = location;
     }
-
 
     @Nullable
     @Override
@@ -141,8 +142,8 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
         View view = inflater.inflate(R.layout.botton_sheet_doctor, container, false);
 
         //.Obtener Toda tabla de doctore online
-        DatabaseReference_TB_AVAILABLE_DOCTOR = FirebaseDatabase.getInstance().getReference().child("tb_Info_Doctor");
-        DatabaseReference_TB_AVAILABLE_DOCTOR.keepSynced(true);
+        TB_AVAILABLE_DOCTOR = FirebaseDatabase.getInstance().getReference().child("tb_Info_Doctor");
+        TB_AVAILABLE_DOCTOR.keepSynced(true);
         //.
 
         btn_yes = view.findViewById(R.id.btn_yes);
@@ -164,7 +165,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
 
         if (isTapOnMap) {
 
-            DatabaseReference_TB_AVAILABLE_DOCTOR
+            TB_AVAILABLE_DOCTOR
                     .orderByKey()
                     .equalTo(driverID)
                     .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -203,47 +204,49 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
             final TextView mTextViewCountDown = myDialog.findViewById(R.id.text_view_countDown);
 
             //.------------------->
-            btn_yes.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    sendRequestDoctor(driverID);
-                    Common.token_doctor = driverID;
-                    Toast.makeText(getContext(), "Enviando ...", Toast.LENGTH_SHORT).show();
-                    dismiss();
-
-                    new CountDownTimer(mTimeLeftInMillis, 500) {
+            btn_yes
+                    .setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onTick(long millisUntilFinished) {
-                            mTimeLeftInMillis = millisUntilFinished;
-                            int minutos = (int) (mTimeLeftInMillis / 1000) / 60;
-                            int secounds = (int) (mTimeLeftInMillis / 1000) % 60;
-                            String timeLeftFormatted = String.format(Locale.getDefault(), "%02d:%02d", minutos, secounds);
-                            mTextViewCountDown.setText(timeLeftFormatted);
-                        }
+                        public void onClick(View v) {
 
-                        @Override
-                        public void onFinish() {
+                            sendRequestDoctor(driverID);
+
+                            Common.token_doctor = driverID;
+                            Toast.makeText(getContext(), "Enviando ...", Toast.LENGTH_SHORT).show();
+                            dismiss();
+
+                            new CountDownTimer(mTimeLeftInMillis, 500) {
+                                @Override
+                                public void onTick(long millisUntilFinished) {
+                                    mTimeLeftInMillis = millisUntilFinished;
+                                    int minutos = (int) (mTimeLeftInMillis / 1000) / 60;
+                                    int secounds = (int) (mTimeLeftInMillis / 1000) % 60;
+                                    String timeLeftFormatted = String.format(Locale.getDefault(), "%02d:%02d", minutos, secounds);
+                                    mTextViewCountDown.setText(timeLeftFormatted);
+                                }
+
+                                @Override
+                                public void onFinish() {
+                                    try {
+                                        mTimeLeftInMillis = START_TIME_IN_MILLS;
+                                        myDialog.dismiss();
+
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+
+                                }
+                            }.start();
                             try {
-                                mTimeLeftInMillis = START_TIME_IN_MILLS;
-                                myDialog.dismiss();
-
+                                myDialog.show();
                             } catch (Exception e) {
-                                e.printStackTrace();
+                                e.getMessage();
+                            } finally {
+
                             }
 
                         }
-                    }.start();
-                    try {
-                        myDialog.show();
-                    } catch (Exception e) {
-                        e.getMessage();
-                    } finally {
-
-                    }
-
-                }
-            });
+                    });
             //.------------------->
             Button btn_s_cancelar;
             btn_s_cancelar = myDialog.findViewById(R.id.btn_s_cancelar);
@@ -376,6 +379,9 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
 
         Log.e(TAG, "======================================================");
     }
+
+
+
 
 
 }

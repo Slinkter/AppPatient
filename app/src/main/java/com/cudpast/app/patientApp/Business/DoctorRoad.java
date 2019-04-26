@@ -9,6 +9,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.AsyncTask;
@@ -19,7 +20,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -627,6 +630,24 @@ public class DoctorRoad extends FragmentActivity implements
             }
         });
         myDialog.show();
+    }
+
+
+
+    public void showDiaglo1(){
+        AlertDialog.Builder builer = new AlertDialog.Builder(DoctorRoad.this);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.botton_sheet_doctor,null);
+        builer.setView(view);
+        final AlertDialog dialog = builer.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+
+
+
+
+
+
     }
 
 

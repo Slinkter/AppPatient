@@ -259,7 +259,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Com
     private void updateUI(FirebaseUser user) {
         if (user != null) {
             if (user.isEmailVerified()) {
-                Toast.makeText(this, "Correo verificado", Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(this, "Correo verificado", Toast.LENGTH_SHORT).show();
                 //     Snackbar.make(root, "Correo verificado", Snackbar.LENGTH_SHORT).show();
             }
         } else {
@@ -311,14 +311,21 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Com
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                             waitingDialog.dismiss();
+
                                             User user001 = dataSnapshot.getValue(User.class);
                                             Common.currentUser = user001;
+                                            if (Common.currentUser != null) {
 
-                                            Log.e(TAG, "currentUser ------>" + Common.currentUser.getNombre());
-                                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                            startActivity(intent);
-                                            finish();
+
+                                                Log.e(TAG, "currentUser ------>" + Common.currentUser.getNombre());
+                                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                startActivity(intent);
+                                                finish();
+                                            } else {
+                                                Toast.makeText(LoginActivity.this, "El usuario esta registrado en la AppDoctor", Toast.LENGTH_SHORT).show();
+                                            }
+
                                         }
 
                                         @Override
@@ -327,7 +334,9 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Com
                                             Log.e("ERROR", "DatabaseError -->" + databaseError.toString());
                                             updateUI(null);
                                         }
-                                    });
+                                    })
+
+                            ;
 
                         } else {
                             waitingDialog.dismiss();
