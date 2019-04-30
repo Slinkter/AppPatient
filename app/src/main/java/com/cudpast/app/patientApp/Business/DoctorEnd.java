@@ -15,6 +15,7 @@ import com.cudpast.app.patientApp.Activities.MainActivity;
 import com.cudpast.app.patientApp.Common.Common;
 import com.cudpast.app.patientApp.Model.DoctorPerfil;
 import com.cudpast.app.patientApp.Model.User;
+import com.cudpast.app.patientApp.PDFHelper.TemplatePDF;
 import com.cudpast.app.patientApp.R;
 import com.cudpast.app.patientApp.Remote.IFCMService;
 import com.cudpast.app.patientApp.helper.Data;
@@ -35,6 +36,7 @@ import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import retrofit2.Call;
@@ -104,10 +106,23 @@ public class DoctorEnd extends AppCompatActivity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();
+
+
             }
         });
 
         mFCMService = Common.getIFCMService();
+
+
+        //pdf
+        templatePDF = new TemplatePDF(getApplicationContext());
+        templatePDF.openDocument();
+        templatePDF.addMetada("Clientes", "Ventas", "Marines");
+        templatePDF.addTitles("Cudpast DoctorApp", "Dr. Juan Perez", "2019/04/27");
+        templatePDF.addParagraph(shortText);
+        templatePDF.addParagraph(longText);
+        templatePDF.addCreateTable(header, getClients());
+        templatePDF.closeDocument();
 
 
     }
@@ -244,6 +259,31 @@ public class DoctorEnd extends AppCompatActivity {
             e.printStackTrace();
             return null;
         }
+    }
+
+    //PDF
+
+    private String[] header = {"Id", "Nombre", "Apellido"};
+    private String shortText = "Estimado paciente : ";
+    private String longText = "Este PDF es generador por al finalizar la consulta medica  ";
+    private TemplatePDF templatePDF;
+
+    public void pdfView(View view) {
+        templatePDF.viewPDF();
+    }
+
+    //Lista de Tabla
+    private ArrayList<String[]> getClients() {
+        ArrayList<String[]> rows = new ArrayList<>();
+
+        rows.add(new String[]{"1", "Pedro", "Lopez"});
+        rows.add(new String[]{"2", "Sofia", "Uhuio"});
+        rows.add(new String[]{"3", "Carlos", "Herandez"});
+        rows.add(new String[]{"4", "Lorena", "Abad"});
+        rows.add(new String[]{"5", "Juan", "Cave"});
+        rows.add(new String[]{"6", "Alex", "Red"});
+
+        return rows;
     }
 
 

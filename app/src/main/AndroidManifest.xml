@@ -11,6 +11,11 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ambulance"
@@ -18,14 +23,11 @@
         android:roundIcon="@drawable/ambulance"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-
+        <activity android:name=".PDFHelper.ViewPDFActivity"></activity>
         <activity
             android:name=".Activities.HistoryActivity"
             android:parentActivityName=".Activities.MainActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:screenOrientation="portrait"></activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -49,6 +51,7 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -57,12 +60,12 @@
             android:parentActivityName=".Activities.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-
             android:name=".Activities.DoctorPerfilActivity"
             android:parentActivityName=".Activities.ListDoctorActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -76,7 +79,6 @@
             </intent-filter>
         </activity>
         <activity
-
             android:name=".Activities.ListDoctorActivity"
             android:parentActivityName=".Activities.MainActivity"
             android:screenOrientation="portrait">
