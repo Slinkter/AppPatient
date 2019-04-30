@@ -30,7 +30,7 @@
             android:layout_width="180dp"
             android:layout_height="180dp"
             android:layout_gravity="center"
-            android:layout_margin="3dp"
+
             app:lottie_autoPlay="true"
             app:lottie_fileName="stopwatch.json"
             app:lottie_imageAssetsFolder="assets"
