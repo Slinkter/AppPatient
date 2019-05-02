@@ -4,31 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-
     android:fitsSystemWindows="false">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:gravity="center"
         android:orientation="vertical">
         <!--Docto Info -->
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="20dp"
+            android:layout_margin="10dp"
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/bs_doctorImage"
-                android:layout_width="155dp"
-                android:layout_height="155dp"
+                android:layout_width="145dp"
+                android:layout_height="145dp"
                 android:layout_margin="2dp"
                 app:civ_border_color="@color/colorVerdeAzul"
-                app:civ_border_width="3dp" />
+                app:civ_border_width="2dp" />
 
             <TextView
                 android:id="@+id/bs_doctorFirstName"
@@ -48,17 +48,13 @@
                 android:textSize="24dp"
                 android:textStyle="bold" />
 
-
         </LinearLayout>
-
-
         <!--Bloques -->
-
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             app:cardBackgroundColor="@color/color_white"
             app:cardCornerRadius="15dp"
             app:cardElevation="8dp"
@@ -73,23 +69,34 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center">
 
                     <TextView
                         android:id="@+id/profile_doctor_especialidad"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20sp"
-                        android:layout_marginRight="20sp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginBottom="20dp"
                         android:text="Especialidad"
-                        android:textSize="15dp"
+                        android:textSize="16dp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/bs_doctorEspecialidad"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/profile_doctor_especialidad"
                         android:layout_alignRight="@+id/profile_doctor_especialidad"
+                        android:layout_alignBottom="@+id/profile_doctor_especialidad"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginStart="142dp"
+                        android:layout_marginEnd="25dp"
+                        android:layout_toEndOf="@+id/profile_doctor_especialidad"
                         android:text="c_especialidad"
                         android:textSize="15dp"
                         android:textStyle="normal" />
@@ -196,10 +203,10 @@
 
         <!--Butones de si y no -->
         <LinearLayout
-            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginTop="20dp"
             android:orientation="vertical">
 
             <LinearLayout
@@ -230,27 +237,27 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
                     android:layout_marginRight="20dp"
+                    android:layout_marginBottom="10dp"
                     android:background="@drawable/background_login"
+                    android:clickable="true"
                     android:paddingLeft="40dp"
                     android:paddingRight="40dp"
                     android:text="Si"
-                    android:clickable="true"
                     android:textColor="#fff"
                     android:textSize="16dp" />
 
                 <Button
                     android:id="@+id/btn_no"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
                     android:background="@drawable/background_signup"
+                    android:clickable="true"
                     android:paddingLeft="40dp"
                     android:paddingRight="40dp"
-                    android:clickable="true"
                     android:text="No"
                     android:textColor="#fff"
                     android:textSize="16dp" />

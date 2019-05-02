@@ -264,7 +264,7 @@ public class DoctorEnd extends AppCompatActivity {
     //PDF
 
     private String[] header = {"Id", "Nombre", "Apellido"};
-    private String shortText = "Estimado paciente : ";
+    private String shortText = "Estimado paciente : " + Common.currentUser.getNombre() + " "+ Common.currentUser.getApellido();
     private String longText = "Este PDF es generador por al finalizar la consulta medica  ";
     private TemplatePDF templatePDF;
 
