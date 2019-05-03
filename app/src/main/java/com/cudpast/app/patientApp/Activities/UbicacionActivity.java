@@ -13,21 +13,16 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
-import com.google.android.gms.maps.GoogleMap.OnMyLocationClickListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -46,13 +41,9 @@ import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
 
 public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -61,8 +52,8 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
     private FusedLocationProviderClient fusedLocationClient;
     LatLng pacienteLocation;
 
-    private DatabaseReference DatabaseReference_TB_AVAILABLE_DOCTOR;
-    private DatabaseReference DatabaseReference_TB_INFO_DOCTOR;
+    private DatabaseReference DbRef_TB_AVAILABLE_DOCTOR;
+    private DatabaseReference DbRef_TB_INFO_DOCTOR;
 
     private static final int DEFAULT_ZOOM = 15;
     private final LatLng mDefaultLocation = new LatLng(-12.141177, -77.026342);
@@ -85,21 +76,15 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
         mapFragment.getMapAsync(this);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        DatabaseReference_TB_AVAILABLE_DOCTOR = FirebaseDatabase.getInstance().getReference(Common.TB_AVAILABLE_DOCTOR);
-        DatabaseReference_TB_INFO_DOCTOR = FirebaseDatabase.getInstance().getReference(Common.TB_INFO_DOCTOR);
-
-        DatabaseReference_TB_AVAILABLE_DOCTOR.keepSynced(true);
-        DatabaseReference_TB_AVAILABLE_DOCTOR.orderByKey();
-
-        DatabaseReference_TB_INFO_DOCTOR.keepSynced(true);
-        DatabaseReference_TB_INFO_DOCTOR.orderByKey();
-
-        setupLocation();
-    }
-
-    private void setupLocation() {
-
-
+        //.
+        DbRef_TB_AVAILABLE_DOCTOR = FirebaseDatabase.getInstance().getReference(Common.TB_AVAILABLE_DOCTOR);
+        DbRef_TB_INFO_DOCTOR = FirebaseDatabase.getInstance().getReference(Common.TB_INFO_DOCTOR);
+        //.
+        DbRef_TB_AVAILABLE_DOCTOR.keepSynced(true);
+        DbRef_TB_AVAILABLE_DOCTOR.orderByKey();
+        //.
+        DbRef_TB_INFO_DOCTOR.keepSynced(true);
+        DbRef_TB_INFO_DOCTOR.orderByKey();
     }
 
     @SuppressLint("MissingPermission")
@@ -131,12 +116,9 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
                                         Common.mLastLocation = location;
                                         LatLng p = new LatLng(Common.mLastLocation.getLatitude(), Common.mLastLocation.getLongitude());
                                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(p, 16.05f));
-
                                     }
                                 }
                             });
-
-
                     getDeviceLocation();
                 } else {
                     Log.e(TAG, "permission denied");
@@ -185,10 +167,8 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
                         if (location != null) {
                             mMap.getUiSettings().setAllGesturesEnabled(true);
                             Common.mLastLocation = location;
-                            mMap
-                                    .moveCamera(CameraUpdateFactory
-                                            .newLatLngZoom(new LatLng(Common.mLastLocation.getLatitude(), Common.mLastLocation.getLongitude()), 16));
-
+                            LatLng indexUbicacion = new LatLng(Common.mLastLocation.getLatitude(), Common.mLastLocation.getLongitude());
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(indexUbicacion, DEFAULT_ZOOM));
                         }
                     }
                 });
@@ -197,33 +177,34 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
         //
         getDeviceLocation();
 
-        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
+        mMap
+                .setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(Marker marker) {
 
-                Double doctorLatitude = marker.getPosition().latitude;
-                Double doctorLongitud = marker.getPosition().longitude;
+                        Double doctorLatitude = marker.getPosition().latitude;
+                        Double doctorLongitud = marker.getPosition().longitude;
 
-                Double pacienteLatitude = Common.mLastLocation.getLatitude();
-                Double pacienteLongitud = Common.mLastLocation.getLongitude();
+                        Double pacienteLatitude = Common.mLastLocation.getLatitude();
+                        Double pacienteLongitud = Common.mLastLocation.getLongitude();
 
-                String title = marker.getTitle();
-                String doctorUID = marker.getSnippet();
+                        String title = marker.getTitle();
+                        String doctorUID = marker.getSnippet();
 
-                Log.e(TAG, "title " + title);
-                Log.e(TAG, "doctorUID " + doctorUID);
+                        Log.e(TAG, "title " + title);
+                        Log.e(TAG, "doctorUID " + doctorUID);
 
-                Log.e(TAG, "doctorLatitude " + doctorLatitude);
-                Log.e(TAG, "doctorLongitud " + doctorLongitud);
+                        Log.e(TAG, "doctorLatitude " + doctorLatitude);
+                        Log.e(TAG, "doctorLongitud " + doctorLongitud);
 
-                Log.e(TAG, "pacienteLatitude " + pacienteLatitude);
-                Log.e(TAG, "pacienteLongitud " + pacienteLongitud);
+                        Log.e(TAG, "pacienteLatitude " + pacienteLatitude);
+                        Log.e(TAG, "pacienteLongitud " + pacienteLongitud);
 
-                BSRFDoctor mBottomSheet = BSRFDoctor.newInstance(title, doctorUID, true, doctorLatitude, doctorLongitud, pacienteLatitude, pacienteLongitud);
-                mBottomSheet.show(getSupportFragmentManager(), mBottomSheet.getTag());
-                return true;
-            }
-        });
+                        BSRFDoctor mBottomSheet = BSRFDoctor.newInstance(title, doctorUID, true, doctorLatitude, doctorLongitud, pacienteLatitude, pacienteLongitud);
+                        mBottomSheet.show(getSupportFragmentManager(), mBottomSheet.getTag());
+                        return true;
+                    }
+                });
 
     }
 
@@ -253,9 +234,10 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
                         public void onSuccess(Location location) {
                             if (location != null) {
                                 Common.mLastLocation = location;
-                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Common.mLastLocation.getLatitude(), Common.mLastLocation.getLongitude()), DEFAULT_ZOOM));
-                                pacienteLocation = new LatLng(Common.mLastLocation.getLatitude(), Common.mLastLocation.getLongitude());
-                                DatabaseReference_TB_AVAILABLE_DOCTOR
+                                LatLng indexUbication = new LatLng(Common.mLastLocation.getLatitude(), Common.mLastLocation.getLongitude());
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(indexUbication, DEFAULT_ZOOM));
+                                pacienteLocation = indexUbication;
+                                DbRef_TB_AVAILABLE_DOCTOR
                                         .addValueEventListener(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -292,7 +274,7 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
     private void loadDoctorAvailableOnMap(final LatLng pacienteLocation) {
         //.
         mMap.clear();
-        GeoFire gf = new GeoFire(DatabaseReference_TB_AVAILABLE_DOCTOR);
+        GeoFire gf = new GeoFire(DbRef_TB_AVAILABLE_DOCTOR);
         //.
         GeoLocation pacienetGeo = new GeoLocation(pacienteLocation.latitude, pacienteLocation.longitude);
         GeoQuery geoQuery = gf.queryAtLocation(pacienetGeo, distance);
@@ -304,9 +286,7 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
                         //use key to get email from table users
                         //table users is table when driver register account and update infomation
                         // just open your driver to check this table name
-                        FirebaseDatabase
-                                .getInstance()
-                                .getReference(Common.TB_INFO_DOCTOR)
+                        DbRef_TB_INFO_DOCTOR
                                 .child(key)
                                 .addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
@@ -315,44 +295,45 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
                                         // so we can user Rider model to get user here
                                         Log.e(TAG, "==========================================");
                                         Log.e(TAG, "        onDataChange        ");
-                                        Log.e(TAG, "onKeyEntered " + dataSnapshot.toString());
+
 
                                         DoctorPerfil doctor_info = dataSnapshot.getValue(DoctorPerfil.class);
-                                        Log.e(TAG, " doctor_info.getFirstname()  " + doctor_info.getFirstname());
-                                        Log.e(TAG, " doctor_info.getLastname()  " + doctor_info.getLastname());
-                                        Log.e(TAG, " doctor_info.getUid()  " + doctor_info.getUid());
-                                        Log.e(TAG, " doctor_info.getDni()  " + doctor_info.getDni());
-                                        //add Driver to map
+                                        if (doctor_info !=null){
+                                            Log.e(TAG, " doctor_info.getFirstname()  " + doctor_info.getFirstname());
+                                            Log.e(TAG, " doctor_info.getLastname()  " + doctor_info.getLastname());
+                                            Log.e(TAG, " doctor_info.getUid()  " + doctor_info.getUid());
+                                            Log.e(TAG, " doctor_info.getDni()  " + doctor_info.getDni());
+                                            mMap
+                                                    .addMarker(new MarkerOptions()
+                                                            .position(new LatLng(location.latitude, location.longitude))
+                                                            .flat(true)
+                                                            .title(doctor_info.getFirstname() + " " + doctor_info.getLastname())
+                                                            .snippet(doctor_info.getUid())
+                                                            .icon(bitmapDescriptorFromVector(UbicacionActivity.this, R.drawable.ic_doctorapp))
+                                                    );
+                                        }
 
-                                        mMap
-                                                .addMarker(new MarkerOptions()
-                                                        .position(new LatLng(location.latitude, location.longitude))
-                                                        .flat(true)
-                                                        .title(doctor_info.getFirstname() + " " + doctor_info.getLastname())
-                                                        .snippet(doctor_info.getUid())
-                                                        .icon(bitmapDescriptorFromVector(UbicacionActivity.this, R.drawable.ic_doctorapp))
-                                                );
 
-                                        mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-                                            @Override
-                                            public View getInfoWindow(Marker marker) {
-                                                return null;
-                                            }
-
-                                            @Override
-                                            public View getInfoContents(Marker marker) {
-
-                                                View view = getLayoutInflater().inflate(R.layout.custom_ider_info_patient, null);
-
-                                                TextView txt_PickupTitle = (view.findViewById(R.id.txtPickupInfo));
-                                                txt_PickupTitle.setText(marker.getTitle());
-
-                                                TextView txt_PickupSnippet = (view.findViewById(R.id.txtPickupSnippet));
-                                                txt_PickupSnippet.setText(marker.getSnippet());
-
-                                                return view;
-                                            }
-                                        });
+//                                        mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+//                                            @Override
+//                                            public View getInfoWindow(Marker marker) {
+//                                                return null;
+//                                            }
+//
+//                                            @Override
+//                                            public View getInfoContents(Marker marker) {
+//
+//                                                View view = getLayoutInflater().inflate(R.layout.custom_ider_info_patient, null);
+//
+//                                                TextView txt_PickupTitle = (view.findViewById(R.id.txtPickupInfo));
+//                                                txt_PickupTitle.setText(marker.getTitle());
+//
+//                                                TextView txt_PickupSnippet = (view.findViewById(R.id.txtPickupSnippet));
+//                                                txt_PickupSnippet.setText(marker.getSnippet());
+//
+//                                                return view;
+//                                            }
+//                                        });
                                     }
 
                                     @Override

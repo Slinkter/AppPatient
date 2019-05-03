@@ -2,8 +2,6 @@ package com.cudpast.app.patientApp.Adapter;
 
 
 import android.app.Dialog;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -11,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
 
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 import android.view.LayoutInflater;
@@ -201,8 +198,9 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                         }
                     });
 
+            // si Acepta
             myDialog = new Dialog(getContext());
-            myDialog.setContentView(R.layout.pop_up_booking);
+            myDialog.setContentView(R.layout.alert_booking);
             myDialog.findViewById(R.id.animation_view);
             mTextViewCountDown=myDialog.findViewById(R.id.text_view_countDown);
 
