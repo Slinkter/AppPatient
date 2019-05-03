@@ -35,7 +35,6 @@ import com.cudpast.app.patientApp.Remote.IGoogleAPI;
 import com.cudpast.app.patientApp.Soporte.DirectionJSONParser;
 import com.cudpast.app.patientApp.helper.Data;
 import com.cudpast.app.patientApp.helper.FCMResponse;
-import com.cudpast.app.patientApp.helper.Notification;
 import com.cudpast.app.patientApp.helper.Sender;
 import com.cudpast.app.patientApp.helper.Token;
 import com.firebase.geofire.GeoFire;
@@ -68,8 +67,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -637,7 +634,7 @@ public class DoctorRoad extends FragmentActivity implements
     public void showDiaglo1(){
         AlertDialog.Builder builer = new AlertDialog.Builder(DoctorRoad.this);
         LayoutInflater inflater = getLayoutInflater();
-        View view = inflater.inflate(R.layout.botton_sheet_doctor,null);
+        View view = inflater.inflate(R.layout.bsrfdoctor,null);
         builer.setView(view);
         final AlertDialog dialog = builer.create();
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));

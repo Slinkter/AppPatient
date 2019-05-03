@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center"
     android:layout_width="match_parent"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp"
     android:layout_height="wrap_content"
     android:background="@drawable/custom_dialog_1"
     android:gravity="center"
@@ -50,7 +53,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_margin="3dp"
             android:gravity="center"
-            android:text="Esperando una respuesta del doctor" />
+            android:text="Esperando respuesta del doctor" />
 
 
     </LinearLayout>
@@ -60,7 +63,6 @@
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:layout_gravity="center"
-
         android:background="@drawable/btn_drawable_1"
         android:text="Cancelar"
         android:textColor="@color/color_white" />
