@@ -78,7 +78,6 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         //parte013<--
 
 
-
         Intent intent = new Intent(MyFirebaseMessaging.this, DoctorEnd.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
@@ -88,14 +87,15 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
 
     private void showAceptNotification(String extra) {
         Log.e(TAG, "          showAceptNotification             ");
+        Common.doctorAcept = true;
         String firebaseDoctorUID = extra;
         Intent intent = new Intent(MyFirebaseMessaging.this, DoctorRoad.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra("firebaseDoctorUID", firebaseDoctorUID);//
+
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.putExtra("firebaseDoctorUID", firebaseDoctorUID);
+
         startActivity(intent);
-
     }
-
 
     @Override
     public void onNewToken(String s) {

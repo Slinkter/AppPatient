@@ -570,7 +570,7 @@ public class DoctorRoad extends FragmentActivity implements
                             //Get token doctor and paciente
                             String dToken = tokenDoctor.getToken();
                             String title = "App Doctor";
-                            String body = "El usuario ha cancelado";
+                            String body = "El usuario ha cancelado durante el servicio";
                             //Data
                             Data data =  new Data(title, body, " ", " ", "", "");
                             //Sender (to, data)

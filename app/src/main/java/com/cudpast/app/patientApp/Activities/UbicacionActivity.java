@@ -200,8 +200,8 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
                         Log.e(TAG, "pacienteLatitude " + pacienteLatitude);
                         Log.e(TAG, "pacienteLongitud " + pacienteLongitud);
 
-                        BSRFDoctor mBottomSheet = BSRFDoctor.newInstance(title, doctorUID, true, doctorLatitude, doctorLongitud, pacienteLatitude, pacienteLongitud);
-                        mBottomSheet.show(getSupportFragmentManager(), mBottomSheet.getTag());
+                        BSRFDoctor showDoctorInfo = BSRFDoctor.newInstance(title, doctorUID, true, doctorLatitude, doctorLongitud, pacienteLatitude, pacienteLongitud);
+                        showDoctorInfo.show(getSupportFragmentManager(), showDoctorInfo.getTag());
                         return true;
                     }
                 });
