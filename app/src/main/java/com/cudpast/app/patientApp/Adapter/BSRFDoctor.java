@@ -279,6 +279,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
     private void cancelRequestDoctor(String driverID) {
         Log.e(TAG, "======================================================");
         Log.e(TAG, "             cancelRequestDoctor                    ");
+        mTimeLeftInMillis = 0;
         DatabaseReference tokens = FirebaseDatabase.getInstance().getReference(Common.token_tbl);
         tokens
                 .orderByKey()
@@ -375,7 +376,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
     //
     private void showDialog1() {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = getLayoutInflater();
         final View view = inflater.inflate(R.layout.alert_booking, null);
         builder.setView(view);
@@ -391,42 +392,46 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
 
         Toast.makeText(getContext(), "Solicitando atención", Toast.LENGTH_SHORT).show();
 
-        new CountDownTimer(mTimeLeftInMillis, 500) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                // millisUntilFinished = mTimeLeftInMillis - 500
-                mTimeLeftInMillis = millisUntilFinished;
-                int minutos = (int) (mTimeLeftInMillis / 1000) / 60;
-                int secounds = (int) (mTimeLeftInMillis / 1000) % 60;
-                String timeLeftFormatted = String.format(Locale.getDefault(), "%02d:%02d", minutos, secounds);
-                Log.e(TAG, " mTimeLeftInMillis : " + mTimeLeftInMillis);
-                xml_countDown.setText(timeLeftFormatted);
-            }
-
-            //todo : aun envia
-            @Override
-            public void onFinish() {
-                Log.e(TAG, " ==============================");
-                try {
-
-                    Log.e(TAG, " onFinish()");
+        if (mTimeLeftInMillis != 0 ){
+            new CountDownTimer(mTimeLeftInMillis, 500) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    // millisUntilFinished = mTimeLeftInMillis - 500
+                    mTimeLeftInMillis = millisUntilFinished;
+                    int minutos = (int) (mTimeLeftInMillis / 1000) / 60;
+                    int secounds = (int) (mTimeLeftInMillis / 1000) % 60;
+                    String timeLeftFormatted = String.format(Locale.getDefault(), "%02d:%02d", minutos, secounds);
                     Log.e(TAG, " mTimeLeftInMillis : " + mTimeLeftInMillis);
-                    Log.e(TAG, " START_TIME_IN_MILLS : " + START_TIME_IN_MILLS);
-                    // mTimeLeftInMillis = START_TIME_IN_MILLS;
-                    dialog.dismiss();
-                    dismiss();
-
-                    //Enviar Notificacion-Data
-                    timeOutRequestDoctor(driverID);
-
-
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    xml_countDown.setText(timeLeftFormatted);
                 }
-                Log.e(TAG, " ==============================");
 
-            }
-        }.start();
+                //todo : aun envia
+                @Override
+                public void onFinish() {
+                    Log.e(TAG, " ==============================");
+                    try {
+
+                        Log.e(TAG, " onFinish()");
+                        Log.e(TAG, " mTimeLeftInMillis : " + mTimeLeftInMillis);
+                        Log.e(TAG, " START_TIME_IN_MILLS : " + START_TIME_IN_MILLS);
+                        // mTimeLeftInMillis = START_TIME_IN_MILLS;
+                        dialog.dismiss();
+                        dismiss();
+
+                        //Enviar Notificacion-Data
+                        timeOutRequestDoctor(driverID);
+
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    Log.e(TAG, " ==============================");
+
+                }
+            }.start();
+        }
+
+
 
         btn_s_cancelar = view.findViewById(R.id.btn_s_cancelar);
 
