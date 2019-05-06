@@ -140,7 +140,6 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         final View view = inflater.inflate(R.layout.bsrfdoctor, container, false);
-
         //.Obtener Toda tabla de doctore online
         TB_AVAILABLE_DOCTOR = FirebaseDatabase.getInstance().getReference().child("tb_Info_Doctor");
         TB_AVAILABLE_DOCTOR.keepSynced(true);
@@ -154,11 +153,11 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
         btn_yes = view.findViewById(R.id.btn_yes);
         btn_no = view.findViewById(R.id.btn_no);
 
-        Log.e(TAG, "pacienteLatitude " + pacienteLatitude);
-        Log.e(TAG, "pacienteLongitud " + pacienteLongitud);
         mFCMService = Common.getIFCMService();
         driverID = doctorUID;
         Common.doctorAcept = false;
+        Log.e(TAG, "pacienteLatitude " + pacienteLatitude);
+        Log.e(TAG, "pacienteLongitud " + pacienteLongitud);
 
         if (isTapOnMap) {
 
@@ -199,11 +198,8 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                 @Override
                 public void onClick(View v) {
                     sendRequestDoctor(driverID);
-                    // return booleando
-
                     showDialog1();
 
-                    //todo : si se cierra el showDialog enviar
                 }
             });
             //.------------------->
@@ -218,6 +214,95 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
         return view;
     }
 
+    //
+    private void showDialog1() {
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = getLayoutInflater();
+        final View view = inflater.inflate(R.layout.alert_booking, null);
+        builder.setView(view);
+        builder.setCancelable(false);
+        mTimeLeftInMillis = START_TIME_IN_MILLS;
+        view.setKeepScreenOn(true);
+
+        Common.doctorAcept = false;
+        final AlertDialog dialog = builder.create();
+
+        view.findViewById(R.id.animation_view);
+        xml_countDown = view.findViewById(R.id.text_view_countDown);
+        Common.token_doctor = driverID;
+
+        Toast.makeText(getContext(), "Solicitando atención", Toast.LENGTH_SHORT).show();
+
+        yourCountDownTimer = new CountDownTimer(mTimeLeftInMillis, 500) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                // millisUntilFinished = mTimeLeftInMillis - 500
+                mTimeLeftInMillis = millisUntilFinished;
+                int minutos = (int) (mTimeLeftInMillis / 1000) / 60;
+                int secounds = (int) (mTimeLeftInMillis / 1000) % 60;
+                String timeFormated = String.format(Locale.getDefault(), "%02d:%02d", minutos, secounds);
+                Log.e(TAG, " mTimeLeftInMillis : " + mTimeLeftInMillis);
+                xml_countDown.setText(timeFormated);
+
+            }
+
+            //todo : aun envia
+            @Override
+            public void onFinish() {
+                Log.e(TAG, " ==============================");
+                try {
+                    Log.e(TAG, " onFinish()");
+                    Log.e(TAG, " mTimeLeftInMillis : " + mTimeLeftInMillis);
+                    Log.e(TAG, " START_TIME_IN_MILLS : " + START_TIME_IN_MILLS);
+                    //  mTimeLeftInMillis = START_TIME_IN_MILLS;
+                    //  mTimeLeftInMillis=0;
+                    dialog.dismiss();
+                    dialog.cancel();
+                    dismiss();
+                    //Enviar Notificacion-Data
+                    timeOutRequestDoctor(driverID);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                Log.e(TAG, " ==============================");
+
+            }
+        }.start();
+
+        if (Common.doctorAcept == true) {
+            Log.e(TAG, " Common.doctorAcept : " + Common.doctorAcept);
+            Log.e(TAG, " yourCountDownTimer  : " + mTimeLeftInMillis);
+          //  yourCountDownTimer.cancel();
+            dialog.dismiss();
+            dialog.cancel();
+            dismiss();
+
+        }
+
+
+        btn_s_cancelar = view.findViewById(R.id.btn_s_cancelar);
+
+        btn_s_cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(view.getContext(), "Cancelado", Toast.LENGTH_SHORT).show();
+                cancelRequestDoctor(driverID);
+                dialog.dismiss();
+                dismiss();
+
+            }
+        });
+
+        try {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
 
     //.
     private void sendRequestDoctor(String doctorUID) {
@@ -279,12 +364,12 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
     }
 
     //.
-
     private void cancelRequestDoctor(String driverID) {
         Log.e(TAG, "======================================================");
         Log.e(TAG, "             cancelRequestDoctor                    ");
 
         yourCountDownTimer.cancel();
+
         Log.e(TAG, "cancelRequestDoctor ---> mTimeLeftInMillis : " + mTimeLeftInMillis);
         DatabaseReference tokens = FirebaseDatabase.getInstance().getReference(Common.token_tbl);
         tokens
@@ -334,7 +419,10 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
     //.
     private void timeOutRequestDoctor(String driverID) {
         Log.e(TAG, "======================================================");
-        Log.e(TAG, "             cancelRequestDoctor                    ");
+        Log.e(TAG, "             timeOutRequestDoctor                    ");
+
+        yourCountDownTimer.cancel();
+
         DatabaseReference tokens = FirebaseDatabase.getInstance().getReference(Common.token_tbl);
         tokens
                 .orderByKey()
@@ -359,14 +447,15 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                                         @Override
                                         public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
                                             if (response.body().success == 1) {
-                                                Log.e(TAG, "onResponse: success  cancelRequestDoctor() ");
-
+                                                Log.e(TAG, "onResponse: success - timeOutRequestDoctor() ");
+                                                Log.e(TAG, "======================================================");
                                             }
                                         }
 
                                         @Override
                                         public void onFailure(Call<FCMResponse> call, Throwable t) {
                                             Log.e(TAG, "onFailure : " + t.getMessage());
+                                            Log.e(TAG, "======================================================");
                                         }
                                     });
                         }
@@ -378,99 +467,6 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                     }
                 });
 
-        Log.e(TAG, "======================================================");
-    }
-
-    //
-    private void showDialog1() {
-
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        LayoutInflater inflater = getLayoutInflater();
-        final View view = inflater.inflate(R.layout.alert_booking, null);
-        builder.setView(view);
-        builder.setCancelable(false);
-        mTimeLeftInMillis = START_TIME_IN_MILLS;
-        view.setKeepScreenOn(true);
-
-        Common.doctorAcept = false;
-        final AlertDialog dialog = builder.create();
-
-        view.findViewById(R.id.animation_view);
-        xml_countDown = view.findViewById(R.id.text_view_countDown);
-        Common.token_doctor = driverID;
-
-        Toast.makeText(getContext(), "Solicitando atención", Toast.LENGTH_SHORT).show();
-
-        yourCountDownTimer = new CountDownTimer(mTimeLeftInMillis, 500) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                // millisUntilFinished = mTimeLeftInMillis - 500
-                mTimeLeftInMillis = millisUntilFinished;
-                int minutos = (int) (mTimeLeftInMillis / 1000) / 60;
-                int secounds = (int) (mTimeLeftInMillis / 1000) % 60;
-                String timeFormated = String.format(Locale.getDefault(), "%02d:%02d", minutos, secounds);
-                Log.e(TAG, " mTimeLeftInMillis : " + mTimeLeftInMillis);
-                xml_countDown.setText(timeFormated);
-
-            }
-
-            //todo : aun envia
-            @Override
-            public void onFinish() {
-                Log.e(TAG, " ==============================");
-                try {
-                    Log.e(TAG, " onFinish()");
-                    Log.e(TAG, " mTimeLeftInMillis : " + mTimeLeftInMillis);
-                    Log.e(TAG, " START_TIME_IN_MILLS : " + START_TIME_IN_MILLS);
-                    //  mTimeLeftInMillis = START_TIME_IN_MILLS;
-                    //  mTimeLeftInMillis=0;
-                    dialog.dismiss();
-                    dialog.cancel();
-                    dismiss();
-                    //Enviar Notificacion-Data
-                    //timeOutRequestDoctor(driverID);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                Log.e(TAG, " ==============================");
-
-            }
-        }.start();
-
-        if (Common.doctorAcept == true) {
-            Log.e(TAG, " Common.doctorAcept : " + Common.doctorAcept);
-            Log.e(TAG, " yourCountDownTimer  : " + mTimeLeftInMillis);
-            yourCountDownTimer.cancel();
-            dialog.dismiss();
-            dialog.cancel();
-            dismiss();
-
-        }
-
-
-        btn_s_cancelar = view.findViewById(R.id.btn_s_cancelar);
-
-        btn_s_cancelar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(view.getContext(), "Cancelado", Toast.LENGTH_SHORT).show();
-                xml_countDown.setText("");
-                cancelRequestDoctor(driverID);
-                dialog.dismiss();
-                dismiss();
-
-            }
-        });
-
-        try {
-            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            dialog.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
 
     }
-
-
 }
