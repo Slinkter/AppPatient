@@ -640,11 +640,6 @@ public class DoctorRoad extends FragmentActivity implements
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
 
-
-
-
-
-
     }
 
 
