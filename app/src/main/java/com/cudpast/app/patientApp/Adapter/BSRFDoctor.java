@@ -74,6 +74,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
     String driverID;
 
     TextView xml_countDown;
+    CountDownTimer yourCountDownTimer;
     LottieAnimationView animationView;
     long START_TIME_IN_MILLS = 60 * 1000 * 2; // 60 s  5min
     long mTimeLeftInMillis;
@@ -283,6 +284,8 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
         Log.e(TAG, "======================================================");
         Log.e(TAG, "             cancelRequestDoctor                    ");
 
+        yourCountDownTimer.cancel();
+        Log.e(TAG, "cancelRequestDoctor ---> mTimeLeftInMillis : " + mTimeLeftInMillis);
         DatabaseReference tokens = FirebaseDatabase.getInstance().getReference(Common.token_tbl);
         tokens
                 .orderByKey()
@@ -398,7 +401,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
 
         Toast.makeText(getContext(), "Solicitando atención", Toast.LENGTH_SHORT).show();
 
-        CountDownTimer yourCountDownTimer = new CountDownTimer(mTimeLeftInMillis, 500) {
+        yourCountDownTimer = new CountDownTimer(mTimeLeftInMillis, 500) {
             @Override
             public void onTick(long millisUntilFinished) {
                 // millisUntilFinished = mTimeLeftInMillis - 500
