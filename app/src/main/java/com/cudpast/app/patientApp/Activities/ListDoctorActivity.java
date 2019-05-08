@@ -38,7 +38,7 @@ public class ListDoctorActivity extends AppCompatActivity {
         //2.
         mBlogList = findViewById(R.id.myrecycleview);
         mBlogList.setHasFixedSize(true);
-//        mBlogList.setAnimation( );
+
         mBlogList.setLayoutManager(new LinearLayoutManager(this));
     }
 
@@ -72,7 +72,7 @@ public class ListDoctorActivity extends AppCompatActivity {
                 final String uid = model.getNumphone();
                 //Abrir perfil de doctor
 
-                view.container.setAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_scale_animation));
+                view.container.setAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade));
                 view.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
