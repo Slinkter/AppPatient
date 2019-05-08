@@ -72,7 +72,7 @@ public class ListDoctorActivity extends AppCompatActivity {
                 final String uid = model.getNumphone();
                 //Abrir perfil de doctor
 
-                view.container.setAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade));
+                view.container.setAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_transition_animation));
                 view.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
