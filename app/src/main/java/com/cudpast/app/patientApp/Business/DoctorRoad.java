@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -27,6 +28,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.cudpast.app.patientApp.Activities.UbicacionActivity;
 import com.cudpast.app.patientApp.Common.Common;
 import com.cudpast.app.patientApp.Model.DoctorPerfil;
 import com.cudpast.app.patientApp.R;
@@ -327,19 +329,6 @@ public class DoctorRoad extends FragmentActivity implements
 
     }
 
-    //.metodos auxiliar para imagenes .svg
-    private BitmapDescriptor BitmapDoctorApp(Context context, @DrawableRes int vectorDrawableResourceId) {
-        Drawable background = ContextCompat.getDrawable(context, vectorDrawableResourceId);
-        background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight());
-        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId);
-        vectorDrawable.setBounds(40, 20, vectorDrawable.getIntrinsicWidth() + 40, vectorDrawable.getIntrinsicHeight() + 20);
-        Bitmap bitmap = Bitmap.createBitmap(background.getIntrinsicWidth(), background.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        background.draw(canvas);
-        vectorDrawable.draw(canvas);
-        return BitmapDescriptorFactory.fromBitmap(bitmap);
-    }
-
     //.
     private void getDirection() {
         Log.e(TAG, "=============================================================");
@@ -508,8 +497,8 @@ public class DoctorRoad extends FragmentActivity implements
                 }
                 //<--
                 polylineOptions.addAll(points);
-                polylineOptions.width(5);
-                polylineOptions.color(Color.MAGENTA);
+                polylineOptions.width(4);
+                polylineOptions.color(Color.RED);
                 polylineOptions.geodesic(true);
             }
 
@@ -551,7 +540,6 @@ public class DoctorRoad extends FragmentActivity implements
 
     }
 
-
     private void cancelBooking(String IdToken) {
         Log.e(TAG, "======================================================");
         Log.e(TAG, "             cancelRequestDoctor                    ");
@@ -581,7 +569,11 @@ public class DoctorRoad extends FragmentActivity implements
                                         @Override
                                         public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
                                             if (response.body().success == 1) {
+                                                Intent intent = new Intent(DoctorRoad.this, UbicacionActivity.class);
+                                                startActivity(intent);
+                                                finish();
                                                 Log.e(TAG, "onResponse: success");
+
                                             }
                                         }
 
@@ -602,6 +594,19 @@ public class DoctorRoad extends FragmentActivity implements
         Log.e(TAG, "======================================================");
     }
 
+    //.metodos auxiliar para imagenes .svg
+    private BitmapDescriptor BitmapDoctorApp(Context context, @DrawableRes int vectorDrawableResourceId) {
+        Drawable background = ContextCompat.getDrawable(context, vectorDrawableResourceId);
+        background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight());
+        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId);
+        vectorDrawable.setBounds(40, 20, vectorDrawable.getIntrinsicWidth() + 40, vectorDrawable.getIntrinsicHeight() + 20);
+        Bitmap bitmap = Bitmap.createBitmap(background.getIntrinsicWidth(), background.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        background.draw(canvas);
+        vectorDrawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
+    }
+
     //.Ventana Emergente al Cancelar DoctorRoad
     public void ShowPopupCancelar() {
         Button btn_accept_cancelar, btn_decline_cancelar;
@@ -616,7 +621,7 @@ public class DoctorRoad extends FragmentActivity implements
                 Toast.makeText(getApplicationContext(), "Confirma cancelar", Toast.LENGTH_SHORT).show();
                 cancelBooking(Common.token_doctor);
                 myDialog.dismiss();
-                finish();
+
             }
         });
 

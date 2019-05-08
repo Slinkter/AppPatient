@@ -55,7 +55,6 @@
             android:gravity="center"
             android:text="Esperando respuesta del doctor" />
 
-
     </LinearLayout>
 
     <Button
@@ -66,7 +65,6 @@
         android:background="@drawable/btn_drawable_1"
         android:text="Cancelar"
         android:textColor="@color/color_white" />
-
 
 </LinearLayout>
 

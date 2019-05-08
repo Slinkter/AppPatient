@@ -115,14 +115,14 @@ public class DoctorEnd extends AppCompatActivity {
 
 
         //pdf
-        templatePDF = new TemplatePDF(getApplicationContext());
-        templatePDF.openDocument();
-        templatePDF.addMetada("Clientes", "Ventas", "Marines");
-        templatePDF.addTitles("Cudpast DoctorApp", "Dr. Juan Perez", "2019/04/27");
-        templatePDF.addParagraph(shortText);
-        templatePDF.addParagraph(longText);
-        templatePDF.addCreateTable(header, getClients());
-        templatePDF.closeDocument();
+//        templatePDF = new TemplatePDF(getApplicationContext());
+//        templatePDF.openDocument();
+//        templatePDF.addMetada("Clientes", "Ventas", "Marines");
+//        templatePDF.addTitles("Cudpast DoctorApp", "Dr. Juan Perez", "2019/04/27");
+//        templatePDF.addParagraph(shortText);
+//        templatePDF.addParagraph(longText);
+//        templatePDF.addCreateTable(header, getClients());
+//        templatePDF.closeDocument();
 
 
     }
@@ -172,7 +172,7 @@ public class DoctorEnd extends AppCompatActivity {
                             Token tokenDoctor = postSnapShot.getValue(Token.class);
                             String dToken = tokenDoctor.getToken();
                             String title = "App Doctor";
-                            String body = "El usuario ha cancelado";
+                            String body = "El usuario ha finalizado";
                             //Data
                             Data data = new Data(title, body, " ", " ", "", "");
                             //Sender (to, data)
@@ -262,7 +262,7 @@ public class DoctorEnd extends AppCompatActivity {
     }
 
     //PDF
-
+/*
     private String[] header = {"Id", "Nombre", "Apellido"};
     private String shortText = "Estimado paciente : " + Common.currentUser.getNombre() + " "+ Common.currentUser.getApellido();
     private String longText = "Este PDF es generador por al finalizar la consulta medica  ";
@@ -286,5 +286,5 @@ public class DoctorEnd extends AppCompatActivity {
         return rows;
     }
 
-
+*/
 }
