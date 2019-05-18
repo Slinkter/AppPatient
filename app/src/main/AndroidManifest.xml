@@ -60,7 +60,7 @@
             android:parentActivityName=".Activities.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activities.DoctorPerfilActivity"
+            android:name=".Activities.DoctorPerfil"
             android:parentActivityName=".Activities.ListDoctorActivity"
             android:screenOrientation="portrait">
             <intent-filter>

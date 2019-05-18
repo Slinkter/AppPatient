@@ -8,12 +8,10 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.cudpast.app.patientApp.Model.DoctorPerfil;
 import com.cudpast.app.patientApp.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
@@ -46,12 +44,12 @@ public class ListDoctorActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        FirebaseRecyclerAdapter<DoctorPerfil, BlogViewHolder> adapter;
+        FirebaseRecyclerAdapter<com.cudpast.app.patientApp.Model.DoctorPerfil, BlogViewHolder> adapter;
 
-        adapter = new FirebaseRecyclerAdapter<DoctorPerfil, BlogViewHolder>(DoctorPerfil.class, R.layout.doctor_layout_info, BlogViewHolder.class, mDatabase) {
+        adapter = new FirebaseRecyclerAdapter<com.cudpast.app.patientApp.Model.DoctorPerfil, BlogViewHolder>(com.cudpast.app.patientApp.Model.DoctorPerfil.class, R.layout.doctor_layout_info, BlogViewHolder.class, mDatabase) {
 
             @Override
-            protected void populateViewHolder(final BlogViewHolder view, final DoctorPerfil model, int position) {
+            protected void populateViewHolder(final BlogViewHolder view, final com.cudpast.app.patientApp.Model.DoctorPerfil model, int position) {
 
                 view.setImage(getApplicationContext(), model.getImage());
                 view.setFirstName(model.getFirstname() + " " + model.getLastname());
@@ -72,11 +70,11 @@ public class ListDoctorActivity extends AppCompatActivity {
                 final String uid = model.getNumphone();
                 //Abrir perfil de doctor
 
-                view.container.setAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_transition_animation));
+              //  view.container.setAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_transition_animation));
                 view.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent i = new Intent(view.mView.getContext(), DoctorPerfilActivity.class);
+                        Intent i = new Intent(view.mView.getContext(), DoctorPerfil.class);
 
                         i.putExtra("doctor_img", img);
                         i.putExtra("doctor_name", firstName);
