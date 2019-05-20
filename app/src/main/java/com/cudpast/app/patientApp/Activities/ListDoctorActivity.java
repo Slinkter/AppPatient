@@ -56,7 +56,7 @@ public class ListDoctorActivity extends AppCompatActivity {
                 view.setPhone(model.getNumphone());
                 view.setEspecialidad(model.getEspecialidad());
 
-                final String codmedpe = model.getFirstname();
+                final String codmedpe = model.getUid();
                 final String correoG = model.getFirstname();
                 final String direccion = model.getFirstname();
                 final String dni = model.getFirstname();
@@ -75,7 +75,7 @@ public class ListDoctorActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Intent i = new Intent(view.mView.getContext(), DoctorPerfil.class);
-
+                        i.putExtra("doctor_uid" ,codmedpe );
                         i.putExtra("doctor_img", img);
                         i.putExtra("doctor_name", firstName);
                         i.putExtra("doctor_last", lastname);

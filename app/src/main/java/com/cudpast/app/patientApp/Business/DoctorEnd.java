@@ -1,18 +1,24 @@
 package com.cudpast.app.patientApp.Business;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cudpast.app.patientApp.Activities.MainActivity;
 import com.cudpast.app.patientApp.Common.Common;
+import com.cudpast.app.patientApp.Model.Comment;
 import com.cudpast.app.patientApp.Model.DoctorPerfil;
 import com.cudpast.app.patientApp.Model.User;
 import com.cudpast.app.patientApp.PDFHelper.TemplatePDF;
@@ -24,8 +30,10 @@ import com.cudpast.app.patientApp.helper.Notification;
 import com.cudpast.app.patientApp.helper.Sender;
 import com.cudpast.app.patientApp.helper.Token;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -61,8 +69,15 @@ public class DoctorEnd extends AppCompatActivity {
     private DatabaseReference AppPaciente_history, AppDoctor_history, AppDoctor_history_Comment;
     private FirebaseAuth auth;
 
+    FirebaseAuth firebaseAuth;
+    FirebaseUser firebaseUser;
+    FirebaseDatabase firebaseDatabase;
+
 
     IFCMService mFCMService;
+
+    private Animation animation;
+    private Vibrator vib;
 
 
     @Override
@@ -72,6 +87,13 @@ public class DoctorEnd extends AppCompatActivity {
         getSupportActionBar().hide();
 
         auth = FirebaseAuth.getInstance();
+
+        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.shake);
+        vib = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
+        firebaseDatabase = FirebaseDatabase.getInstance();
 
         AppPaciente_history = FirebaseDatabase.getInstance().getReference(Common.AppPaciente_history);
         AppDoctor_history = FirebaseDatabase.getInstance().getReference(Common.AppDoctor_history);
@@ -95,23 +117,31 @@ public class DoctorEnd extends AppCompatActivity {
         metodoSignInResult();
 
         btn_fin_atencion = findViewById(R.id.btn_fin_atencion);
+
         btn_fin_atencion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //
-                sendEndAttention(Common.token_doctor);
-                insertarHistoryPacienteDoctor();
-                //
-                Intent intent = new Intent(DoctorEnd.this, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
+
+                if (submitForm()) {
+                    //
+                    mFCMService = Common.getIFCMService();
+                    sendEndAttention(Common.token_doctor);
+                    insertarHistoryPacienteDoctor();
+                    //
+                    Intent intent = new Intent(DoctorEnd.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();
+                }
+
+
 
 
             }
         });
 
-        mFCMService = Common.getIFCMService();
+
+
 
 
         //pdf
@@ -125,6 +155,25 @@ public class DoctorEnd extends AppCompatActivity {
 //        templatePDF.closeDocument();
 
 
+    }
+
+    private boolean submitForm() {
+
+        if (!checkCommentPaciente()) {
+            id_paciente_comment.setAnimation(animation);
+            id_paciente_comment.startAnimation(animation);
+            vib.vibrate(120);
+            return false;
+        }
+        return true;
+    }
+
+    private boolean checkCommentPaciente() {
+        if (id_paciente_comment.getText().toString().trim().isEmpty()) {
+            id_paciente_comment.setError("Debes ingresar un comentario ");
+            return false;
+        }
+        return true;
     }
 
 
@@ -233,16 +282,29 @@ public class DoctorEnd extends AppCompatActivity {
                     }
                 });
 
-        String commnet = id_paciente_comment.getText().toString();
 
-        AppDoctor_history_Comment
-                .child(doctorUID)
-                .child(fecha)
-                .setValue(commnet)
+        String comment_content = id_paciente_comment.getText().toString();
+        String uid = pacienteUID;
+        String uname = Common.currentUser.getNombre();
+        String uimg = "";
+
+        Comment comment = new Comment(comment_content, uid, uimg, uname);
+
+        DatabaseReference commentReference = AppDoctor_history_Comment.child(doctorUID).push();
+        commentReference
+                .setValue(comment)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.e("AppDoctor_history ", "AppDoctor_history_Comment ");
+                        showMessage("comment added");
+                        id_paciente_comment.setText("");
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        showMessage("failt to add comment " + e.getMessage());
                     }
                 });
 
@@ -287,4 +349,8 @@ public class DoctorEnd extends AppCompatActivity {
     }
 
 */
+
+    private void showMessage(String s) {
+        Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
+    }
 }
