@@ -29,7 +29,7 @@
             android:visibility="gone" />
 
         <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/animation_view"
+            android:id="@+id/animation_view_stopwatch"
             android:layout_width="180dp"
             android:layout_height="180dp"
             android:layout_gravity="center"

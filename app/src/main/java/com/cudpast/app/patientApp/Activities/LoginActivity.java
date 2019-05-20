@@ -55,7 +55,6 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Com
     private FirebaseAuth auth;
     private FirebaseDatabase db;
     private DatabaseReference users;
-    private LinearLayout root;
 
     private TextView txt_forgot_pwd;
 
@@ -83,7 +82,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Com
         users = db.getReference("db_usuarios");
         btn_login = findViewById(R.id.btn_login);
         btn_register = findViewById(R.id.btn_register);
-        root = findViewById(R.id.root);
+
 
         //check
         sharedPreferences = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);

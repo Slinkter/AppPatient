@@ -18,7 +18,6 @@ public class MainActivity extends AppCompatActivity implements
     private TextView nameTextView;
     private TextView emailTextView;
     private TextView idTextView;
-
     private FirebaseAuth auth;
 
 
@@ -49,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements
         User currentUser = Common.currentUser;
         updateUI(currentUser);
     }
+
     //.VerificarSiUsuarioExiste
     private void updateUI(User user) {
         if (user != null) {
@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements
             goLogIngScreen();
         }
     }
+
     //.Escoger Btn
     @Override
     public void onClick(View v) {
@@ -88,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements
         try {
 
             User usuario = Common.currentUser;
-            nameTextView.setText(usuario.getNombre() +" "+  usuario.getApellido() );
+            nameTextView.setText(usuario.getNombre() + " " + usuario.getApellido());
             emailTextView.setText(usuario.getCorreo());
             idTextView.setText(usuario.getDni());
 
@@ -104,7 +105,9 @@ public class MainActivity extends AppCompatActivity implements
         Intent intent = new Intent(this, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | intent.FLAG_ACTIVITY_CLEAR_TASK | intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+        finish();
     }
+
     //.
     private void signOut() {
         auth.signOut();

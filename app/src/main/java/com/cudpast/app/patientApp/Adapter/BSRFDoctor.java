@@ -228,7 +228,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
         Common.doctorAcept = false;
         final AlertDialog dialog = builder.create();
 
-        view.findViewById(R.id.animation_view);
+        view.findViewById(R.id.animation_view_stopwatch);
         xml_countDown = view.findViewById(R.id.text_view_countDown);
         Common.token_doctor = driverID;
 
