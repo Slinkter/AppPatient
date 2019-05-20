@@ -64,8 +64,8 @@ public class DoctorPerfil extends AppCompatActivity {
         getSupportActionBar().setTitle("Perfil del Médico");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Window w = getWindow();
-        w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+//        Window w = getWindow();
+//        w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         RVComment = findViewById(R.id.myrecycleviewComments);
         AppDoctor_history_Comment = FirebaseDatabase.getInstance().getReference(Common.AppDoctor_history_Comment);
 

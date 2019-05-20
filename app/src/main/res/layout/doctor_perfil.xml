@@ -10,9 +10,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_height="match_parent"
         android:background="@color/colorVerdeAzul"
         android:orientation="vertical">
         <!--Docto Info -->
@@ -21,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="?attr/actionBarSize"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -29,7 +27,7 @@
                 android:id="@+id/aa_thumbnail"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
-                android:layout_marginTop="45dp"
+
                 app:civ_border_color="@color/color_white"
                 app:civ_border_width="3dp" />
 
