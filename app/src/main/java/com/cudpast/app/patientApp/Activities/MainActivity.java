@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements
 
         // Buttons
         findViewById(R.id.btnMedicos).setOnClickListener(this);
-        findViewById(R.id.btnEspecialidad).setOnClickListener(this);
+
         findViewById(R.id.btnHistorial).setOnClickListener(this);
         findViewById(R.id.btnUpdateInfo).setOnClickListener(this);
         findViewById(R.id.btnUbicacion).setOnClickListener(this);
@@ -64,9 +64,6 @@ public class MainActivity extends AppCompatActivity implements
         int i = v.getId();
         if (i == R.id.btnMedicos) {
             Intent intent = new Intent(MainActivity.this, ListDoctorActivity.class);
-            startActivity(intent);
-        } else if (i == R.id.btnEspecialidad) {
-            Intent intent = new Intent(MainActivity.this, EspecialidadActivity.class);
             startActivity(intent);
         } else if (i == R.id.btnHistorial) {
             Intent intent = new Intent(MainActivity.this, HistoryActivity.class);

@@ -16,15 +16,6 @@
         android:paddingTop="36dp"
         android:paddingRight="10dp">
 
-        <ImageView
-            android:layout_width="95dp"
-            android:layout_height="95dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="5dp"
-            android:contentDescription="nada"
-            android:src="@drawable/ic_ambulance" />
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
