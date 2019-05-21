@@ -8,18 +8,19 @@
     tools:context=".Activities.SplashActivity">
 
     <ImageView
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:src="@drawable/ambulance"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/animation_view_stopwatch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:visibility="gone"
         app:lottie_autoPlay="true"
         app:lottie_fileName="splash_doctor.json"
         app:lottie_imageAssetsFolder="assets"

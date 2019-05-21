@@ -26,6 +26,7 @@
                 android:layout_marginBottom="6dp"
                 android:gravity="center"
                 android:text="Bienvenido"
+                android:textColor="@color/colorCelesteDark"
                 android:textSize="40sp"
                 android:textStyle="bold" />
 
@@ -56,7 +57,7 @@
                 <android.support.v7.widget.CardView
                     android:layout_width="110dp"
                     android:layout_height="110dp"
-                    android:layout_margin="10dp"
+                    android:layout_margin="8dp"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:shape="ring"
                     app:cardCornerRadius="55dp"
@@ -89,7 +90,7 @@
                 <android.support.v7.widget.CardView
                     android:layout_width="110dp"
                     android:layout_height="110dp"
-                    android:layout_margin="10dp"
+                    android:layout_margin="8dp"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:shape="ring"
                     app:cardCornerRadius="55dp"
@@ -135,7 +136,7 @@
                 <android.support.v7.widget.CardView
                     android:layout_width="110dp"
                     android:layout_height="110dp"
-                    android:layout_margin="10dp"
+                    android:layout_margin="8dp"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:shape="ring"
                     app:cardCornerRadius="55dp"
@@ -168,7 +169,7 @@
                 <android.support.v7.widget.CardView
                     android:layout_width="110dp"
                     android:layout_height="110dp"
-                    android:layout_margin="10dp"
+                    android:layout_margin="8dp"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:shape="ring"
                     app:cardCornerRadius="55dp"

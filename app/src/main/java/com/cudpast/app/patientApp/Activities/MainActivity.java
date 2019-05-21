@@ -1,8 +1,14 @@
 package com.cudpast.app.patientApp.Activities;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -19,6 +25,9 @@ public class MainActivity extends AppCompatActivity implements
     private TextView emailTextView;
     private TextView idTextView;
     private FirebaseAuth auth;
+
+    private static final long SPLASH_SCREEN_DELAY = 3000;
+    private static final int MY_PERMISSION_REQUEST_CODE = 7000;
 
 
     @Override
@@ -45,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onStart() {
         super.onStart();
+        permisos();
         User currentUser = Common.currentUser;
         updateUI(currentUser);
     }
@@ -112,6 +122,42 @@ public class MainActivity extends AppCompatActivity implements
         Intent intent = new Intent(this, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | intent.FLAG_ACTIVITY_CLEAR_TASK | intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+    }
+
+    //permisos
+    public void permisos() {
+        if (ContextCompat
+                .checkSelfPermission(this,
+                        Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat
+                        .checkSelfPermission(this,
+                                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{
+                            Manifest.permission.ACCESS_COARSE_LOCATION,
+                            Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_PERMISSION_REQUEST_CODE);
+        } else {
+            // Si tiene los permisos
+            // verficiar el  checkPlayService
+            Log.e("hola", "si tiene los permisos");
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        switch (requestCode) {
+            case MY_PERMISSION_REQUEST_CODE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.e("hola", "si tiene los permisos  v2 ");
+                }
+            }
+        }
+
     }
 
 
