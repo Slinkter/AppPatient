@@ -12,7 +12,7 @@
         android:layout_height="250dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:src="@drawable/ambulance"
+        android:src="@drawable/ic_ambulance"
         android:visibility="visible" />
 
     <com.airbnb.lottie.LottieAnimationView

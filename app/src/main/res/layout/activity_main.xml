@@ -26,7 +26,7 @@
                 android:layout_marginBottom="6dp"
                 android:gravity="center"
                 android:text="Bienvenido"
-                android:textColor="@color/colorCelesteDark"
+                android:textColor="@color/btnSignIN"
                 android:textSize="40sp"
                 android:textStyle="bold" />
 
@@ -36,7 +36,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:text="USUARIO"
-                android:textSize="18dp" />
+                android:textSize="18dp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/emailTextView"
@@ -49,8 +50,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="3dp"
-                android:clipToPadding="false"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -58,7 +57,6 @@
                     android:layout_width="110dp"
                     android:layout_height="110dp"
                     android:layout_margin="8dp"
-                    android:foreground="?android:attr/selectableItemBackground"
                     android:shape="ring"
                     app:cardCornerRadius="55dp"
                     app:cardElevation="5dp">
@@ -72,18 +70,12 @@
 
                         <Button
                             android:id="@+id/btnMedicos"
-                            android:layout_width="64dp"
-                            android:layout_height="64dp"
-                            android:layout_marginTop="5dp"
+                            android:layout_width="49dp"
+                            android:layout_height="49dp"
+                            android:layout_margin="49dp"
                             android:background="@drawable/main_1"
                             android:baselineAligned="false" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="3dp"
-                            android:gravity="center"
-                            android:text="Medicos" />
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
 
@@ -105,20 +97,13 @@
 
                         <Button
                             android:id="@+id/btnUbicacion"
-                            android:layout_width="64dp"
-                            android:layout_height="64dp"
-                            android:layout_marginTop="5dp"
+                            android:layout_width="55dp"
+                            android:layout_height="49dp"
+                            android:layout_margin="49dp"
                             android:background="@drawable/main_2"
                             android:baselineAligned="false" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginTop="3dp"
-                            android:layout_marginRight="5dp"
-                            android:gravity="center"
-                            android:text="Ubicacion" />
+
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
 
@@ -151,18 +136,13 @@
 
                         <Button
                             android:id="@+id/btnHistorial"
-                            android:layout_width="64dp"
-                            android:layout_height="64dp"
-                            android:layout_marginTop="5dp"
+                            android:layout_width="49dp"
+                            android:layout_height="49dp"
+                            android:layout_margin="5dp"
                             android:background="@drawable/main_4"
                             android:baselineAligned="false" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="3dp"
-                            android:gravity="center"
-                            android:text="Historial" />
+
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
 
@@ -184,20 +164,11 @@
 
                         <Button
                             android:id="@+id/btnUpdateInfo"
-                            android:layout_width="64dp"
-                            android:layout_height="64dp"
-                            android:layout_marginTop="5dp"
-                            android:background="@drawable/ic_user_comment"
+                            android:layout_width="49dp"
+                            android:layout_height="49dp"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/ic_user1"
                             android:baselineAligned="false" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginTop="3dp"
-                            android:layout_marginRight="5dp"
-                            android:gravity="center"
-                            android:text="Perfil" />
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
             </LinearLayout>
@@ -227,18 +198,11 @@
 
                         <Button
                             android:id="@+id/btnCerra_sesion"
-                            android:layout_width="64dp"
-                            android:layout_height="64dp"
-                            android:layout_marginTop="5dp"
-                            android:background="@drawable/ic_x_button"
+                            android:layout_width="49dp"
+                            android:layout_height="49dp"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/ic_exit_to_app_red_24dp"
                             android:baselineAligned="false" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="3dp"
-                            android:gravity="center"
-                            android:text="Salir" />
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
             </LinearLayout>
