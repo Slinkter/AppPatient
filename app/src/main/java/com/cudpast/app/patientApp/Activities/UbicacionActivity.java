@@ -68,11 +68,13 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ubicacion);
+        //
         getSupportActionBar().setTitle("Mapas de Doctores");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapUbicacion);
         mapFragment.getMapAsync(this);
-
+        //
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         //.
         DbRef_TB_AVAILABLE_DOCTOR = FirebaseDatabase.getInstance().getReference(Common.TB_AVAILABLE_DOCTOR);
@@ -98,6 +100,7 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
                     try {
                         boolean isSuccess = mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.my_map_style));
                         if (!isSuccess) {
+                            mMap.setMyLocationEnabled(true);
                             Log.e("ERROR", "El estilo de google map no carga");
                         }
                     } catch (Exception e) {
@@ -110,6 +113,7 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
                                 @Override
                                 public void onSuccess(Location location) {
                                     if (location != null) {
+                                        mMap.setMyLocationEnabled(true);
                                         mMap.getUiSettings().setAllGesturesEnabled(true);
                                         Common.mLastLocation = location;
                                         LatLng p = new LatLng(Common.mLastLocation.getLatitude(), Common.mLastLocation.getLongitude());
@@ -231,6 +235,7 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
                         @Override
                         public void onSuccess(Location location) {
                             if (location != null) {
+
                                 Common.mLastLocation = location;
                                 LatLng indexUbication = new LatLng(Common.mLastLocation.getLatitude(), Common.mLastLocation.getLongitude());
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(indexUbication, DEFAULT_ZOOM));
@@ -239,6 +244,7 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
                                         .addValueEventListener(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                mMap.setMyLocationEnabled(true);
                                                 Log.e(TAG, " onDataChange() : " + dataSnapshot);
                                                 loadDoctorAvailableOnMap(pacienteLocation);
                                             }
@@ -296,7 +302,7 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
 
 
                                         DoctorPerfil doctor_info = dataSnapshot.getValue(DoctorPerfil.class);
-                                        if (doctor_info !=null){
+                                        if (doctor_info != null) {
                                             Log.e(TAG, " doctor_info.getFirstname()  " + doctor_info.getFirstname());
                                             Log.e(TAG, " doctor_info.getLastname()  " + doctor_info.getLastname());
                                             Log.e(TAG, " doctor_info.getUid()  " + doctor_info.getUid());
@@ -346,6 +352,7 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
                 });
 
     }
+
     //.
     private BitmapDescriptor bitmapDescriptorFromVector(Context context, @DrawableRes int vectorDrawableResourceId) {
         Drawable background = ContextCompat.getDrawable(context, vectorDrawableResourceId);
