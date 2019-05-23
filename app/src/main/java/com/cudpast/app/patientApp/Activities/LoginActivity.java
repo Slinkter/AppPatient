@@ -122,13 +122,14 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Com
         });
 
         txt_forgot_pwd = findViewById(R.id.txt_forgot_password);
-        txt_forgot_pwd.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                showDialogForgotPwd();
-                return false;
-            }
-        });
+        txt_forgot_pwd
+                .setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View view, MotionEvent motionEvent) {
+                        showDialogForgotPwd();
+                        return false;
+                    }
+                });
     }
 
 

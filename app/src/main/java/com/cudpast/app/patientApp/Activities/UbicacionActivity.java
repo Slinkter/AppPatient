@@ -60,8 +60,6 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
 
     private int distance = 5;   // 3km
     private static final int LIMIT = 10;
-
-
     private boolean mPermissionDenied = false;
 
     private GoogleMap mMap;
@@ -314,26 +312,6 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
                                         }
 
 
-//                                        mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-//                                            @Override
-//                                            public View getInfoWindow(Marker marker) {
-//                                                return null;
-//                                            }
-//
-//                                            @Override
-//                                            public View getInfoContents(Marker marker) {
-//
-//                                                View view = getLayoutInflater().inflate(R.layout.custom_ider_info_patient, null);
-//
-//                                                TextView txt_PickupTitle = (view.findViewById(R.id.txtPickupInfo));
-//                                                txt_PickupTitle.setText(marker.getTitle());
-//
-//                                                TextView txt_PickupSnippet = (view.findViewById(R.id.txtPickupSnippet));
-//                                                txt_PickupSnippet.setText(marker.getSnippet());
-//
-//                                                return view;
-//                                            }
-//                                        });
                                     }
 
                                     @Override
@@ -368,7 +346,6 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
                 });
 
     }
-
     //.
     private BitmapDescriptor bitmapDescriptorFromVector(Context context, @DrawableRes int vectorDrawableResourceId) {
         Drawable background = ContextCompat.getDrawable(context, vectorDrawableResourceId);

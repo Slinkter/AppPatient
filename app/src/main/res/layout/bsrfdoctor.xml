@@ -33,8 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
-                android:text="firstname "
-
+                android:text="firstname"
                 android:textSize="24dp"
                 android:textStyle="bold" />
 
@@ -44,7 +43,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
                 android:text="lastname"
-             
                 android:textSize="24dp"
                 android:textStyle="bold" />
 
@@ -86,7 +84,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="c_especialidad"
-
                         android:textSize="15dp"
                         android:textStyle="normal" />
 

@@ -1,11 +1,11 @@
 <resources>
-    <string name="app_name">CUDPAST PacienteAPP</string>
+    <string name="app_name">Paciente APP</string>
     <string name="title_activity_maps">Map</string>
-
 
     <string name="username_hint">
         <font size="12">Usuario</font>
     </string>
+
     <string name="password_hint">
         <font size="12">Contraseña</font>
     </string>
@@ -15,6 +15,7 @@
     <string name="register">
         <font size="15">Crear Cuenta</font>
     </string>
+
     <string name="title_activity_business">BusinessActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
