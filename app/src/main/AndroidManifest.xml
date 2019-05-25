@@ -24,6 +24,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".PDFHelper.ViewPDFActivity"></activity>
+        <activity android:name=".Soporte.IntroActivity"/>
         <activity
             android:name=".Activities.HistoryActivity"
             android:parentActivityName=".Activities.MainActivity"

@@ -42,4 +42,9 @@
     <color name="white">#FFFFFF</color>
 
 
+    <color name="slide_1">#00bcd4</color>
+    <color name="slide_2">#FFA000</color>
+    <color name="slide_3">#C4D30808</color>
+
+
 </resources>

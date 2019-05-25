@@ -31,6 +31,7 @@ import android.widget.Toast;
 import com.cudpast.app.patientApp.Common.Common;
 import com.cudpast.app.patientApp.Model.User;
 import com.cudpast.app.patientApp.R;
+import com.cudpast.app.patientApp.Soporte.IntroActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -74,9 +75,13 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Com
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         getSupportActionBar().hide();
         permisos();
+        //AppIntro
+        Intent intent = new Intent(this, IntroActivity.class);
+        startActivity(intent);
+        //
+
         auth = FirebaseAuth.getInstance();
         db = FirebaseDatabase.getInstance();
         users = db.getReference("db_usuarios");
