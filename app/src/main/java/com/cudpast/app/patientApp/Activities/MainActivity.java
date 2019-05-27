@@ -20,6 +20,8 @@ import com.google.firebase.auth.FirebaseAuth;
 public class MainActivity extends AppCompatActivity implements
         View.OnClickListener {
 
+    public static final String TAG = MainActivity.class.getSimpleName();
+
     // private ImageView photoImageView;
     private TextView nameTextView;
     private TextView emailTextView;
