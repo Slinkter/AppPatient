@@ -29,13 +29,17 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
             Log.e(TAG, "          MyFirebaseMessaging             ");
 
             String rpta = remoteMessage.getNotification().getTitle();
+            String caso_1 = "Cancel";
+            String caso_2 = "Arrived";
+            String caso_3 = "Acepta";
+
             Log.e(TAG, " rpta : " + rpta);
 
-            if (rpta.equalsIgnoreCase("Cancel")) {
+            if (rpta.equalsIgnoreCase(caso_1) ) {
                 showCancelNotification(remoteMessage.getNotification().getBody());
-            } else if (rpta.equalsIgnoreCase("Arrived")) {
+            } else if (rpta.equalsIgnoreCase(caso_2)) {
                 showArrivedNotification(remoteMessage.getNotification().getBody());
-            } else if (rpta.equalsIgnoreCase("Acepta")) {
+            } else if (rpta.equalsIgnoreCase(caso_3)) {
                 showAceptNotification(remoteMessage.getData().get("extra").toString());
             }
         }
