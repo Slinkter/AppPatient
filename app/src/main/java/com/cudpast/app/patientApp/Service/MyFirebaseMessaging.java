@@ -28,10 +28,6 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
             Log.e(TAG, "==========================================");
             Log.e(TAG, "          MyFirebaseMessaging             ");
 
-
-
-
-
             String caso_1 = "Acepta";
             String caso_2 = "Cancel";
             String caso_3 = "Arrived";
@@ -41,9 +37,9 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
             if (body.equalsIgnoreCase(caso_1) ) {
                 showAceptedNotification(remoteMessage);
             } else if (body.equalsIgnoreCase(caso_2)) {
-                showArrivedNotification(remoteMessage);
-            } else if (body.equalsIgnoreCase(caso_3)) {
                 showCancelNotification(remoteMessage);
+            } else if (body.equalsIgnoreCase(caso_3)) {
+                showArrivedNotification(remoteMessage);
             }
         }
 
@@ -65,11 +61,12 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
     private void showCancelNotification(RemoteMessage message) {
         //todo En la appDoctor , el doctor se pone off pero en appPaciente no actualiza esto
         Log.e(TAG, "          showCancelNotification             ");
-
+        mostrarMensaje(message);
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(new Runnable() {
             @Override
             public void run() {
+
                 Toast.makeText(MyFirebaseMessaging.this, "" + "", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), UbicacionActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -82,7 +79,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
 
 
         Log.e(TAG, "          showArrivedNotification             ");
-
+        mostrarMensaje(message);
         Intent intent = new Intent(MyFirebaseMessaging.this, DoctorEnd.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
