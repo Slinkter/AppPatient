@@ -48,6 +48,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.Locale;
 
+import dmax.dialog.SpotsDialog;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -304,10 +305,14 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
 
     }
 
-    //.
+    //.Caso 1
     private void sendRequestDoctor(String doctorUID) {
         Log.e(TAG, "======================================================");
         Log.e(TAG, "             sendRequestDoctor                    ");
+        //
+        final SpotsDialog waitingDialog = new SpotsDialog(getContext(), R.style.DialogLogin);
+        waitingDialog.show();
+        //
         DatabaseReference tokens = FirebaseDatabase.getInstance().getReference(Common.token_tbl);
         tokens
                 .orderByKey()
@@ -327,6 +332,8 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                             String json_lat_lng = new Gson().toJson(userGeo);
                             //.Data
                             Data data = new Data(title, body, pToken, dToken, json_lat_lng, pacienteUID);
+                            //Sender (to:token,data:informacion_del_paciente)
+                            Sender sender = new Sender(dToken, data);
                             //.Log
                             Log.e(TAG, "title : " + title);
                             Log.e(TAG, "body : " + body);
@@ -334,21 +341,24 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                             Log.e(TAG, "pacienteToken : " + pToken);
                             Log.e(TAG, "ubicacion de paciente : " + json_lat_lng);
                             Log.e(TAG, "pacienteUID : " + pacienteUID);
-                            //Sender (to:token,data:informacion_del_paciente)
-                            Sender sender = new Sender(dToken, data);
+
                             mFCMService
                                     .sendMessage(sender)
                                     .enqueue(new Callback<FCMResponse>() {
                                         @Override
                                         public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
                                             if (response.body().success == 1) {
+                                                waitingDialog.show();
                                                 Log.e(TAG, "onResponse: success");
+                                                Log.e(TAG, "======================================================");
                                             }
                                         }
 
                                         @Override
                                         public void onFailure(Call<FCMResponse> call, Throwable t) {
+                                            waitingDialog.show();
                                             Log.e(TAG, "onFailure : " + t.getMessage());
+                                            Log.e(TAG, "======================================================");
                                         }
                                     });
                         }
@@ -356,18 +366,19 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
+                        waitingDialog.show();
                         Log.e(TAG, " onCancelled" + databaseError.getMessage());
+                        Log.e(TAG, "======================================================");
                     }
                 });
-
-        Log.e(TAG, "======================================================");
     }
 
-    //.
+    //.Caso 2
     private void cancelRequestDoctor(String driverID) {
         Log.e(TAG, "======================================================");
         Log.e(TAG, "             cancelRequestDoctor                    ");
-
+        final SpotsDialog waitingDialog = new SpotsDialog(getContext(), R.style.DialogLogin);
+        waitingDialog.show();
         yourCountDownTimer.cancel();
 
         Log.e(TAG, "cancelRequestDoctor ---> mTimeLeftInMillis : " + mTimeLeftInMillis);
@@ -395,13 +406,17 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                                         @Override
                                         public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
                                             if (response.body().success == 1) {
+                                                waitingDialog.show();
                                                 Log.e(TAG, "onResponse: success  cancelRequestDoctor() ");
+                                                Log.e(TAG, "======================================================");
                                             }
                                         }
 
                                         @Override
                                         public void onFailure(Call<FCMResponse> call, Throwable t) {
+                                            waitingDialog.show();
                                             Log.e(TAG, "onFailure : " + t.getMessage());
+                                            Log.e(TAG, "======================================================");
                                         }
                                     });
                         }
@@ -409,18 +424,19 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
+                        waitingDialog.show();
                         Log.e(TAG, " onCancelled" + databaseError.getMessage());
+                        Log.e(TAG, "======================================================");
                     }
                 });
-
-        Log.e(TAG, "======================================================");
     }
 
-    //.
+    //.Caso 3
     private void timeOutRequestDoctor(String driverID) {
         Log.e(TAG, "======================================================");
         Log.e(TAG, "             timeOutRequestDoctor                    ");
-
+        final SpotsDialog waitingDialog = new SpotsDialog(getContext(), R.style.DialogLogin);
+        waitingDialog.show();
         yourCountDownTimer.cancel();
 
         DatabaseReference tokens = FirebaseDatabase.getInstance().getReference(Common.token_tbl);
@@ -447,6 +463,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                                         @Override
                                         public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
                                             if (response.body().success == 1) {
+                                                waitingDialog.show();
                                                 Log.e(TAG, "onResponse: success - timeOutRequestDoctor() ");
                                                 Log.e(TAG, "======================================================");
                                             }
@@ -454,6 +471,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
 
                                         @Override
                                         public void onFailure(Call<FCMResponse> call, Throwable t) {
+                                            waitingDialog.show();
                                             Log.e(TAG, "onFailure : " + t.getMessage());
                                             Log.e(TAG, "======================================================");
                                         }
@@ -463,10 +481,10 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
+                        waitingDialog.show();
                         Log.e(TAG, " onCancelled" + databaseError.getMessage());
+                        Log.e(TAG, "======================================================");
                     }
                 });
-
-
     }
 }

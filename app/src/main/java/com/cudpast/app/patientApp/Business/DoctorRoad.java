@@ -125,10 +125,10 @@ public class DoctorRoad extends FragmentActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_go_doctor);
-        //*************************************************
+        //
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapGoDoctor);
         mapFragment.getMapAsync(this);
-        //*************************************************
+        //
         ubicacion = LocationServices.getFusedLocationProviderClient(this);
         btn_ruta_cancelar = findViewById(R.id.btn_ruta_cancelar);
         myDialog = new Dialog(this);
@@ -139,7 +139,6 @@ public class DoctorRoad extends FragmentActivity implements
                 ShowPopupCancelar();
             }
         });
-
 
         //.Recibir de la notificacion
         if (getIntent() != null) {
@@ -212,7 +211,6 @@ public class DoctorRoad extends FragmentActivity implements
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiCliente);
 
         if (mLastLocation != null) {
-
             Double latitud = mLastLocation.getLatitude();
             Double longitude = mLastLocation.getLongitude();
             final LatLng pacienteLocation = new LatLng(latitud, longitude);
@@ -594,7 +592,7 @@ public class DoctorRoad extends FragmentActivity implements
         Log.e(TAG, "======================================================");
     }
 
-    //.metodos auxiliar para imagenes .svg
+    //.
     private BitmapDescriptor BitmapDoctorApp(Context context, @DrawableRes int vectorDrawableResourceId) {
         Drawable background = ContextCompat.getDrawable(context, vectorDrawableResourceId);
         background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight());

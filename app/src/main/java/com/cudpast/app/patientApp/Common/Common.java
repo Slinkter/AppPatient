@@ -21,6 +21,8 @@ public class Common {
     public static final String AppDoctor_history= "AppDoctor_history";
     public static final String AppDoctor_history_Comment= "AppDoctor_history_Comment";
 
+    public static final String db_session = "db_session";
+
     public static Boolean doctorAcept ;
 
     public static User currentUser;
