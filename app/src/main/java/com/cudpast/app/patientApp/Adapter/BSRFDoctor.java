@@ -207,7 +207,6 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
             btn_no.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getContext(), "Cancelado", Toast.LENGTH_SHORT).show();
                     dismiss();
                 }
             });
@@ -248,7 +247,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
 
             }
 
-            //todo : aun envia
+
             @Override
             public void onFinish() {
                 Log.e(TAG, " ==============================");
@@ -348,15 +347,15 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                                         @Override
                                         public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
                                             if (response.body().success == 1) {
-                                                waitingDialog.show();
-                                                Log.e(TAG, "onResponse: success");
+                                                waitingDialog.dismiss();
+                                                Log.e(TAG, "onResponse: success Caso 1");
                                                 Log.e(TAG, "======================================================");
                                             }
                                         }
 
                                         @Override
                                         public void onFailure(Call<FCMResponse> call, Throwable t) {
-                                            waitingDialog.show();
+                                            waitingDialog.dismiss();
                                             Log.e(TAG, "onFailure : " + t.getMessage());
                                             Log.e(TAG, "======================================================");
                                         }
@@ -366,7 +365,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-                        waitingDialog.show();
+                        waitingDialog.dismiss();
                         Log.e(TAG, " onCancelled" + databaseError.getMessage());
                         Log.e(TAG, "======================================================");
                     }
@@ -406,7 +405,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                                         @Override
                                         public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
                                             if (response.body().success == 1) {
-                                                waitingDialog.show();
+                                                waitingDialog.dismiss();
                                                 Log.e(TAG, "onResponse: success  cancelRequestDoctor() ");
                                                 Log.e(TAG, "======================================================");
                                             }
@@ -414,7 +413,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
 
                                         @Override
                                         public void onFailure(Call<FCMResponse> call, Throwable t) {
-                                            waitingDialog.show();
+                                            waitingDialog.dismiss();
                                             Log.e(TAG, "onFailure : " + t.getMessage());
                                             Log.e(TAG, "======================================================");
                                         }
@@ -424,7 +423,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-                        waitingDialog.show();
+                        waitingDialog.dismiss();
                         Log.e(TAG, " onCancelled" + databaseError.getMessage());
                         Log.e(TAG, "======================================================");
                     }

@@ -1,8 +1,18 @@
 package com.cudpast.app.patientApp.Service;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -10,6 +20,7 @@ import com.cudpast.app.patientApp.Activities.UbicacionActivity;
 import com.cudpast.app.patientApp.Business.DoctorEnd;
 import com.cudpast.app.patientApp.Business.DoctorRoad;
 import com.cudpast.app.patientApp.Common.Common;
+import com.cudpast.app.patientApp.R;
 import com.cudpast.app.patientApp.helper.Token;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -20,6 +31,8 @@ import com.google.firebase.messaging.RemoteMessage;
 public class MyFirebaseMessaging extends FirebaseMessagingService {
 
     private static String TAG = MyFirebaseMessaging.class.getSimpleName();
+    public static final String APP_CHANNEL_ID = "Default";
+    public static final String APP_CHANNEL_NAME = "App Channel";
 
     @Override
     public void onMessageReceived(final RemoteMessage remoteMessage) {
@@ -46,7 +59,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
     }
     private void showAceptedNotification(RemoteMessage message) {
         Log.e(TAG,"===============================================");
-        Log.e(TAG, "          showAceptedNotification             ");
+        Log.e(TAG, "          El doctor Acepta          ");
         mostrarMensaje(message);
         Common.doctorAcept = true;
         String firebaseDoctorUID = message.getData().get("dToken");
@@ -54,8 +67,10 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         Intent intent = new Intent(MyFirebaseMessaging.this, DoctorRoad.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.putExtra("firebaseDoctorUID", firebaseDoctorUID);
+        Common.doctorAcept = true;
         startActivity(intent);
-        Log.e(TAG,"===============================================");
+        Log.e(TAG, "============================FIN============================");
+        //
     }
 
     private void showCancelNotification(RemoteMessage message) {
@@ -66,28 +81,22 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         handler.post(new Runnable() {
             @Override
             public void run() {
-
-                Toast.makeText(MyFirebaseMessaging.this, "" + "", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MyFirebaseMessaging.this, "Cancelado", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), UbicacionActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
+
             }
         });
     }
 
     private void showArrivedNotification(RemoteMessage message) {
-
-
-        Log.e(TAG, "          showArrivedNotification             ");
+        Log.e(TAG, "          El doctor ha llegado a tu domicilio             ");
         mostrarMensaje(message);
         Intent intent = new Intent(MyFirebaseMessaging.this, DoctorEnd.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
-
-
     }
-
-
 
     @Override
     public void onNewToken(String s) {

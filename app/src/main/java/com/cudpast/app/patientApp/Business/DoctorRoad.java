@@ -28,6 +28,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.cudpast.app.patientApp.Activities.MainActivity;
 import com.cudpast.app.patientApp.Activities.UbicacionActivity;
 import com.cudpast.app.patientApp.Common.Common;
 import com.cudpast.app.patientApp.Model.DoctorPerfil;
@@ -567,7 +568,7 @@ public class DoctorRoad extends FragmentActivity implements
                                         @Override
                                         public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
                                             if (response.body().success == 1) {
-                                                Intent intent = new Intent(DoctorRoad.this, UbicacionActivity.class);
+                                                Intent intent = new Intent(DoctorRoad.this, MainActivity.class);
                                                 startActivity(intent);
                                                 finish();
                                                 Log.e(TAG, "onResponse: success");
