@@ -37,14 +37,12 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
-
+        //
         nameTextView = findViewById(R.id.nameTextView);
         emailTextView = findViewById(R.id.emailTextView);
         auth = FirebaseAuth.getInstance();
-
         // Buttons
         findViewById(R.id.btnMedicos).setOnClickListener(this);
-
         findViewById(R.id.btnHistorial).setOnClickListener(this);
         findViewById(R.id.btnUpdateInfo).setOnClickListener(this);
         findViewById(R.id.btnUbicacion).setOnClickListener(this);

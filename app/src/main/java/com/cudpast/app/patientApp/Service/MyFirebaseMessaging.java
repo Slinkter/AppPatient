@@ -17,6 +17,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.cudpast.app.patientApp.Activities.UbicacionActivity;
+import com.cudpast.app.patientApp.Business.DoctorCancel;
 import com.cudpast.app.patientApp.Business.DoctorEnd;
 import com.cudpast.app.patientApp.Business.DoctorRoad;
 import com.cudpast.app.patientApp.Common.Common;
@@ -42,47 +43,51 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
             Log.e(TAG, "          MyFirebaseMessaging             ");
 
             String caso_1 = "Acepta";
-            String caso_2 = "Cancel";
+            String caso_2 = "rechaza";
             String caso_3 = "Arrived";
+            String caso_4 = "Cancel";
 
             String body = remoteMessage.getData().get("body");
 
-            if (body.equalsIgnoreCase(caso_1) ) {
-                showAceptedNotification(remoteMessage);
-            } else if (body.equalsIgnoreCase(caso_2)) {
-                showCancelNotification(remoteMessage);
-            } else if (body.equalsIgnoreCase(caso_3)) {
-                showArrivedNotification(remoteMessage);
+            if (body != null) {
+                if (body.equalsIgnoreCase(caso_1)) {
+                    showAceptedNotification(remoteMessage);
+                } else if (body.equalsIgnoreCase(caso_2)) {
+                    showCancelNotification(remoteMessage);
+                } else if (body.equalsIgnoreCase(caso_3)) {
+                    showArrivedNotification(remoteMessage);
+                } else if (body.equalsIgnoreCase(caso_4)) {
+                    showDoctorCancelOnRoad(remoteMessage);
+                }
             }
         }
-
     }
+
+    // Caso 1 : El Docto Acepta
     private void showAceptedNotification(RemoteMessage message) {
-        Log.e(TAG,"===============================================");
-        Log.e(TAG, "          El doctor Acepta          ");
+        Log.e(TAG, "===============================================");
+        Log.e(TAG, "Caso 1 : El doctor Acepta  ");
         mostrarMensaje(message);
         Common.doctorAcept = true;
         String firebaseDoctorUID = message.getData().get("dToken");
-        //
         Intent intent = new Intent(MyFirebaseMessaging.this, DoctorRoad.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.putExtra("firebaseDoctorUID", firebaseDoctorUID);
-        Common.doctorAcept = true;
         startActivity(intent);
-        Log.e(TAG, "============================FIN============================");
-        //
+        Log.e(TAG, "========================================================");
     }
 
+    // Caso 2 : El Docto rechaza
     private void showCancelNotification(RemoteMessage message) {
-        //todo En la appDoctor , el doctor se pone off pero en appPaciente no actualiza esto
-        Log.e(TAG, "          showCancelNotification             ");
+
+        Log.e(TAG, "Caso 2 : showCancelNotification             ");
         mostrarMensaje(message);
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(new Runnable() {
             @Override
             public void run() {
                 Toast.makeText(MyFirebaseMessaging.this, "Cancelado", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), UbicacionActivity.class);
+                Intent intent = new Intent(getApplicationContext(), DoctorCancel.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
 
@@ -90,12 +95,24 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         });
     }
 
+    // Caso 3 : El Doctor Llega al domicilio del paciente
     private void showArrivedNotification(RemoteMessage message) {
-        Log.e(TAG, "          El doctor ha llegado a tu domicilio             ");
+        Log.e(TAG, "Caso 3 : El doctor ha llegado a tu domicilio             ");
         mostrarMensaje(message);
         Intent intent = new Intent(MyFirebaseMessaging.this, DoctorEnd.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
+    }
+
+    // Caso 4 : El Doctor cancela en pleno servicio
+    private void showDoctorCancelOnRoad(RemoteMessage message) {
+        Log.e(TAG, "========================================================");
+        Log.e(TAG, "Caso 4 : El doctor ha cancelado en pleno viaje ");
+        Intent intent = new Intent(MyFirebaseMessaging.this, DoctorCancel.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        mostrarMensaje(message);
+        startActivity(intent);
+        Log.e(TAG, "========================================================");
     }
 
     @Override
@@ -110,7 +127,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
     }
 
 
-    public void mostrarMensaje(RemoteMessage message){
+    public void mostrarMensaje(RemoteMessage message) {
 
         Log.e(TAG, "title : " + message.getData().get("title"));
         Log.e(TAG, "body : " + message.getData().get("body"));

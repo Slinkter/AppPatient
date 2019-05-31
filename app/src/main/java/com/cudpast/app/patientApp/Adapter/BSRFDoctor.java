@@ -217,22 +217,20 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
     //
     private void showDialog1() {
 
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = getLayoutInflater();
-        final View view = inflater.inflate(R.layout.alert_booking, null);
+        View view = inflater.inflate(R.layout.alert_booking, null);
         builder.setView(view);
         builder.setCancelable(false);
         mTimeLeftInMillis = START_TIME_IN_MILLS;
         view.setKeepScreenOn(true);
-
+        btn_s_cancelar = view.findViewById(R.id.btn_s_cancelar);
         Common.doctorAcept = false;
         final AlertDialog dialog = builder.create();
 
         view.findViewById(R.id.animation_view_stopwatch);
         xml_countDown = view.findViewById(R.id.text_view_countDown);
         Common.token_doctor = driverID;
-
-        Toast.makeText(getContext(), "Solicitando atención", Toast.LENGTH_SHORT).show();
 
         yourCountDownTimer = new CountDownTimer(mTimeLeftInMillis, 500) {
             @Override
@@ -273,24 +271,19 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
         if (Common.doctorAcept == true) {
             Log.e(TAG, " Common.doctorAcept : " + Common.doctorAcept);
             Log.e(TAG, " yourCountDownTimer  : " + mTimeLeftInMillis);
-          //  yourCountDownTimer.cancel();
+            //  yourCountDownTimer.cancel();
             dialog.dismiss();
             dialog.cancel();
             dismiss();
 
         }
 
-
-        btn_s_cancelar = view.findViewById(R.id.btn_s_cancelar);
-
         btn_s_cancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(view.getContext(), "Cancelado", Toast.LENGTH_SHORT).show();
                 cancelRequestDoctor(driverID);
                 dialog.dismiss();
                 dismiss();
-
             }
         });
 
@@ -378,8 +371,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
         Log.e(TAG, "             cancelRequestDoctor                    ");
         final SpotsDialog waitingDialog = new SpotsDialog(getContext(), R.style.DialogLogin);
         waitingDialog.show();
-        yourCountDownTimer.cancel();
-
+        yourCountDownTimer.cancel();// <-- se cancela el timer del reloj
         Log.e(TAG, "cancelRequestDoctor ---> mTimeLeftInMillis : " + mTimeLeftInMillis);
         DatabaseReference tokens = FirebaseDatabase.getInstance().getReference(Common.token_tbl);
         tokens
@@ -462,7 +454,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                                         @Override
                                         public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
                                             if (response.body().success == 1) {
-                                                waitingDialog.show();
+                                                waitingDialog.dismiss();
                                                 Log.e(TAG, "onResponse: success - timeOutRequestDoctor() ");
                                                 Log.e(TAG, "======================================================");
                                             }
@@ -470,7 +462,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
 
                                         @Override
                                         public void onFailure(Call<FCMResponse> call, Throwable t) {
-                                            waitingDialog.show();
+                                            waitingDialog.dismiss();
                                             Log.e(TAG, "onFailure : " + t.getMessage());
                                             Log.e(TAG, "======================================================");
                                         }
@@ -480,7 +472,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-                        waitingDialog.show();
+                        waitingDialog.dismiss();
                         Log.e(TAG, " onCancelled" + databaseError.getMessage());
                         Log.e(TAG, "======================================================");
                     }

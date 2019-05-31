@@ -78,7 +78,5 @@ dependencies {
     implementation 'com.github.AppIntro:AppIntro:4.2.3'
 
 
-
-
 }
 apply plugin: 'com.google.gms.google-services'

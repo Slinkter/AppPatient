@@ -10,11 +10,8 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
-
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
 
     <application
         android:allowBackup="true"
@@ -23,12 +20,13 @@
         android:roundIcon="@drawable/ic_ambulance"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".PDFHelper.ViewPDFActivity"></activity>
-        <activity android:name=".Soporte.IntroActivity"/>
+        <activity android:name=".Business.DoctorCancel"></activity>
+        <activity android:name=".PDFHelper.ViewPDFActivity" />
+        <activity android:name=".Soporte.IntroActivity" />
         <activity
             android:name=".Activities.HistoryActivity"
             android:parentActivityName=".Activities.MainActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -117,7 +115,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity> <!-- Notification -->
-
         <service android:name=".Service.MyFirebaseMessaging">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
