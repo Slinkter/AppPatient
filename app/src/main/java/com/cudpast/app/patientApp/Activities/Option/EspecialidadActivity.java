@@ -1,4 +1,4 @@
-package com.cudpast.app.patientApp.Activities;
+package com.cudpast.app.patientApp.Activities.Option;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

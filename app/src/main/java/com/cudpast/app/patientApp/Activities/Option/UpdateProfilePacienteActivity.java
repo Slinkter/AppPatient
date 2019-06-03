@@ -1,4 +1,4 @@
-package com.cudpast.app.patientApp.Activities;
+package com.cudpast.app.patientApp.Activities.Option;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.cudpast.app.patientApp.Activities.MainActivity;
 import com.cudpast.app.patientApp.Common.Common;
 import com.cudpast.app.patientApp.Model.User;
 import com.cudpast.app.patientApp.R;

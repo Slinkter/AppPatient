@@ -1,27 +1,15 @@
 package com.cudpast.app.patientApp.Service;
 
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.cudpast.app.patientApp.Activities.UbicacionActivity;
 import com.cudpast.app.patientApp.Business.DoctorCancel;
 import com.cudpast.app.patientApp.Business.DoctorEnd;
 import com.cudpast.app.patientApp.Business.DoctorRoad;
 import com.cudpast.app.patientApp.Common.Common;
-import com.cudpast.app.patientApp.R;
 import com.cudpast.app.patientApp.helper.Token;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;

@@ -29,7 +29,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.cudpast.app.patientApp.Activities.MainActivity;
-import com.cudpast.app.patientApp.Activities.UbicacionActivity;
 import com.cudpast.app.patientApp.Common.Common;
 import com.cudpast.app.patientApp.Model.DoctorPerfil;
 import com.cudpast.app.patientApp.R;

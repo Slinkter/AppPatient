@@ -1,4 +1,4 @@
-package com.cudpast.app.patientApp.Activities;
+package com.cudpast.app.patientApp.Soporte;
 
 import android.Manifest;
 import android.app.AlertDialog;

@@ -1,4 +1,4 @@
-package com.cudpast.app.patientApp.Activities;
+package com.cudpast.app.patientApp.Activities.Option;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.cudpast.app.patientApp.Activities.Option.extra.DoctorPerfil;
 import com.cudpast.app.patientApp.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;

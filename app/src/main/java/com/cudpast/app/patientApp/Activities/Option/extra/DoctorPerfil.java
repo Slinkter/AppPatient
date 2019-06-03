@@ -1,4 +1,4 @@
-package com.cudpast.app.patientApp.Activities;
+package com.cudpast.app.patientApp.Activities.Option.extra;
 
 import android.content.Intent;
 import android.net.Uri;

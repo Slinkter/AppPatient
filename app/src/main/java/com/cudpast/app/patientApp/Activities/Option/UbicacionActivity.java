@@ -1,4 +1,4 @@
-package com.cudpast.app.patientApp.Activities;
+package com.cudpast.app.patientApp.Activities.Option;
 
 
 import com.cudpast.app.patientApp.Adapter.BSRFDoctor;

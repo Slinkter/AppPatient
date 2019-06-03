@@ -12,6 +12,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.cudpast.app.patientApp.Activities.Option.HistoryActivity;
+import com.cudpast.app.patientApp.Activities.Option.ListDoctorActivity;
+import com.cudpast.app.patientApp.Activities.Option.UbicacionActivity;
+import com.cudpast.app.patientApp.Activities.Option.UpdateProfilePacienteActivity;
 import com.cudpast.app.patientApp.Common.Common;
 import com.cudpast.app.patientApp.Model.User;
 import com.cudpast.app.patientApp.R;

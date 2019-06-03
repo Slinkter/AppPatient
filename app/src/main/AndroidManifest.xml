@@ -24,7 +24,7 @@
         <activity android:name=".PDFHelper.ViewPDFActivity" />
         <activity android:name=".Soporte.IntroActivity" />
         <activity
-            android:name=".Activities.HistoryActivity"
+            android:name=".Activities.Option.HistoryActivity"
             android:parentActivityName=".Activities.MainActivity"
             android:screenOrientation="portrait" />
 
@@ -36,7 +36,7 @@
             android:value="false" />
 
         <activity
-            android:name=".Activities.UpdateProfilePacienteActivity"
+            android:name=".Activities.Option.UpdateProfilePacienteActivity"
             android:parentActivityName=".Activities.MainActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -55,12 +55,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.UbicacionActivity"
+            android:name=".Activities.Option.UbicacionActivity"
             android:parentActivityName=".Activities.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activities.DoctorPerfil"
-            android:parentActivityName=".Activities.ListDoctorActivity"
+            android:name=".Activities.Option.extra.DoctorPerfil"
+            android:parentActivityName=".Activities.Option.ListDoctorActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -69,7 +69,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.EspecialidadActivity"
+            android:name=".Activities.Option.EspecialidadActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -78,7 +78,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.ListDoctorActivity"
+            android:name=".Activities.Option.ListDoctorActivity"
             android:parentActivityName=".Activities.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
