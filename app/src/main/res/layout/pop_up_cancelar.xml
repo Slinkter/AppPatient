@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+    android:layout_width="290dp"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:background="@drawable/custom_dialog_1"
@@ -11,18 +11,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:layout_margin="14dp"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:gravity="center">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="5dp"
             android:text="¿Deseas cancelar el servicio?"
-            android:textSize="18dp"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -44,25 +39,27 @@
             android:id="@+id/btn_accept_cancelar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="12dp"
-            android:background="@drawable/custom_button_accept"
-            android:text="si"
-            android:textColor="@android:color/white" />
+            android:layout_weight="1"
+            android:background="@android:color/white"
+            android:text="SI"
+            android:textColor="@android:color/holo_blue_bright"
+            android:textStyle="bold" />
 
         <View
             android:layout_width="0.7dp"
             android:layout_height="match_parent"
             android:alpha="0.8"
-            android:background="@android:color/darker_gray"  />
+            android:background="@android:color/darker_gray" />
 
         <Button
             android:id="@+id/btn_decline_cancelar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="12dp"
-            android:background="@drawable/custom_button_decline"
-            android:text="no"
-            android:textColor="@android:color/white" />
+            android:layout_weight="1"
+            android:background="@android:color/white"
+            android:text="No"
+            android:textColor="@color/colorRed"
+            android:textStyle="bold" />
 
     </LinearLayout>
 

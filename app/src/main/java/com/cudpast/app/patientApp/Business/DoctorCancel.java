@@ -17,6 +17,7 @@ public class DoctorCancel extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_doctor_cancel);
         regresar = findViewById(R.id.returnCancelMain);
         regresar.setOnClickListener(new View.OnClickListener() {

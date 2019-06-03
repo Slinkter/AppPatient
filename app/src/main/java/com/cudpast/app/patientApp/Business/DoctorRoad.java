@@ -1,6 +1,7 @@
 package com.cudpast.app.patientApp.Business;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -21,7 +22,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -136,7 +136,8 @@ public class DoctorRoad extends FragmentActivity implements
         btn_ruta_cancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ShowPopupCancelar();
+              //  ShowPopupCancelar();
+                showDiaglo1();
             }
         });
 
@@ -348,7 +349,7 @@ public class DoctorRoad extends FragmentActivity implements
                     MarkerOptions doctorMO = new MarkerOptions()
                             .position(doctorlatlng)
                             .title("Doctor")
-                            .icon(BitmapDoctorApp(DoctorRoad.this, R.drawable.ic_doctorapp));
+                            .icon(BitmapDoctorApp(getApplicationContext(), R.drawable.ic_doctorapp));
 
                     marketDoctorCurrent = mMap.addMarker(doctorMO);
 
@@ -558,9 +559,9 @@ public class DoctorRoad extends FragmentActivity implements
                             String title = "App Doctor";
                             String body = "El usuario ha cancelado durante el servicio";
                             //Data
-                            Data data =  new Data(title, body, " ", " ", "", "");
+                            Data data = new Data(title, body, " ", " ", "", "");
                             //Sender (to, data)
-                            Sender sender = new Sender(dToken,  data);
+                            Sender sender = new Sender(dToken, data);
                             mFCMService
                                     .sendMessage(sender)
                                     .enqueue(new Callback<FCMResponse>() {
@@ -597,7 +598,7 @@ public class DoctorRoad extends FragmentActivity implements
         Drawable background = ContextCompat.getDrawable(context, vectorDrawableResourceId);
         background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight());
         Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId);
-        vectorDrawable.setBounds(40, 20, vectorDrawable.getIntrinsicWidth() + 40, vectorDrawable.getIntrinsicHeight() + 20);
+        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth() + 0, vectorDrawable.getIntrinsicHeight() + 0);
         Bitmap bitmap = Bitmap.createBitmap(background.getIntrinsicWidth(), background.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         background.draw(canvas);
@@ -608,41 +609,65 @@ public class DoctorRoad extends FragmentActivity implements
     //.Ventana Emergente al Cancelar DoctorRoad
     public void ShowPopupCancelar() {
         Button btn_accept_cancelar, btn_decline_cancelar;
-
         myDialog.setContentView(R.layout.pop_up_cancelar);
         btn_accept_cancelar = myDialog.findViewById(R.id.btn_accept_cancelar);
         btn_decline_cancelar = myDialog.findViewById(R.id.btn_decline_cancelar);
+        btn_accept_cancelar
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(getApplicationContext(), "Confirma cancelar", Toast.LENGTH_SHORT).show();
+                        cancelBooking(Common.token_doctor);
+                        myDialog.dismiss();
 
-        btn_accept_cancelar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "Confirma cancelar", Toast.LENGTH_SHORT).show();
-                cancelBooking(Common.token_doctor);
-                myDialog.dismiss();
-
-            }
-        });
-
-        btn_decline_cancelar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                myDialog.dismiss();
-            }
-        });
+                    }
+                });
+        btn_decline_cancelar
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        myDialog.dismiss();
+                    }
+                });
         myDialog.show();
     }
 
 
-
-    public void showDiaglo1(){
-        AlertDialog.Builder builer = new AlertDialog.Builder(DoctorRoad.this);
+    public void showDiaglo1() {
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(DoctorRoad.this);
         LayoutInflater inflater = getLayoutInflater();
-        View view = inflater.inflate(R.layout.bsrfdoctor,null);
-        builer.setView(view);
-        final AlertDialog dialog = builer.create();
+        View view = inflater.inflate(R.layout.pop_up_cancelar, null);
+        builder.setView(view);
+        builder.setCancelable(false);
+        view.setKeepScreenOn(true);
+        final AlertDialog dialog = builder.create();
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        //
+        Button btn_accept_cancelar, btn_decline_cancelar;
+        btn_accept_cancelar = view.findViewById(R.id.btn_accept_cancelar);
+        btn_decline_cancelar = view.findViewById(R.id.btn_decline_cancelar);
+
+        btn_accept_cancelar
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(getApplicationContext(), "Enviando cancelación del servicio al doctor", Toast.LENGTH_SHORT).show();
+                        cancelBooking(Common.token_doctor);
+                        dialog.dismiss();
+                        finish();
 
 
+                    }
+                });
+
+        btn_decline_cancelar
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+        dialog.show();
     }
 
 
