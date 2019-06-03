@@ -77,7 +77,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
     TextView xml_countDown;
     CountDownTimer yourCountDownTimer;
     LottieAnimationView animationView;
-    long START_TIME_IN_MILLS = 60 * 1000 * 2; // 60 s  5min
+    long START_TIME_IN_MILLS = 60 * 1000 * 5; // 60 s  5min
     long mTimeLeftInMillis;
 
 
