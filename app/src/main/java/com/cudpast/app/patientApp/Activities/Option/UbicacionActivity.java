@@ -313,7 +313,7 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
                                                             .flat(true)
                                                             .title(doctor_info.getFirstname() + " " + doctor_info.getLastname())
                                                             .snippet(doctor_info.getUid())
-                                                            .icon(bitmapDescriptorFromVector(UbicacionActivity.this, R.drawable.ic_doctorapp))
+                                                            .icon(bitmapDescriptorFromVector(getApplicationContext(), R.drawable.ic_doctorapp))
                                                     );
                                         }
 
@@ -358,7 +358,7 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
         Drawable background = ContextCompat.getDrawable(context, vectorDrawableResourceId);
         background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight());
         Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId);
-        vectorDrawable.setBounds(40, 20, vectorDrawable.getIntrinsicWidth() + 40, vectorDrawable.getIntrinsicHeight() + 20);
+        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth() + 0, vectorDrawable.getIntrinsicHeight() + 0);
         Bitmap bitmap = Bitmap.createBitmap(background.getIntrinsicWidth(), background.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         background.draw(canvas);
