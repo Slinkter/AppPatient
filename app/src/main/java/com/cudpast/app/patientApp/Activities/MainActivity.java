@@ -1,16 +1,20 @@
 package com.cudpast.app.patientApp.Activities;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cudpast.app.patientApp.Activities.Option.HistoryActivity;
 import com.cudpast.app.patientApp.Activities.Option.ListDoctorActivity;
@@ -93,6 +97,13 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Toast.makeText(this, "onBackPressed() ", Toast.LENGTH_SHORT).show();
+        Log.e(TAG, "onBackPressed() ");
+
+    }
 
     //. mostratInfoDelUsuario() {
     private void mostratInfoDelUsuario() {
@@ -161,6 +172,48 @@ public class MainActivity extends AppCompatActivity implements
                 }
             }
         }
+
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            //        Toast.makeText(this, "Hola on key Down ", Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "onKeyDown");
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //     Toast.makeText(this, "Hola on onDestroy() ", Toast.LENGTH_SHORT).show();
+        Log.e(TAG, "onDestroy");
+
+        new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Closing Activity")
+                .setMessage("Are you sure you want to close this activity?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+
+                })
+                .setNegativeButton("No", null)
+                .show();
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //   Toast.makeText(this, "Hola on onStop() ", Toast.LENGTH_SHORT).show();
+        Log.e(TAG, "onStop");
+
 
     }
 
