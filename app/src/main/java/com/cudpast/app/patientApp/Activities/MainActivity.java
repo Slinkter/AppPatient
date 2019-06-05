@@ -187,35 +187,16 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     protected void onDestroy() {
+        Log.e(TAG, "------------> onDestroy called <--------------");
+        Toast.makeText(this, "onDestroy called", Toast.LENGTH_LONG).show();
+
+
         super.onDestroy();
-        //     Toast.makeText(this, "Hola on onDestroy() ", Toast.LENGTH_SHORT).show();
-        Log.e(TAG, "onDestroy");
-
-        new AlertDialog.Builder(this)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setTitle("Closing Activity")
-                .setMessage("Are you sure you want to close this activity?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener()
-                {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-
-                })
-                .setNegativeButton("No", null)
-                .show();
     }
-
 
     @Override
     protected void onStop() {
         super.onStop();
-        //   Toast.makeText(this, "Hola on onStop() ", Toast.LENGTH_SHORT).show();
         Log.e(TAG, "onStop");
-
-
     }
-
-
 }
