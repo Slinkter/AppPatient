@@ -136,7 +136,7 @@ public class DoctorRoad extends FragmentActivity implements
         btn_ruta_cancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              //  ShowPopupCancelar();
+                //  ShowPopupCancelar();
                 showDiaglo1();
             }
         });
@@ -241,14 +241,17 @@ public class DoctorRoad extends FragmentActivity implements
 
     //.
     private void loadRoadDoctorOnMap(final LatLng pacienteLocation) {
-
         Log.e(TAG, "==========================================================");
         Log.e(TAG, "                   loadRoadDoctorOnMap                    ");
         mMap.clear();
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pacienteLocation, 15.0f));
-        mMap.addMarker(new MarkerOptions()
+        mMap
+                .animateCamera(CameraUpdateFactory.newLatLngZoom(pacienteLocation, 15.0f));
+
+        MarkerOptions markerOptions = new MarkerOptions()
                 .position(new LatLng(pacienteLocation.latitude, pacienteLocation.longitude))
-                .icon(BitmapDoctorApp(DoctorRoad.this, R.drawable.ic_client)));
+                .icon(BitmapDoctorApp(DoctorRoad.this, R.drawable.ic_client));
+
+        mMap.addMarker(markerOptions);
         //.
         GeoLocation pacienetGeo = new GeoLocation(pacienteLocation.latitude, pacienteLocation.longitude);
         Log.e(TAG, "loadRoadDoctorOnMap : pacienetGeo" + pacienetGeo);
@@ -259,8 +262,9 @@ public class DoctorRoad extends FragmentActivity implements
                 .addGeoQueryEventListener(new GeoQueryEventListener() {
                     @Override
                     public void onKeyEntered(String key, final GeoLocation location) {
-                        Log.e(TAG, "onKeyEntered : key  " + key);
-                        Log.e(TAG, "onKeyEntered : location  " + location);
+                        Log.e(TAG, "onKeyEntered ");
+                        Log.e(TAG, "String key" + key);
+                        Log.e(TAG, "final GeoLocation location " + location);
 
                         referenceTbDoctor
                                 .child(key)
@@ -276,31 +280,31 @@ public class DoctorRoad extends FragmentActivity implements
                                     public void onCancelled(@NonNull DatabaseError databaseError) {
                                     }
                                 });
-
-
                     }
 
                     @Override
                     public void onKeyExited(String key) {
-
+                        Log.e(TAG, "onKeyMoved");
+                        Log.e(TAG, "String key" + key);
                     }
 
                     @Override
                     public void onKeyMoved(String key, GeoLocation location) {
-
+                        Log.e(TAG, "onKeyMoved");
+                        Log.e(TAG, "String key" + key);
+                        Log.e(TAG, "GeoLocation location" + location);
                     }
 
                     @Override
                     public void onGeoQueryReady() {
-
+                        Log.e(TAG, "onGeoQueryReady");
                     }
 
                     @Override
                     public void onGeoQueryError(DatabaseError error) {
-
+                        Log.e(TAG, "onGeoQueryError" + error);
                     }
                 });
-
     }
 
     @Override
@@ -332,106 +336,102 @@ public class DoctorRoad extends FragmentActivity implements
     private void getDirection() {
         Log.e(TAG, "=============================================================");
         Log.e(TAG, "                     getDirection()                          ");
+        geoFire
+                .getLocation(firebaseDoctorUID, new LocationCallback() {
+                    @Override
+                    public void onLocationResult(String key, GeoLocation location) {
+                        if (location != null) {
+                            //set marker to display on map
+                            doctorLat = location.latitude;
+                            doctorLng = location.longitude;
+
+                            LatLng doctorlatlng = new LatLng(doctorLat, doctorLng);
+                            MarkerOptions doctorMO = new MarkerOptions()
+                                    .position(doctorlatlng)
+                                    .title("Doctor")
+                                    .icon(BitmapDoctorApp(getApplicationContext(), R.drawable.ic_doctorapp));
+
+                            marketDoctorCurrent = mMap.addMarker(doctorMO);
+
+                            try {
+
+                                requestApi =
+                                        "https://maps.googleapis.com/maps/api/directions/json?" +
+                                                "mode=driving&" +
+                                                "transit_routing_preference=less_driving&" +
+                                                "origin=" + doctorLat + "," + doctorLng + "&" +
+                                                "destination=" + mLastLocation.getLatitude() + "," + mLastLocation.getLongitude() + "&" +
+                                                "key=" + "AIzaSyCZMjdhZ3FydT4lkXtHGKs-d6tZKylQXAA";
 
 
-        geoFire.getLocation(firebaseDoctorUID, new LocationCallback() {
-            @Override
-            public void onLocationResult(String key, GeoLocation location) {
-                if (location != null) {
+                                mService.getPath(requestApi)
+                                        .enqueue(new Callback<String>() {
+                                            @Override
+                                            public void onResponse(Call<String> call, Response<String> response) {
+                                                try {
 
-                    //set marker to display on map
-                    doctorLat = location.latitude;
-                    doctorLng = location.longitude;
-                    Log.e("doctorLat", " " + doctorLat);
-                    Log.e("doctorLng", " " + doctorLng);
+                                                    if (direction != null) {
+                                                        direction.remove();//remote old direction
 
-                    LatLng doctorlatlng = new LatLng(doctorLat, doctorLng);
-                    MarkerOptions doctorMO = new MarkerOptions()
-                            .position(doctorlatlng)
-                            .title("Doctor")
-                            .icon(BitmapDoctorApp(getApplicationContext(), R.drawable.ic_doctorapp));
+                                                    }
 
-                    marketDoctorCurrent = mMap.addMarker(doctorMO);
-
-                    try {
-
-                        requestApi =
-                                "https://maps.googleapis.com/maps/api/directions/json?" +
-                                        "mode=driving&" +
-                                        "transit_routing_preference=less_driving&" +
-                                        "origin=" + doctorLat + "," + doctorLng + "&" +
-                                        "destination=" + mLastLocation.getLatitude() + "," + mLastLocation.getLongitude() + "&" +
-                                        "key=" + "AIzaSyCZMjdhZ3FydT4lkXtHGKs-d6tZKylQXAA";
+                                                    new getDireccionParserTask().execute(response.body().toString());
 
 
-                        mService.getPath(requestApi)
-                                .enqueue(new Callback<String>() {
-                                    @Override
-                                    public void onResponse(Call<String> call, Response<String> response) {
-                                        try {
-
-                                            if (direction != null) {
-                                                direction.remove();//remote old direction
-
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                }
                                             }
 
-                                            new getDireccionParserTask().execute(response.body().toString());
+                                            @Override
+                                            public void onFailure(Call<String> call, Throwable t) {
+                                                Toast.makeText(DoctorRoad.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                            } catch (Exception e) {
+
+                            }
 
 
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<String> call, Throwable t) {
-                                        Toast.makeText(DoctorRoad.this, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                    } catch (Exception e) {
-
+                        } else {
+                            //When location is null
+                        }
                     }
 
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
 
-                } else {
-                    //When location is null
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                //LogDatabase error
-            }
-        });
+                    }
+                });
 
 
         GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(doctorLat, doctorLng), 0.05f);
         geoQuery.addGeoQueryDataEventListener(new GeoQueryDataEventListener() {
             @Override
             public void onDataEntered(DataSnapshot dataSnapshot, GeoLocation location) {
-                Log.e(TAG, " =================================");
-                Log.e(TAG, " dataSnapshot" + dataSnapshot);
-                Log.e(TAG, " onDataEntered" + location);
+                Log.e(TAG, " onDataEntered --->");
+                Log.e(TAG, " DataSnapshot dataSnapshot   : " + dataSnapshot);
+                Log.e(TAG, " GeoLocation location  : " + location);
             }
 
             @Override
             public void onDataExited(DataSnapshot dataSnapshot) {
-                Log.e(TAG, " =================================");
-                Log.e(TAG, " onDataExited" + dataSnapshot);
+                Log.e(TAG, "onDataExited  ---> ");
+                Log.e(TAG, " DataSnapshot dataSnapshot : " + dataSnapshot);
             }
 
             @Override
             public void onDataMoved(DataSnapshot dataSnapshot, GeoLocation location) {
-                Log.e(TAG, " =================================");
-                Log.e(TAG, " dataSnapshot" + dataSnapshot);
-                Log.e(TAG, " onDataMoved" + location);
+                Log.e(TAG, "onDataMoved  ---> ");
+                Log.e(TAG, " DataSnapshot dataSnapshot : " + dataSnapshot);
+                Log.e(TAG, " GeoLocation location : " + location);
             }
 
             @Override
             public void onDataChanged(DataSnapshot dataSnapshot, GeoLocation location) {
-                Log.e(TAG, " =================================");
-                Log.e(TAG, " dataSnapshot" + dataSnapshot);
-                Log.e(TAG, " onDataChanged" + location);
+                Log.e(TAG, "onDataChanged  ---> ");
+                Log.e(TAG, " DataSnapshot dataSnapshot : " + dataSnapshot);
+                Log.e(TAG, " GeoLocation location : " + location);
             }
 
             @Override

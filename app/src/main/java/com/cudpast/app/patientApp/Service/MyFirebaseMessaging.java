@@ -39,11 +39,11 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
 
             if (body != null) {
                 if (body.equalsIgnoreCase(caso_1)) {
-                    showAceptedNotification(remoteMessage);
+                    showAceptedBooking(remoteMessage);
                 } else if (body.equalsIgnoreCase(caso_2)) {
-                    showCancelNotification(remoteMessage);
+                    showNotAceptBooking(remoteMessage);
                 } else if (body.equalsIgnoreCase(caso_3)) {
-                    showArrivedNotification(remoteMessage);
+                    showDoctorArrived(remoteMessage);
                 } else if (body.equalsIgnoreCase(caso_4)) {
                     showDoctorCancelOnRoad(remoteMessage);
                 }
@@ -52,7 +52,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
     }
 
     // Caso 1 : El Docto Acepta
-    private void showAceptedNotification(RemoteMessage message) {
+    private void showAceptedBooking(RemoteMessage message) {
         Log.e(TAG, "===============================================");
         Log.e(TAG, "Caso 1 : El doctor Acepta  ");
         mostrarMensaje(message);
@@ -66,9 +66,9 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
     }
 
     // Caso 2 : El Docto rechaza
-    private void showCancelNotification(RemoteMessage message) {
+    private void showNotAceptBooking(RemoteMessage message) {
 
-        Log.e(TAG, "Caso 2 : showCancelNotification             ");
+        Log.e(TAG, "Caso 2 : showNotAceptBooking             ");
         mostrarMensaje(message);
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(new Runnable() {
@@ -84,7 +84,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
     }
 
     // Caso 3 : El Doctor Llega al domicilio del paciente
-    private void showArrivedNotification(RemoteMessage message) {
+    private void showDoctorArrived(RemoteMessage message) {
         Log.e(TAG, "Caso 3 : El doctor ha llegado a tu domicilio             ");
         mostrarMensaje(message);
         Intent intent = new Intent(MyFirebaseMessaging.this, DoctorEnd.class);

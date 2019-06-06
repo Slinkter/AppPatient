@@ -296,7 +296,7 @@ public class DoctorEnd extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        showMessage("comment added");
+                        showMessage("¡Gracias por commentar !");
                         id_paciente_comment.setText("");
 
                     }
