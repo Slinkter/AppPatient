@@ -41,7 +41,7 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="El doctor ha cancelado el servicio" />
+            android:text="El doctor ha cancelado/rechazado el servicio" />
 
         <Button
             android:id="@+id/returnCancelMain"

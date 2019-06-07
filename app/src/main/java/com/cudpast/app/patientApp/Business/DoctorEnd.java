@@ -100,9 +100,12 @@ public class DoctorEnd extends AppCompatActivity {
         AppDoctor_history_Comment = FirebaseDatabase.getInstance().getReference(Common.AppDoctor_history_Comment);
 
 
-        image_doctor = findViewById(R.id.fin_doctorImage);
+        //   image_doctor = findViewById(R.id.fin_doctorImage);
+        //    tv_doctor_lastName = findViewById(R.id.fin_doctorLastNameFin);
+        //  tv_paciente_firstname = findViewById(R.id.fin_pacienteFirstName);
+        //tv_paciente_lastName = findViewById(R.id.fin_pacienteLastName);
+
         tv_doctor_firstname = findViewById(R.id.fin_doctorFirstNameFin);
-        tv_doctor_lastName = findViewById(R.id.fin_doctorLastNameFin);
 
         id_paciente_comment = findViewById(R.id.id_paciente_comment);
 
@@ -110,9 +113,6 @@ public class DoctorEnd extends AppCompatActivity {
         c_tiempo = findViewById(R.id.c_tiempo);
         c_servicio = findViewById(R.id.c_servicio);
 
-
-        tv_paciente_firstname = findViewById(R.id.fin_pacienteFirstName);
-        tv_paciente_lastName = findViewById(R.id.fin_pacienteLastName);
 
         metodoSignInResult();
 
@@ -135,13 +135,8 @@ public class DoctorEnd extends AppCompatActivity {
                 }
 
 
-
-
             }
         });
-
-
-
 
 
         //pdf
@@ -323,32 +318,7 @@ public class DoctorEnd extends AppCompatActivity {
         }
     }
 
-    //PDF
-/*
-    private String[] header = {"Id", "Nombre", "Apellido"};
-    private String shortText = "Estimado paciente : " + Common.currentUser.getNombre() + " "+ Common.currentUser.getApellido();
-    private String longText = "Este PDF es generador por al finalizar la consulta medica  ";
-    private TemplatePDF templatePDF;
 
-    public void pdfView(View view) {
-        templatePDF.viewPDF();
-    }
-
-    //Lista de Tabla
-    private ArrayList<String[]> getClients() {
-        ArrayList<String[]> rows = new ArrayList<>();
-
-        rows.add(new String[]{"1", "Pedro", "Lopez"});
-        rows.add(new String[]{"2", "Sofia", "Uhuio"});
-        rows.add(new String[]{"3", "Carlos", "Herandez"});
-        rows.add(new String[]{"4", "Lorena", "Abad"});
-        rows.add(new String[]{"5", "Juan", "Cave"});
-        rows.add(new String[]{"6", "Alex", "Red"});
-
-        return rows;
-    }
-
-*/
 
     private void showMessage(String s) {
         Toast.makeText(this, s, Toast.LENGTH_SHORT).show();

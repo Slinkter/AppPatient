@@ -1,123 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/color_white"
+    android:fitsSystemWindows="false"
     tools:context=".Business.DoctorEnd">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Atención Medica"
-        android:textSize="25dp"
-        android:textStyle="bold" />
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/fin_doctorImage"
-        android:layout_width="145dp"
-        android:layout_height="145dp"
-        android:layout_margin="10dp"
-        app:civ_border_color="@color/startblue"
-        app:civ_border_width="2dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Doctor"
-        android:textSize="18dp"
-        android:textStyle="bold" />
-
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingTop="36dp"
+        android:paddingRight="10dp">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/nameg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:text="Atencion Medica "
+            android:textColor="@color/colorAmarillo"
+            android:textSize="30sp"
+            android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/fin_doctorFirstNameFin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="nombre"
-                android:textColor="@color/startblue"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/fin_doctorLastNameFin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="10dp"
-                android:text="apellido"
-                android:textColor="@color/startblue"
-                android:textSize="16sp" />
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/ic_doctorapp" />
 
 
-            <TextView
-                android:id="@+id/bs_doctorPhone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="5dp"
-                android:text="999-999-999"
-                android:textColor="@color/startblue"
-                android:textSize="20sp"
-                android:visibility="gone" />
-
-        </LinearLayout>
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/fin_doctorFirstNameFin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-
-            <TextView
-                android:id="@+id/fin_pacienteFirstName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="Paciente"
-                android:textColor="@color/startblue"
-                android:textSize="16sp"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/fin_pacienteLastName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="1dp"
-                android:text="lastname"
-                android:textColor="@color/startblue"
-                android:textSize="16sp" />
-
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:text="name"
+            android:textColor="@color/colorCelesteDark"
+            android:textSize="20sp" />
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_weight="2"
+            android:gravity="center"
             android:padding="10dp">
 
             <TextView
@@ -135,11 +70,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignRight="@+id/profile_doctor_especialidad"
-                android:text="c_especialidad"
+                android:text="Medicina"
                 android:textSize="14dp"
                 android:textStyle="bold" />
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/fin_tiempo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -151,6 +87,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/c_tiempo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -161,6 +98,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/fin_servicio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -176,6 +114,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/fin_tiempo"
+                android:visibility="gone"
                 android:layout_alignRight="@+id/fin_servicio"
                 android:text="c_servicio"
                 android:textSize="14dp"
@@ -204,40 +143,30 @@
 
         </RelativeLayout>
 
+
         <EditText
             android:id="@+id/id_paciente_comment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="15dp"
             android:layout_marginRight="20dp"
             android:background="@drawable/button_style_rounded"
             android:gravity="center"
             android:hint="Escriba algun comentario " />
+
+        <Button
+            android:id="@+id/btn_fin_atencion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="40dp"
+            android:background="@drawable/custom_button_2"
+            android:text="Finalizar"
+            android:textColor="@color/white" />
+
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_fin_atencion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="30dp"
-        android:background="@drawable/custom_button_accept"
 
-        android:enabled="true"
-        android:paddingLeft="50dp"
-        android:paddingRight="50dp"
-        android:text="Finalizar"
-        android:textColor="#fff"
-        android:textSize="20dp" />
-
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="pdf"
-        android:textStyle="bold"
-        android:visibility="gone" />
-
-
-</LinearLayout>
+</ScrollView>
