@@ -105,7 +105,9 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
 
     @Override
     public void onNewToken(String s) {
-        super.onNewToken(s);
+        Log.e(TAG, "token from Myfrebase : " + s);
+
+
         DatabaseReference tb_tokens = FirebaseDatabase.getInstance().getReference(Common.token_tbl);
         Token token = new Token(s);
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {

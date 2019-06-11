@@ -114,7 +114,8 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-        </activity> <!-- Notification -->
+        </activity>
+        <!-- Notification -->
         <service android:name=".Service.MyFirebaseMessaging">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
