@@ -310,60 +310,62 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
         tokens
                 .orderByKey()
                 .equalTo(doctorUID)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for (DataSnapshot postSnapShot : dataSnapshot.getChildren()) {
-                            //convert to LatLng to json.
-                            LatLng userGeo = new LatLng(pacienteLatitude, pacienteLongitud);
-                            Token tokenDoctor = postSnapShot.getValue(Token.class);
-                            //.Pre-envio-data
-                            String title = "App Doctor";
-                            String body = "Usted tiene una solicutud de atención";
-                            String dToken = tokenDoctor.getToken();//doctor token
-                            String pToken = FirebaseInstanceId.getInstance().getToken(); // paciente token
-                            String json_lat_lng = new Gson().toJson(userGeo);
-                            //.Data
-                            Data data = new Data(title, body, pToken, dToken, json_lat_lng, pacienteUID);
-                            //Sender (to:token,data:informacion_del_paciente)
-                            Sender sender = new Sender(dToken, data);
-                            //.Log
-                            Log.e(TAG, "title : " + title);
-                            Log.e(TAG, "body : " + body);
-                            Log.e(TAG, "doctorToken : " + dToken);
-                            Log.e(TAG, "pacienteToken : " + pToken);
-                            Log.e(TAG, "ubicacion de paciente : " + json_lat_lng);
-                            Log.e(TAG, "pacienteUID : " + pacienteUID);
+                .addValueEventListener
+                        (new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for (DataSnapshot postSnapShot : dataSnapshot.getChildren()) {
+                                    //convert to LatLng to json.
+                                    LatLng userGeo = new LatLng(pacienteLatitude, pacienteLongitud);
+                                    Token tokenDoctor = postSnapShot.getValue(Token.class);
+                                    Log.e(TAG, " : Token tokenDoctor = " + tokenDoctor.getToken());
+                                    //.Pre-envio-data
+                                    String title = "App Doctor";
+                                    String body = "Usted tiene una solicutud de atención";
+                                    String dToken = tokenDoctor.getToken();//doctor token
+                                    String pToken = FirebaseInstanceId.getInstance().getToken(); //todo: paciente token corregir
+                                    String json_lat_lng = new Gson().toJson(userGeo);
+                                    //.Data
+                                    Data data = new Data(title, body, pToken, dToken, json_lat_lng, pacienteUID);
+                                    //Sender (to:token,data:información_del_paciente)
+                                    Sender sender = new Sender(dToken, data);
+                                    //.Log
+                                    Log.e(TAG, "title : " + title);
+                                    Log.e(TAG, "body : " + body);
+                                    Log.e(TAG, "doctorToken : " + dToken);
+                                    Log.e(TAG, "pacienteToken : " + pToken);
+                                    Log.e(TAG, "ubicacion de paciente : " + json_lat_lng);
+                                    Log.e(TAG, "pacienteUID : " + pacienteUID);
 
-                            mFCMService
-                                    .sendMessage(sender)
-                                    .enqueue(new Callback<FCMResponse>() {
-                                        @Override
-                                        public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
-                                            if (response.body().success == 1) {
-                                                waitingDialog.dismiss();
-                                                Log.e(TAG, "onResponse: success Caso 1");
-                                                Log.e(TAG, "======================================================");
-                                            }
-                                        }
+                                    mFCMService
+                                            .sendMessage(sender)
+                                            .enqueue(new Callback<FCMResponse>() {
+                                                @Override
+                                                public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
+                                                    if (response.body().success == 1) {
+                                                        waitingDialog.dismiss();
+                                                        Log.e(TAG, "onResponse: success Caso 1");
+                                                        Log.e(TAG, "======================================================");
+                                                    }
+                                                }
 
-                                        @Override
-                                        public void onFailure(Call<FCMResponse> call, Throwable t) {
-                                            waitingDialog.dismiss();
-                                            Log.e(TAG, "onFailure : " + t.getMessage());
-                                            Log.e(TAG, "======================================================");
-                                        }
-                                    });
-                        }
-                    }
+                                                @Override
+                                                public void onFailure(Call<FCMResponse> call, Throwable t) {
+                                                    waitingDialog.dismiss();
+                                                    Log.e(TAG, "onFailure : " + t.getMessage());
+                                                    Log.e(TAG, "======================================================");
+                                                }
+                                            });
+                                }
+                            }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        waitingDialog.dismiss();
-                        Log.e(TAG, " onCancelled" + databaseError.getMessage());
-                        Log.e(TAG, "======================================================");
-                    }
-                });
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                waitingDialog.dismiss();
+                                Log.e(TAG, " onCancelled" + databaseError.getMessage());
+                                Log.e(TAG, "======================================================");
+                            }
+                        });
     }
 
     //.Caso 2
@@ -378,54 +380,55 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
         tokens
                 .orderByKey()
                 .equalTo(driverID)
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for (DataSnapshot postSnapShot : dataSnapshot.getChildren()) {
+                .addValueEventListener(
+                        new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for (DataSnapshot postSnapShot : dataSnapshot.getChildren()) {
 
-                            Token tokenDoctor = postSnapShot.getValue(Token.class);
+                                    Token tokenDoctor = postSnapShot.getValue(Token.class);
 
-                            if (tokenDoctor.getToken() != null) {
-                                Log.e(TAG, "cancelRequestDoctor : Token tokenDoctor = " + tokenDoctor.getToken());
-                                String dToken = tokenDoctor.getToken();
-                                String title = "App Doctor";
-                                String body = "El usuario ha cancelado";
-                                //--->Data
-                                Data data = new Data(title, body, " ", " ", "", "");
-                                //-->Sender (to, data)
-                                Sender sender = new Sender(dToken, data);
-                                mFCMService
-                                        .sendMessage(sender)
-                                        .enqueue(new Callback<FCMResponse>() {
-                                            @Override
-                                            public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
-                                                if (response.body().success == 1) {
-                                                    Log.e(TAG, "SI se ha enviado correctamente notifación de cancelación ");
-                                                    waitingDialog.dismiss();
-                                                } else {
-                                                    Log.e(TAG, "NO se ha enviado correctamente notifación de cancelación ");
-                                                    waitingDialog.dismiss();
-                                                }
-                                                Log.e(TAG, "======================================================");
-                                            }
+                                    if (tokenDoctor.getToken() != null) {
+                                        Log.e(TAG, "cancelRequestDoctor : Token tokenDoctor = " + tokenDoctor.getToken());
+                                        String dToken = tokenDoctor.getToken();
+                                        String title = "App Doctor";
+                                        String body = "El usuario ha cancelado";
+                                        //--->Data
+                                        Data data = new Data(title, body, " ", " ", "", "");
+                                        //-->Sender (to, data)
+                                        Sender sender = new Sender(dToken, data);
+                                        mFCMService
+                                                .sendMessage(sender)
+                                                .enqueue(new Callback<FCMResponse>() {
+                                                    @Override
+                                                    public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
+                                                        if (response.body().success == 1) {
+                                                            Log.e(TAG, "SI se ha enviado correctamente notifación de cancelación ");
+                                                            waitingDialog.dismiss();
+                                                        } else {
+                                                            Log.e(TAG, "NO se ha enviado correctamente notifación de cancelación ");
+                                                            waitingDialog.dismiss();
+                                                        }
+                                                        Log.e(TAG, "======================================================");
+                                                    }
 
-                                            @Override
-                                            public void onFailure(Call<FCMResponse> call, Throwable t) {
-                                                Log.e(TAG, "onFailure : " + t.getMessage());
-                                                waitingDialog.dismiss();
-                                            }
-                                        });
+                                                    @Override
+                                                    public void onFailure(Call<FCMResponse> call, Throwable t) {
+                                                        Log.e(TAG, "onFailure : " + t.getMessage());
+                                                        waitingDialog.dismiss();
+                                                    }
+                                                });
+                                    }
+                                }
                             }
-                        }
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        waitingDialog.dismiss();
-                        Log.e(TAG, " onCancelled : " + databaseError.getMessage());
-                        Log.e(TAG, "======================================================");
-                    }
-                });
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                waitingDialog.dismiss();
+                                Log.e(TAG, " onCancelled : " + databaseError.getMessage());
+                                Log.e(TAG, "======================================================");
+                            }
+                        });
     }
 
     //.Caso 3

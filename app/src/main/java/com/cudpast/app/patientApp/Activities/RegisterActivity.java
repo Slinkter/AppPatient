@@ -27,6 +27,7 @@ import com.cudpast.app.patientApp.Common.Common;
 import com.cudpast.app.patientApp.Model.User;
 import com.cudpast.app.patientApp.R;
 import com.cudpast.app.patientApp.Soporte.VolleyRP;
+import com.cudpast.app.patientApp.helper.Token;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -36,6 +37,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import org.json.JSONException;
@@ -48,7 +50,7 @@ import dmax.dialog.SpotsDialog;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private static String TAG = "RegisterActivity";
+    private static String TAG = RegisterActivity.class.getSimpleName();
     private FirebaseAuth auth;
     private DatabaseReference tb_Info_Paciente;
     private RequestQueue mRequest;
@@ -166,6 +168,7 @@ public class RegisterActivity extends AppCompatActivity {
                                                 public void onSuccess(Void aVoid) {
                                                     waitingDialog.dismiss();
                                                     Log.e(TAG, " : onSuccess ");
+                                                    generarToken();
                                                     Toast.makeText(RegisterActivity.this, "Usuario Registrado , espere correo de verificación", Toast.LENGTH_SHORT).show();
                                                     sendEmailVerification();
                                                     goToLoginActivity();
@@ -341,6 +344,23 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 });
 
+    }
+
+    public void generarToken() {
+        Log.e(TAG, "generarToken1()");
+        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        DatabaseReference tokens = db.getReference(Common.token_tbl);
+
+        Token token = new Token(refreshedToken);
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            String doctorUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            tokens
+                    .child(doctorUID)
+                    .setValue(token);
+            Common.token_doctor = token.getToken();
+            Log.e("TOKEN : ", refreshedToken);
+        }
     }
 
 }
