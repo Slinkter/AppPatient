@@ -46,7 +46,6 @@ public class ListDoctorActivity extends AppCompatActivity {
         super.onStart();
 
         FirebaseRecyclerAdapter<com.cudpast.app.patientApp.Model.DoctorPerfil, BlogViewHolder> adapter;
-
         adapter = new FirebaseRecyclerAdapter<com.cudpast.app.patientApp.Model.DoctorPerfil, BlogViewHolder>(com.cudpast.app.patientApp.Model.DoctorPerfil.class, R.layout.doctor_layout_info, BlogViewHolder.class, mDatabase) {
 
             @Override
