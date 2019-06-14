@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.cudpast.app.patientApp.Activities.Option.HistoryActivity;
 import com.cudpast.app.patientApp.Activities.Option.ListDoctorActivity;
+import com.cudpast.app.patientApp.Activities.Option.PlasmaActivity;
 import com.cudpast.app.patientApp.Activities.Option.UbicacionActivity;
 import com.cudpast.app.patientApp.Activities.Option.UpdateProfilePacienteActivity;
 import com.cudpast.app.patientApp.Common.Common;
@@ -62,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements
         findViewById(R.id.btnUpdateInfo).setOnClickListener(this);
         findViewById(R.id.btnUbicacion).setOnClickListener(this);
         findViewById(R.id.btnCerra_sesion).setOnClickListener(this);
+        findViewById(R.id.btnPlasma).setOnClickListener(this);
 
     }
 
@@ -98,6 +100,9 @@ public class MainActivity extends AppCompatActivity implements
             startActivity(intent);
         } else if (i == R.id.btnUbicacion) {
             Intent intent = new Intent(MainActivity.this, UbicacionActivity.class);
+            startActivity(intent);
+        } else if (i == R.id.btnPlasma) {
+            Intent intent = new Intent(MainActivity.this, PlasmaActivity.class);
             startActivity(intent);
         } else if (i == R.id.btnCerra_sesion) {
             signOut();
