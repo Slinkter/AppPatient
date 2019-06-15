@@ -16,7 +16,10 @@
         android:roundIcon="@drawable/ic_ambulance"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.Option.PlasmaActivity"></activity>
+        <activity
+            android:name=".Activities.Option.ListPlasmaActivity"
+            android:parentActivityName=".Activities.MainActivity"
+            android:screenOrientation="portrait"></activity>
         <activity android:name=".Business.DoctorCancel" />
         <activity android:name=".PDFHelper.ViewPDFActivity" />
         <activity android:name=".Soporte.IntroActivity" />

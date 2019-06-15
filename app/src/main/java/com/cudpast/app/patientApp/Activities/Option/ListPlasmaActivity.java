@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.cudpast.app.patientApp.Common.Common;
 import com.cudpast.app.patientApp.Model.DoctorPerfil;
 import com.cudpast.app.patientApp.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -19,7 +20,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
-public class PlasmaActivity extends AppCompatActivity {
+public class ListPlasmaActivity extends AppCompatActivity {
 
     private RecyclerView mBlogList;
     private DatabaseReference refDB_PlasmaDoctor;
@@ -28,10 +29,11 @@ public class PlasmaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plasma);
-        getSupportActionBar().setTitle("Lista de Medicos");
+        getSupportActionBar().setTitle("Lista de Enfermera");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //1.Hacer la referencia a la tabla
-        refDB_PlasmaDoctor = FirebaseDatabase.getInstance().getReference().child("tb_Info_Doctor");
+        refDB_PlasmaDoctor = FirebaseDatabase.getInstance().getReference(Common.TB_INFO_PLASMA);
+
         refDB_PlasmaDoctor.keepSynced(true);
         refDB_PlasmaDoctor.orderByKey();
         //2.
@@ -46,10 +48,10 @@ public class PlasmaActivity extends AppCompatActivity {
         super.onStart();
 
         FirebaseRecyclerAdapter<DoctorPerfil, ListDoctorActivity.BlogViewHolder> adapter;
-        adapter = new FirebaseRecyclerAdapter<com.cudpast.app.patientApp.Model.DoctorPerfil, ListDoctorActivity.BlogViewHolder>(com.cudpast.app.patientApp.Model.DoctorPerfil.class, R.layout.doctor_layout_info, ListDoctorActivity.BlogViewHolder.class, refDB_PlasmaDoctor) {
+        adapter = new FirebaseRecyclerAdapter<DoctorPerfil, ListDoctorActivity.BlogViewHolder>(DoctorPerfil.class, R.layout.doctor_layout_info, ListDoctorActivity.BlogViewHolder.class, refDB_PlasmaDoctor) {
 
             @Override
-            protected void populateViewHolder(final ListDoctorActivity.BlogViewHolder view, final com.cudpast.app.patientApp.Model.DoctorPerfil model, int position) {
+            protected void populateViewHolder(final ListDoctorActivity.BlogViewHolder view, final DoctorPerfil model, int position) {
 
                 view.setImage(getApplicationContext(), model.getImage());
                 view.setFirstName(model.getFirstname() + " " + model.getLastname());

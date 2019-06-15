@@ -1,12 +1,8 @@
 package com.cudpast.app.patientApp.Activities;
 
 import android.Manifest;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -14,24 +10,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cudpast.app.patientApp.Activities.Option.HistoryActivity;
 import com.cudpast.app.patientApp.Activities.Option.ListDoctorActivity;
-import com.cudpast.app.patientApp.Activities.Option.PlasmaActivity;
+import com.cudpast.app.patientApp.Activities.Option.ListPlasmaActivity;
 import com.cudpast.app.patientApp.Activities.Option.UbicacionActivity;
 import com.cudpast.app.patientApp.Activities.Option.UpdateProfilePacienteActivity;
 import com.cudpast.app.patientApp.Common.Common;
 import com.cudpast.app.patientApp.Model.User;
 import com.cudpast.app.patientApp.R;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
-
-import java.nio.charset.MalformedInputException;
 
 public class MainActivity extends AppCompatActivity implements
         View.OnClickListener {
@@ -102,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements
             Intent intent = new Intent(MainActivity.this, UbicacionActivity.class);
             startActivity(intent);
         } else if (i == R.id.btnPlasma) {
-            Intent intent = new Intent(MainActivity.this, PlasmaActivity.class);
+            Intent intent = new Intent(MainActivity.this, ListPlasmaActivity.class);
             startActivity(intent);
         } else if (i == R.id.btnCerra_sesion) {
             signOut();
