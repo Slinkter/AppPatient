@@ -95,10 +95,9 @@ public class PlasmaPerfilActivity extends AppCompatActivity {
         if (getIntent() != null) {
             //get extra intent
 
-            Log.e(TAG,getIntent().getExtras().getString("doctor_uid"));
-            Log.e(TAG,getIntent().getExtras().getString("doctor_name"));
-            Log.e(TAG,getIntent().getExtras().getString("doctor_last"));
-
+            Log.e(TAG, getIntent().getExtras().getString("doctor_uid"));
+            Log.e(TAG, getIntent().getExtras().getString("doctor_name"));
+            Log.e(TAG, getIntent().getExtras().getString("doctor_last"));
 
 
             photoDoctor = getIntent().getExtras().getString("doctor_img");
@@ -128,7 +127,6 @@ public class PlasmaPerfilActivity extends AppCompatActivity {
                     .placeholder(R.drawable.ic_doctorapp)
                     .error(R.drawable.ic_doctorapp)
                     .into(imgdoc);
-
 
 
             btn_call_plasma = findViewById(R.id.btn_call_plasma);
@@ -198,9 +196,21 @@ public class PlasmaPerfilActivity extends AppCompatActivity {
     }
 
     public void showAlertDialogBooking() {
+           /*
             Intent waiting = new Intent(PlasmaPerfilActivity.this   , PlasmaWaiting.class);
             startActivity(waiting);
             finish();
+            */
+        try {
+            AlertDialog.Builder mBuiler = new AlertDialog.Builder(PlasmaPerfilActivity.this);
+            View view = getLayoutInflater().inflate(R.layout.plasma_booking_waiting, null);
+            mBuiler.setView(view);
+            AlertDialog dialog = mBuiler.create();
+            dialog.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
     }
 

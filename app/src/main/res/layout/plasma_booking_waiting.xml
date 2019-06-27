@@ -62,7 +62,8 @@
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:layout_gravity="center"
-        android:background="@drawable/btn_drawable_1"
+
+        android:background="@drawable/custom_button_decline"
         android:text="Cancelar"
         android:textColor="@color/color_white" />
 
