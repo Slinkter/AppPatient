@@ -75,8 +75,6 @@ public class PlasmaPerfilActivity extends AppCompatActivity {
             numPhone = getIntent().getExtras().getString("doctor_phone");
             especialidad = getIntent().getExtras().getString("doctor_especilidad");
 
-
-
             // init views-xml
             ImageView imgdoc = findViewById(R.id.aa_thumbnail);
             TextView post_firstName = findViewById(R.id.aa_firstname);
