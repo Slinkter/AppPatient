@@ -205,6 +205,7 @@ public class PlasmaPerfilActivity extends AppCompatActivity {
             AlertDialog.Builder mBuiler = new AlertDialog.Builder(PlasmaPerfilActivity.this);
             View view = getLayoutInflater().inflate(R.layout.plasma_booking_waiting, null);
             mBuiler.setView(view);
+            mBuiler.setCancelable(false);
             AlertDialog dialog = mBuiler.create();
             dialog.show();
         } catch (Exception e) {
