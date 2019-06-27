@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.cudpast.app.patientApp.Activities.Option.extra.DoctorPerfilActivity;
+import com.cudpast.app.patientApp.Activities.Option.extra.PlasmaPerfilActivity;
 import com.cudpast.app.patientApp.Common.Common;
 import com.cudpast.app.patientApp.Model.DoctorPerfil;
 import com.cudpast.app.patientApp.R;
@@ -76,7 +78,7 @@ public class ListPlasmaActivity extends AppCompatActivity {
                 view.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent i = new Intent(view.mView.getContext(), com.cudpast.app.patientApp.Activities.Option.extra.DoctorPerfil.class);
+                        Intent i = new Intent(view.mView.getContext(), PlasmaPerfilActivity.class);
                         i.putExtra("doctor_uid" ,codmedpe );
                         i.putExtra("doctor_img", img);
                         i.putExtra("doctor_name", firstName);

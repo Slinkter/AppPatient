@@ -2,11 +2,9 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@color/color_white"
-    android:fitsSystemWindows="false"
-    tools:context=".Activities.Option.extra.DoctorPerfilActivity">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.Option.extra.PlasmaPerfilActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
