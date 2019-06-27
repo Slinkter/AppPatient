@@ -7,7 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -22,8 +24,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
+
 public class ListPlasmaActivity extends AppCompatActivity {
 
+    private static final String TAG = ListPlasmaActivity.class.getSimpleName();
     private RecyclerView mBlogList;
     private DatabaseReference refDB_PlasmaDoctor;
 
@@ -48,7 +53,6 @@ public class ListPlasmaActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
         FirebaseRecyclerAdapter<DoctorPerfil, ListDoctorActivity.BlogViewHolder> adapter;
         adapter = new FirebaseRecyclerAdapter<DoctorPerfil, ListDoctorActivity.BlogViewHolder>(DoctorPerfil.class, R.layout.doctor_layout_info, ListDoctorActivity.BlogViewHolder.class, refDB_PlasmaDoctor) {
 
@@ -60,31 +64,21 @@ public class ListPlasmaActivity extends AppCompatActivity {
                 view.setPhone(model.getNumphone());
                 view.setEspecialidad(model.getEspecialidad());
 
-                final String codmedpe = model.getUid();
-                final String correoG = model.getFirstname();
-                final String direccion = model.getFirstname();
-                final String dni = model.getFirstname();
-                final String especialidad = model.getEspecialidad();
-                final String fecha = model.getEspecialidad();
-                final String firstName = model.getFirstname();
-                final String img = model.getImage();
-                final String lastname = model.getLastname();
-                final String numPhone = model.getNumphone();
-                final String pwd = model.getNumphone();
-                final String uid = model.getNumphone();
-                //Abrir perfil de doctor
-
-                //  view.container.setAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_transition_animation));
+                view.container.setAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_transition_animation));
                 view.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent i = new Intent(view.mView.getContext(), PlasmaPerfilActivity.class);
-                        i.putExtra("doctor_uid" ,codmedpe );
-                        i.putExtra("doctor_img", img);
-                        i.putExtra("doctor_name", firstName);
-                        i.putExtra("doctor_last", lastname);
-                        i.putExtra("doctor_phone", numPhone);
-                        i.putExtra("doctor_especilidad", especialidad);
+                        Log.e(TAG,model.getUid());
+                        Log.e(TAG,model.getFirstname());
+                        Log.e(TAG,model.getLastname());
+
+                        i.putExtra("doctor_uid", model.getUid());
+                        i.putExtra("doctor_img", model.getImage());
+                        i.putExtra("doctor_name", model.getFirstname());
+                        i.putExtra("doctor_last", model.getFirstname());
+                        i.putExtra("doctor_phone", model.getNumphone());
+                        i.putExtra("doctor_especilidad", model.getEspecialidad());
                         view.mView.getContext().startActivity(i);
                     }
                 });

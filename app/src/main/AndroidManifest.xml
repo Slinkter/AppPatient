@@ -16,7 +16,19 @@
         android:roundIcon="@drawable/ic_ambulance"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.Option.extra.PlasmaPerfilActivity"></activity>
+
+
+        <activity
+            android:name=".Business.PlasmaWaiting"
+            android:parentActivityName=".Activities.Option.extra.PlasmaPerfilActivity"
+            android:screenOrientation="portrait" >
+
+
+        </activity>
+        <activity android:name=".Activities.Option.extra.PlasmaPerfilActivity"
+            android:parentActivityName=".Activities.Option.ListPlasmaActivity"
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".Activities.Option.ListPlasmaActivity"
             android:parentActivityName=".Activities.MainActivity"
