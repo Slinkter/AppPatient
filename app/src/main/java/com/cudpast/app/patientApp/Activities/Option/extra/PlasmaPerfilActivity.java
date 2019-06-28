@@ -65,13 +65,13 @@ public class PlasmaPerfilActivity extends AppCompatActivity {
     DatabaseReference AppDoctor_history_Comment;
 
     //
-
-    AlertDialog.Builder builder;
-    LayoutInflater inflater;
-    View view;
-    AlertDialog dialog;
-    TextView xml_countDown;
     CountDownTimer yourCountDownTimer;
+    long START_TIME_IN_MILLS = 60 * 1000 * 5;
+    long mTimeLeftInMillis;
+
+    //
+    LottieAnimationView animationView;
+
     //
     Button btn_call_plasma;
     Button btn_plasmaBooking;
@@ -205,8 +205,47 @@ public class PlasmaPerfilActivity extends AppCompatActivity {
             AlertDialog.Builder mBuiler = new AlertDialog.Builder(PlasmaPerfilActivity.this);
             View view = getLayoutInflater().inflate(R.layout.plasma_booking_waiting, null);
             Button btn_cancelar_plasma = view.findViewById(R.id.btn_cancelar_plasma);
+            final TextView xml_countDown = view.findViewById(R.id.text_view_countDown_plasma);
             mBuiler.setView(view);
             mBuiler.setCancelable(false);
+            //
+            mTimeLeftInMillis = START_TIME_IN_MILLS;
+            yourCountDownTimer = new CountDownTimer(mTimeLeftInMillis, 500) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+
+                    mTimeLeftInMillis = millisUntilFinished;
+                    int minutos = (int) (mTimeLeftInMillis / 1000) / 60;
+                    int secounds = (int) (mTimeLeftInMillis / 1000) % 60;
+                    String timeFormated = String.format(Locale.getDefault(), "%02d:%02d", minutos, secounds);
+                    xml_countDown.setText(timeFormated);
+                    Log.e("onTick", " : mTimeLeftInMillis = " + mTimeLeftInMillis);
+                }
+
+
+                @Override
+                public void onFinish() {
+                    Log.e(TAG, " ==============================");
+                    try {
+                        Log.e(TAG, " onFinish()");
+                        Log.e(TAG, " mTimeLeftInMillis : " + mTimeLeftInMillis);
+                        Log.e(TAG, " START_TIME_IN_MILLS : " + START_TIME_IN_MILLS);
+                        //  mTimeLeftInMillis = START_TIME_IN_MILLS;
+                        //  mTimeLeftInMillis=0;
+
+                        //Enviar Notificacion-Data
+                        //  timeOutRequestDoctor(driverID);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    Log.e(TAG, " ==============================");
+
+                }
+            };
+            //
+
+            yourCountDownTimer.start();
+
             final AlertDialog dialog = mBuiler.create();
             dialog.show();
 
@@ -214,6 +253,7 @@ public class PlasmaPerfilActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
+                    yourCountDownTimer.cancel();
                 }
             });
 

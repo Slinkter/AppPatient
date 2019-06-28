@@ -269,7 +269,8 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                     Log.e(TAG, " ==============================");
 
                 }
-            }.start();
+            }
+                    .start();
 
             if (Common.doctorAcept == true) {
                 Log.e(TAG, " Common.doctorAcept : " + Common.doctorAcept);
