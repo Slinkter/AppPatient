@@ -28,25 +28,23 @@ public class MainActivity extends AppCompatActivity implements
         View.OnClickListener {
 
     public static final String TAG = MainActivity.class.getSimpleName();
-
-    // private ImageView photoImageView;
+    private static final int MY_PERMISSION_REQUEST_CODE = 7000;
+    //
     private TextView nameTextView;
     private TextView emailTextView;
-    private TextView idTextView;
+    //
     private FirebaseAuth auth;
-
-    private static final long SPLASH_SCREEN_DELAY = 3000;
-    private static final int MY_PERMISSION_REQUEST_CODE = 7000;
-
+    //
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
+        setContentView(R.layout.activity_main);
         //
         nameTextView = findViewById(R.id.nameTextView);
         emailTextView = findViewById(R.id.emailTextView);
+        //
         auth = FirebaseAuth.getInstance();
         // Buttons
         findViewById(R.id.btnMedicos).setOnClickListener(this);
@@ -58,25 +56,7 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
-    //.Metodo Principal
-    @Override
-    protected void onStart() {
-        super.onStart();
-        permisos();
-        User currentUser = Common.currentUser;
-        updateUI(currentUser);
-    }
-
-    //.VerificarSiUsuarioExiste
-    private void updateUI(User user) {
-        if (user != null) {
-            mostratInfoDelUsuario();
-        } else {
-            goLogIngScreen();
-        }
-    }
-
-    //.Escoger Btn
+    // METODO PRINCIPAL
     @Override
     public void onClick(View v) {
         int i = v.getId();
@@ -101,66 +81,36 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        permisos();
+        User currentUser = Common.currentUser;
+        updateUI(currentUser);
+    }
+
+    @Override
+    protected void onDestroy() {
+
+        if (Common.currentUser != null) {
+            Log.e(TAG, "------------> usuario logeado <--------------");
+        } else {
+            Log.e(TAG, "------------> usuario no logeado <--------------");
+        }
+
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onStop() {
+        Log.e(TAG, "onStop");
+        super.onStop();
+    }
+
+    @Override
     public void onBackPressed() {
         super.onBackPressed();
         Toast.makeText(this, "onBackPressed() ", Toast.LENGTH_SHORT).show();
         Log.e(TAG, "onBackPressed() ");
-
-    }
-
-    //. mostratInfoDelUsuario() {
-    private void mostratInfoDelUsuario() {
-
-        try {
-
-            User usuario = Common.currentUser;
-            nameTextView.setText(usuario.getNombre() + " " + usuario.getApellido());
-            emailTextView.setText(usuario.getCorreo());
-            idTextView.setText(usuario.getDni());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-    }
-
-    //.
-    private void goLogIngScreen() {
-        Intent intent = new Intent(this, LoginActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | intent.FLAG_ACTIVITY_CLEAR_TASK | intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-        finish();
-    }
-
-    //.
-    private void signOut() {
-        auth.signOut();
-        updateUI(null);
-        Intent intent = new Intent(this, LoginActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | intent.FLAG_ACTIVITY_CLEAR_TASK | intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-    }
-
-    //permisos
-    public void permisos() {
-        if (ContextCompat
-                .checkSelfPermission(this,
-                        Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat
-                        .checkSelfPermission(this,
-                                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(this,
-                    new String[]{
-                            Manifest.permission.ACCESS_COARSE_LOCATION,
-                            Manifest.permission.ACCESS_FINE_LOCATION},
-                    MY_PERMISSION_REQUEST_CODE);
-        } else {
-            // Si tiene los permisos
-            // verficiar el  checkPlayService
-            Log.e("hola", "si tiene los permisos");
-        }
 
     }
 
@@ -188,21 +138,64 @@ public class MainActivity extends AppCompatActivity implements
         return super.onKeyDown(keyCode, event);
     }
 
-    @Override
-    protected void onDestroy() {
+    //. Cargar info del Paciente
+    private void mostratInfoDelUsuario() {
 
         if (Common.currentUser != null) {
-            Log.e(TAG, "------------> user is not null <--------------");
-        } else {
-            Log.e(TAG, "------------> user is  null <--------------");
+            User usuario = Common.currentUser;
+            nameTextView.setText(usuario.getNombre() + " " + usuario.getApellido());
+            emailTextView.setText(usuario.getCorreo());
         }
 
-        super.onDestroy();
     }
 
-    @Override
-    protected void onStop() {
-        Log.e(TAG, "onStop");
-        super.onStop();
+    //.Ir al Login sino esta logeado
+    private void goLogIngScreen() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | intent.FLAG_ACTIVITY_CLEAR_TASK | intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
     }
+
+    //.Cerrar session
+    private void signOut() {
+        auth.signOut();
+        updateUI(null);
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | intent.FLAG_ACTIVITY_CLEAR_TASK | intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    //.Verificar Si Usuario Existe
+    private void updateUI(User user) {
+        if (user != null) {
+            mostratInfoDelUsuario();
+        } else {
+            goLogIngScreen();
+        }
+    }
+
+    //Verificar  los permisos
+    public void permisos() {
+        if (ContextCompat
+                .checkSelfPermission(this,
+                        Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat
+                        .checkSelfPermission(this,
+                                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{
+                            Manifest.permission.ACCESS_COARSE_LOCATION,
+                            Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_PERMISSION_REQUEST_CODE);
+        } else {
+            // Si tiene los permisos
+            // verficiar el  checkPlayService
+            Log.e("hola", "si tiene los permisos");
+        }
+
+    }
+
+
 }

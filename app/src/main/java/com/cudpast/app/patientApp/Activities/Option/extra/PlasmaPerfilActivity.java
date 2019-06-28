@@ -65,7 +65,7 @@ public class PlasmaPerfilActivity extends AppCompatActivity {
     DatabaseReference AppDoctor_history_Comment;
 
     //
-    Button btn_cancelar_plasma;
+
     AlertDialog.Builder builder;
     LayoutInflater inflater;
     View view;
@@ -204,10 +204,20 @@ public class PlasmaPerfilActivity extends AppCompatActivity {
         try {
             AlertDialog.Builder mBuiler = new AlertDialog.Builder(PlasmaPerfilActivity.this);
             View view = getLayoutInflater().inflate(R.layout.plasma_booking_waiting, null);
+            Button btn_cancelar_plasma = view.findViewById(R.id.btn_cancelar_plasma);
             mBuiler.setView(view);
             mBuiler.setCancelable(false);
-            AlertDialog dialog = mBuiler.create();
+            final AlertDialog dialog = mBuiler.create();
             dialog.show();
+
+            btn_cancelar_plasma.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
