@@ -21,6 +21,11 @@ public class Data {
         this.pacienteUID = pacienteUID;
     }
 
+    public Data(String title, String body) {
+        this.title = title;
+        this.body = body;
+    }
+
     public String getTitle() {
         return title;
     }

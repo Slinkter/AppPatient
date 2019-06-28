@@ -19,7 +19,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.cudpast.app.patientApp.Common.Common;
@@ -58,7 +57,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
     private static final String TAG = BSRFDoctor.class.getSimpleName();
 
     public String mTitle, doctorUID, pacienteUID;
-    public Double mLatitude, mLongitud, pacienteLongitud, pacienteLatitude;
+    public Double doctorLatitude, doctorLongitud, pacienteLongitud, pacienteLatitude;
     boolean isTapOnMap;
     public DatabaseReference TB_AVAILABLE_DOCTOR;
     public FirebaseAuth auth;
@@ -72,7 +71,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
     ImageView post_image;
     Location mLastLocation;
     IFCMService mFCMService;
-    String driverID;
+
 
     TextView xml_countDown;
     //
@@ -105,29 +104,23 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        auth = FirebaseAuth.getInstance();
 
-        mTitle = getArguments().getString("title");
+        pacienteUID = auth.getCurrentUser().getUid();
         doctorUID = getArguments().getString("doctorUID");
-
+        mTitle = getArguments().getString("title");
         isTapOnMap = getArguments().getBoolean("isTapOnMap");
-
-        mLatitude = getArguments().getDouble("doctorLatitude");
-        mLongitud = getArguments().getDouble("doctorLongitud");
-
+        doctorLatitude = getArguments().getDouble("doctorLatitude");
+        doctorLongitud = getArguments().getDouble("doctorLongitud");
         pacienteLatitude = getArguments().getDouble("pacienteLatitude");
         pacienteLongitud = getArguments().getDouble("pacienteLongitud");
 
-        auth = FirebaseAuth.getInstance();
-        pacienteUID = auth.getCurrentUser().getUid();
+        Log.e(TAG, " onCreate doctorUID :  " + doctorUID);
+        Log.e(TAG, " onCreate pacienteUID : " + pacienteUID);
 
         Log.e(TAG, "title " + mTitle);
-
-        Log.e(TAG, "doctorUID " + doctorUID);
-        Log.e(TAG, "pacienteUID " + pacienteUID);
-
-        Log.e(TAG, "doctorLatitude " + mLatitude);
-        Log.e(TAG, "doctorLongitud " + mLongitud);
-
+        Log.e(TAG, "doctorLatitude " + doctorLatitude);
+        Log.e(TAG, "doctorLongitud " + doctorLongitud);
         Log.e(TAG, "pacienteLatitude " + pacienteLatitude);
         Log.e(TAG, "pacienteLongitud " + pacienteLongitud);
     }
@@ -143,9 +136,9 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        final View view = inflater.inflate(R.layout.bsrfdoctor, container, false);
-        //.Obtener Toda tabla de doctore online
-        TB_AVAILABLE_DOCTOR = FirebaseDatabase.getInstance().getReference().child("tb_Info_Doctor");
+        View view = inflater.inflate(R.layout.bsrfdoctor, container, false);
+
+        TB_AVAILABLE_DOCTOR = FirebaseDatabase.getInstance().getReference().child(Common.TB_INFO_DOCTOR);
         TB_AVAILABLE_DOCTOR.keepSynced(true);
 
         post_firstName = view.findViewById(R.id.bs_doctorFirstName);
@@ -158,50 +151,48 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
         btn_no = view.findViewById(R.id.btn_no);
 
         mFCMService = Common.getIFCMService();
-        driverID = doctorUID;
-        Common.doctorAcept = false;
+
         Log.e(TAG, "pacienteLatitude " + pacienteLatitude);
         Log.e(TAG, "pacienteLongitud " + pacienteLongitud);
 
         if (isTapOnMap) {
-
             TB_AVAILABLE_DOCTOR
                     .orderByKey()
-                    .equalTo(driverID)
+                    .equalTo(doctorUID)
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                            DoctorPerfil doctorPerfil;
                             for (DataSnapshot post : dataSnapshot.getChildren()) {
-
-                                doctorPerfil = post.getValue(DoctorPerfil.class);
-                                Log.e("driverID", driverID);
+                                DoctorPerfil doctorPerfil = post.getValue(DoctorPerfil.class);
+                                if (doctorPerfil != null) {
+                                    post_firstName.setText(doctorPerfil.getFirstname());
+                                    post_lastName.setText(doctorPerfil.getLastname());
+                                    post_phone.setText(doctorPerfil.getNumphone());
+                                    post_especialidad.setText(doctorPerfil.getEspecialidad());
+                                    Picasso.with(getContext())
+                                            .load(doctorPerfil.getImage())
+                                            .resize(300, 300)
+                                            .centerInside().
+                                            into(post_image);
+                                }
+                                //Log
+                                Log.e("doctorUID", doctorUID);
                                 Log.e("doctorPerfil.uid:", doctorPerfil.getUid());
                                 Log.e("doctorPerfil", doctorPerfil.toString());
-
-                                post_firstName.setText(doctorPerfil.getFirstname());
-                                post_lastName.setText(doctorPerfil.getLastname());
-                                post_phone.setText(doctorPerfil.getNumphone());
-                                post_especialidad.setText(doctorPerfil.getEspecialidad());
-                                Picasso.with(getContext())
-                                        .load(doctorPerfil.getImage())
-                                        .resize(300, 300)
-                                        .centerInside().
-                                        into(post_image);
                             }
                         }
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                            Log.e(TAG, "USUARIO NO EXISTE EN LA BASE DE DATOS");
                         }
                     });
             //.------------------->
             btn_yes.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    sendRequestDoctor(driverID);
+                    sendRequestDoctor(doctorUID);
                     showDialog1();
 
                 }
@@ -221,8 +212,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
     private void showDialog1() {
         try {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            LayoutInflater inflater = getLayoutInflater();
-            View view = inflater.inflate(R.layout.alert_booking, null);
+            View view = getLayoutInflater().inflate(R.layout.alert_booking, null);
             builder.setView(view);
             builder.setCancelable(false);
             mTimeLeftInMillis = START_TIME_IN_MILLS;
@@ -234,7 +224,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
 
             view.findViewById(R.id.animation_view_stopwatch);
             xml_countDown = view.findViewById(R.id.text_view_countDown);
-            Common.token_doctor = driverID;
+
 
             yourCountDownTimer = new CountDownTimer(mTimeLeftInMillis, 500) {
                 @Override
@@ -262,15 +252,16 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                         dialog.cancel();
                         dismiss();
                         //Enviar Notificacion-Data
-                        timeOutRequestDoctor(driverID);
+                        timeOutRequestDoctor(doctorUID);
+                        yourCountDownTimer.cancel();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                     Log.e(TAG, " ==============================");
 
                 }
-            }
-                    .start();
+            };
+            yourCountDownTimer.start();
 
             if (Common.doctorAcept == true) {
                 Log.e(TAG, " Common.doctorAcept : " + Common.doctorAcept);
@@ -285,8 +276,9 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
             btn_s_cancelar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    cancelRequestDoctor(driverID);
+                    cancelRequestDoctor(doctorUID);
                     dialog.dismiss();
+                    yourCountDownTimer.cancel();
                     dismiss();
                 }
             });
