@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.airbnb.lottie.LottieAnimationView;
 import com.cudpast.app.patientApp.Adapter.CommentAdapter;
 import com.cudpast.app.patientApp.Common.Common;
 import com.cudpast.app.patientApp.Model.Comment;
@@ -34,7 +32,6 @@ import com.cudpast.app.patientApp.helper.Sender;
 import com.cudpast.app.patientApp.helper.Token;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -62,7 +59,6 @@ public class PlasmaPerfilActivity extends AppCompatActivity {
 
     private static final String TAG = PlasmaPerfilActivity.class.getSimpleName();
     private static final int MY_PERMISSION_REQUEST_CODE = 7000;
-
     //
     String pacienteUID;
     // plasma info
@@ -97,7 +93,7 @@ public class PlasmaPerfilActivity extends AppCompatActivity {
     Button btn_plasma_Booking;
     //
     Double pacienteLatitude, pacienteLongitud;
-
+    SpotsDialog waitingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,8 +110,9 @@ public class PlasmaPerfilActivity extends AppCompatActivity {
         mFCMService = Common.getIFCMService();
         firebaseAuth = FirebaseAuth.getInstance();
         pacienteUID = firebaseAuth.getCurrentUser().getUid();
-
-
+        //
+        waitingDialog = new SpotsDialog(PlasmaPerfilActivity.this, R.style.DialogLogin);
+        //
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
                     new String[]{
@@ -188,7 +185,7 @@ public class PlasmaPerfilActivity extends AppCompatActivity {
             btn_plasma_Booking.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    sendRequestDoctor(doctor_uid);
+                    RequestDoctor_booking(doctor_uid);
                     showAlertDialogBooking();
                 }
             });
@@ -196,73 +193,6 @@ public class PlasmaPerfilActivity extends AppCompatActivity {
         initRVComment();
     }
 
-    private void sendRequestDoctor(String doctor_uid) {
-        Log.e(TAG, "======================================================");
-        Log.e(TAG, "             sendRequestDoctor                    ");
-        //
-        final SpotsDialog waitingDialog = new SpotsDialog(PlasmaPerfilActivity.this, R.style.DialogLogin);
-        waitingDialog.show();
-        //
-        DatabaseReference tokens = FirebaseDatabase.getInstance().getReference(Common.token_tbl);
-        tokens.orderByKey().equalTo(doctor_uid).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot postSnapShot : dataSnapshot.getChildren()) {
-                    Token tokenDoctor = postSnapShot.getValue(Token.class);
-                    if (tokenDoctor != null) {
-                        //convert to LatLng to json.
-                        LatLng userGeo = new LatLng(pacienteLatitude, pacienteLongitud);
-                        //.Pre-envio-data
-                        String title = "App Doctor";
-                        String body = "Usted tiene una solicutud de atención";
-                        String dToken = tokenDoctor.getToken();//doctor token
-                        String pToken = FirebaseInstanceId.getInstance().getToken(); //todo: paciente token corregir
-                        String json_lat_lng = new Gson().toJson(userGeo);
-                        //.Data
-                        Data data = new Data(title, body, pToken, dToken, json_lat_lng, pacienteUID);
-                        //Sender (to:token,data:información_del_paciente)
-                        Sender sender = new Sender(dToken, data);
-                        //.Log
-                        Log.e(TAG, "title : " + title);
-                        Log.e(TAG, "body : " + body);
-                        Log.e(TAG, "doctorToken : " + dToken);
-                        Log.e(TAG, "pacienteToken : " + pToken);
-                        Log.e(TAG, "ubicacion de paciente : " + json_lat_lng);
-                        Log.e(TAG, "pacienteUID : " + pacienteUID);
-                        Log.e(TAG, " : Token tokenDoctor = " + tokenDoctor.getToken());
-                        mFCMService
-                                .sendMessage(sender)
-                                .enqueue(new Callback<FCMResponse>() {
-                                    @Override
-                                    public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
-                                        if (response.body().success == 1) {
-                                            waitingDialog.dismiss();
-                                            Log.e(TAG, "onResponse: success Caso 1");
-                                            Log.e(TAG, "======================================================");
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<FCMResponse> call, Throwable t) {
-                                        waitingDialog.dismiss();
-                                        Log.e(TAG, "onFailure : " + t.getMessage());
-                                        Log.e(TAG, "======================================================");
-                                    }
-                                });
-                    }
-
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                waitingDialog.dismiss();
-                Log.e(TAG, " onCancelled" + databaseError.getMessage());
-                Log.e(TAG, "======================================================");
-            }
-        });
-
-    }
 
     private void initRVComment() {
 
@@ -335,7 +265,7 @@ public class PlasmaPerfilActivity extends AppCompatActivity {
                 @Override
                 public void onFinish() {
                     //Enviar NotificacionData
-                    timeOutRequestDoctor(doctor_uid);
+                    RequestDoctor_timeOut(doctor_uid);
                     yourCountDownTimer.cancel();
                     dialog.dismiss();
                     Log.e("onFinish", " Tiempo fuera , el doctor no respondio ele mensaje ");
@@ -347,7 +277,7 @@ public class PlasmaPerfilActivity extends AppCompatActivity {
             btn_cancelar_plasma.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    cancelRequestDoctor(doctor_uid);
+                    RequestDoctor_cancel(doctor_uid);
                     yourCountDownTimer.cancel();
                     dialog.dismiss();
                 }
@@ -361,56 +291,118 @@ public class PlasmaPerfilActivity extends AppCompatActivity {
 
     }
 
-    private void cancelRequestDoctor(String doctor_uid) {
+    private void RequestDoctor_booking(String doctor_uid) {
         Log.e(TAG, "======================================================");
-        Log.e(TAG, "             cancelRequestDoctor                    ");
+        Log.e(TAG, "             RequestDoctor_booking                    ");
         //
         final SpotsDialog waitingDialog = new SpotsDialog(PlasmaPerfilActivity.this, R.style.DialogLogin);
+        waitingDialog.show();
+        //
+        DatabaseReference tokens = FirebaseDatabase.getInstance().getReference(Common.token_tbl);
+        tokens.orderByKey().equalTo(doctor_uid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapShot : dataSnapshot.getChildren()) {
+                    Token tokenDoctor = postSnapShot.getValue(Token.class);
+                    if (tokenDoctor != null) {
+                        //convert to LatLng to json.
+                        LatLng userGeo = new LatLng(pacienteLatitude, pacienteLongitud);
+                        //.Pre-envio-data
+                        String title = "App Doctor";
+                        String body = "Usted tiene una solicutud de atención";
+                        String dToken = tokenDoctor.getToken();//doctor token
+                        String pToken = FirebaseInstanceId.getInstance().getToken(); //todo: paciente token corregir
+                        String json_lat_lng = new Gson().toJson(userGeo);
+                        //.Data
+                        Data data = new Data(title, body, pToken, dToken, json_lat_lng, pacienteUID);
+                        //Sender (to:token,data:información_del_paciente)
+                        Sender sender = new Sender(dToken, data);
+                        //.Log
+                        Log.e(TAG, "title : " + title);
+                        Log.e(TAG, "body : " + body);
+                        Log.e(TAG, "doctorToken : " + dToken);
+                        Log.e(TAG, "pacienteToken : " + pToken);
+                        Log.e(TAG, "ubicacion de paciente : json_lat_lng = " + json_lat_lng);
+                        Log.e(TAG, "pacienteUID : " + pacienteUID);
+                        Log.e(TAG, " : Token tokenDoctor = " + tokenDoctor.getToken());
+                        mFCMService
+                                .sendMessage(sender)
+                                .enqueue(new Callback<FCMResponse>() {
+                                    @Override
+                                    public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
+                                        if (response.body().success == 1) {
+                                            waitingDialog.dismiss();
+                                            Log.e(TAG, "onResponse: success Caso 1");
+                                            Log.e(TAG, "======================================================");
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<FCMResponse> call, Throwable t) {
+                                        waitingDialog.dismiss();
+                                        Log.e(TAG, "onFailure : " + t.getMessage());
+                                        Log.e(TAG, "======================================================");
+                                    }
+                                });
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                waitingDialog.dismiss();
+                Log.e(TAG, " onCancelled" + databaseError.getMessage());
+                Log.e(TAG, "======================================================");
+            }
+        });
+
+    }
+
+    private void RequestDoctor_cancel(String doctor_uid) {
+        Log.e(TAG, "======================================================");
+        Log.e(TAG, "             RequestDoctor_cancel                    ");
+        //
         waitingDialog.show();
         //.Obtener el token del doctor apartir de su id del doctor
         DatabaseReference tokens = FirebaseDatabase.getInstance().getReference(Common.token_tbl);
-        tokens
-                .orderByKey()
-                .equalTo(doctor_uid)
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for (DataSnapshot postSnapShot : dataSnapshot.getChildren()) {
-                            Token tokenDoctor = postSnapShot.getValue(Token.class);
-                            if (tokenDoctor != null) {
-                                //
-                                String title = "App Doctor";
-                                String body = "El usuario ha cancelado";
-                                String dToken = tokenDoctor.getToken();
-                                Log.e(TAG, "Token tokenDoctor = " + tokenDoctor.getToken());
-                                //-->Data
-                                Data data = new Data(title, body);
-                                //-->Sender (to, data)
-                                Sender sender = new Sender(dToken, data);
-                                //
-                                sendNotification(sender);
-                            }
-                        }
+        tokens.orderByKey().equalTo(doctor_uid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapShot : dataSnapshot.getChildren()) {
+                    Token tokenDoctor = postSnapShot.getValue(Token.class);
+                    if (tokenDoctor != null) {
+                        //
+                        String title = "App Doctor";
+                        String body = "El usuario ha cancelado";
+                        String dToken = tokenDoctor.getToken();
+                        Log.e(TAG, "Token tokenDoctor = " + tokenDoctor.getToken());
+                        //-->Data
+                        Data data = new Data(title, body);
+                        //-->Sender (to, data)
+                        Sender sender = new Sender(dToken, data);
+                        //
+                        sendNotification(sender);
                     }
+                }
+            }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        waitingDialog.dismiss();
-                        Log.e(TAG, " onCancelled : " + databaseError.getMessage());
-                        Log.e(TAG, "======================================================");
-                    }
-                });
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                waitingDialog.dismiss();
+                Log.e(TAG, " onCancelled : " + databaseError.getMessage());
+            }
+        });
     }
 
-    private void timeOutRequestDoctor(String driverID) {
+    private void RequestDoctor_timeOut(String doctor_uid) {
         Log.e(TAG, "======================================================");
-        Log.e(TAG, "             timeOutRequestDoctor                    ");
+        Log.e(TAG, "             RequestDoctor_timeOut                    ");
         //
-        final SpotsDialog waitingDialog = new SpotsDialog(PlasmaPerfilActivity.this, R.style.DialogLogin);
         waitingDialog.show();
-        //
+        //Obtener el token del doctor apartir de su id del doctor
         DatabaseReference tokens = FirebaseDatabase.getInstance().getReference(Common.token_tbl);
-        tokens.orderByKey().equalTo(driverID).addValueEventListener(new ValueEventListener() {
+        tokens.orderByKey().equalTo(doctor_uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapShot : dataSnapshot.getChildren()) {
@@ -426,7 +418,6 @@ public class PlasmaPerfilActivity extends AppCompatActivity {
                         Sender sender = new Sender(dToken, data);
                         //
                         sendNotification(sender);
-                        waitingDialog.dismiss();
                     }
                 }
             }
@@ -448,15 +439,16 @@ public class PlasmaPerfilActivity extends AppCompatActivity {
                     public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
                         if (response.body().success == 1) {
                             Log.e(TAG, "sendNotification :SUCCESS ");
+                            waitingDialog.dismiss();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<FCMResponse> call, Throwable t) {
                         Log.e(TAG, "sendNotification :FAILURE ");
+                        waitingDialog.dismiss();
                     }
                 });
     }
-
 
 }
