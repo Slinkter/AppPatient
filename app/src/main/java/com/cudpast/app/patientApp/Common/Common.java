@@ -12,6 +12,7 @@ import com.cudpast.app.patientApp.Remote.IGoogleAPI;
 public class Common {
 
     public static final String TB_AVAILABLE_DOCTOR = "TB_AVAILABLE_DOCTOR";
+    public static final String TB_AVAILABLE_PLASMA = "TB_AVAILABLE_DOCTOR";
     public static final String TB_INFO_DOCTOR = "tb_Info_Doctor";
     public static final String TB_INFO_PLASMA = "tb_Info_Plasma";
     public static final String TB_INFO_PACIENTE = "tb_Info_Paciente";

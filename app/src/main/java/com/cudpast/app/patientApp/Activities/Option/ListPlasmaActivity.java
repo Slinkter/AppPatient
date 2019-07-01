@@ -39,7 +39,7 @@ public class ListPlasmaActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Lista de Enfermera");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //1.Hacer la referencia a la tabla
-        refDB_PlasmaDoctor = FirebaseDatabase.getInstance().getReference(Common.TB_INFO_PLASMA);
+        refDB_PlasmaDoctor = FirebaseDatabase.getInstance().getReference(Common.TB_AVAILABLE_PLASMA);
 
         refDB_PlasmaDoctor.keepSynced(true);
         refDB_PlasmaDoctor.orderByKey();
@@ -54,10 +54,13 @@ public class ListPlasmaActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         FirebaseRecyclerAdapter<DoctorPerfil, ListDoctorActivity.BlogViewHolder> adapter;
+
         adapter = new FirebaseRecyclerAdapter<DoctorPerfil, ListDoctorActivity.BlogViewHolder>(DoctorPerfil.class, R.layout.doctor_layout_info, ListDoctorActivity.BlogViewHolder.class, refDB_PlasmaDoctor) {
+
 
             @Override
             protected void populateViewHolder(final ListDoctorActivity.BlogViewHolder view, final DoctorPerfil model, int position) {
+
 
                 view.setImage(getApplicationContext(), model.getImage());
                 view.setFirstName(model.getFirstname() + " " + model.getLastname());
@@ -69,9 +72,9 @@ public class ListPlasmaActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Intent i = new Intent(view.mView.getContext(), PlasmaPerfilActivity.class);
-                        Log.e(TAG,model.getUid());
-                        Log.e(TAG,model.getFirstname());
-                        Log.e(TAG,model.getLastname());
+                        Log.e(TAG, model.getUid());
+                        Log.e(TAG, model.getFirstname());
+                        Log.e(TAG, model.getLastname());
 
                         i.putExtra("doctor_uid", model.getUid());
                         i.putExtra("doctor_img", model.getImage());
