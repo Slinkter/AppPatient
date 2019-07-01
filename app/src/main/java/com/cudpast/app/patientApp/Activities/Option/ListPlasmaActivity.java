@@ -30,6 +30,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
@@ -39,6 +40,7 @@ public class ListPlasmaActivity extends AppCompatActivity {
 
     private static final String TAG = ListPlasmaActivity.class.getSimpleName();
     private RecyclerView mBlogList;
+
     private DatabaseReference refDB_PlasmaDoctor;
 
 
@@ -49,7 +51,8 @@ public class ListPlasmaActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Lista de Enfermera");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //1.Hacer la referencia a la tabla
-        refDB_PlasmaDoctor = FirebaseDatabase.getInstance().getReference(Common.TB_AVAILABLE_PLASMA);
+
+        refDB_PlasmaDoctor = FirebaseDatabase.getInstance().getReference(Common.TB_INFO_DOCTOR);
 
         refDB_PlasmaDoctor.keepSynced(true);
         refDB_PlasmaDoctor.orderByKey();
@@ -65,12 +68,14 @@ public class ListPlasmaActivity extends AppCompatActivity {
         super.onStart();
         FirebaseRecyclerAdapter<DoctorPerfil, ListDoctorActivity.BlogViewHolder> adapter;
 
-        adapter = new FirebaseRecyclerAdapter<DoctorPerfil, ListDoctorActivity.BlogViewHolder>(DoctorPerfil.class, R.layout.doctor_layout_info, ListDoctorActivity.BlogViewHolder.class, refDB_PlasmaDoctor) {
-
+        adapter = new FirebaseRecyclerAdapter<DoctorPerfil, ListDoctorActivity.BlogViewHolder>(
+                DoctorPerfil.class,
+                R.layout.doctor_layout_info,
+                ListDoctorActivity.BlogViewHolder.class,
+                refDB_PlasmaDoctor.orderByChild("especialidad").equalTo("Medicina General")) {
 
             @Override
             protected void populateViewHolder(final ListDoctorActivity.BlogViewHolder view, final DoctorPerfil model, int position) {
-
 
                 view.setImage(getApplicationContext(), model.getImage());
                 view.setFirstName(model.getFirstname() + " " + model.getLastname());
@@ -101,49 +106,4 @@ public class ListPlasmaActivity extends AppCompatActivity {
         mBlogList.setAdapter(adapter);
     }
 
-    public static class BlogViewHolder extends RecyclerView.ViewHolder {
-
-        View mView;
-        //
-        TextView tv_title, tv_content, tv_date;
-        ImageView img_user;
-        RelativeLayout container;
-        //
-
-
-        public BlogViewHolder(@NonNull final View itemView) {
-            super(itemView);
-            mView = itemView;
-            container = mView.findViewById(R.id.containerDoctorInfo);
-        }
-
-        public void setImage(Context context, String image) {
-            ImageView post_image = mView.findViewById(R.id.profile_doctor_image);
-            Picasso
-                    .with(context)
-                    .load(image)
-                    .resize(300, 300)
-                    .centerInside()
-                    .placeholder(R.drawable.ic_doctorapp)
-                    .error(R.drawable.ic_doctorapp)
-                    .into(post_image);
-        }
-
-        public void setFirstName(String firstName) {
-            TextView post_firstName = mView.findViewById(R.id.profile_doctor_firstname);
-            post_firstName.setText(firstName);
-        }
-
-        public void setEspecialidad(String especialidad) {
-            TextView post_especialidad = mView.findViewById(R.id.profile_doctor_especialidad);
-            post_especialidad.setText(especialidad);
-        }
-
-        public void setPhone(String phone) {
-            TextView post_phone = mView.findViewById(R.id.profile_doctor_phone);
-            post_phone.setText(phone);
-        }
-
-
-    }
 }

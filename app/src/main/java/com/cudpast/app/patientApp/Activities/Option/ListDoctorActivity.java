@@ -46,7 +46,11 @@ public class ListDoctorActivity extends AppCompatActivity {
         super.onStart();
 
         FirebaseRecyclerAdapter<com.cudpast.app.patientApp.Model.DoctorPerfil, BlogViewHolder> adapter;
-        adapter = new FirebaseRecyclerAdapter<com.cudpast.app.patientApp.Model.DoctorPerfil, BlogViewHolder>(com.cudpast.app.patientApp.Model.DoctorPerfil.class, R.layout.doctor_layout_info, BlogViewHolder.class, mDatabase) {
+        adapter = new FirebaseRecyclerAdapter<com.cudpast.app.patientApp.Model.DoctorPerfil, BlogViewHolder>(
+                com.cudpast.app.patientApp.Model.DoctorPerfil.class,
+                R.layout.doctor_layout_info,
+                BlogViewHolder.class,
+                mDatabase.orderByChild("especialidad").equalTo("Plasma")) {
 
             @Override
             protected void populateViewHolder(final BlogViewHolder view, final com.cudpast.app.patientApp.Model.DoctorPerfil model, int position) {
@@ -70,12 +74,12 @@ public class ListDoctorActivity extends AppCompatActivity {
                 final String uid = model.getNumphone();
                 //Abrir perfil de doctor
 
-              //  view.container.setAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_transition_animation));
+                //  view.container.setAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_transition_animation));
                 view.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent i = new Intent(view.mView.getContext(), DoctorPerfilActivity.class);
-                        i.putExtra("doctor_uid" ,codmedpe );
+                        i.putExtra("doctor_uid", codmedpe);
                         i.putExtra("doctor_img", img);
                         i.putExtra("doctor_name", firstName);
                         i.putExtra("doctor_last", lastname);
