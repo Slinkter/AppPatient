@@ -292,15 +292,13 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
                         // just open your driver to check this table name
                         DbRef_TB_INFO_DOCTOR
                                 .child(key)
-                                .addListenerForSingleValueEvent(new ValueEventListener() {
+                                .addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         // because doctor_info and user model is same properties
                                         // so we can user Rider model to get user here
                                         Log.e(TAG, "==========================================");
                                         Log.e(TAG, "        onDataChange        ");
-
-
                                         DoctorPerfil doctor_info = dataSnapshot.getValue(DoctorPerfil.class);
                                         if (doctor_info != null) {
                                             Log.e(TAG, " doctor_info.getFirstname()  " + doctor_info.getFirstname());

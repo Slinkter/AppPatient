@@ -19,9 +19,18 @@ import com.cudpast.app.patientApp.Activities.Option.extra.PlasmaPerfilActivity;
 import com.cudpast.app.patientApp.Common.Common;
 import com.cudpast.app.patientApp.Model.DoctorPerfil;
 import com.cudpast.app.patientApp.R;
+import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoLocation;
+import com.firebase.geofire.GeoQuery;
+import com.firebase.geofire.GeoQueryEventListener;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -31,6 +40,7 @@ public class ListPlasmaActivity extends AppCompatActivity {
     private static final String TAG = ListPlasmaActivity.class.getSimpleName();
     private RecyclerView mBlogList;
     private DatabaseReference refDB_PlasmaDoctor;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
