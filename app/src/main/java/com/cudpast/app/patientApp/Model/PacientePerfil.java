@@ -1,14 +1,14 @@
 package com.cudpast.app.patientApp.Model;
 
-public class User {
+public class PacientePerfil {
     private String dni,correo,password,nombre,apellido,telefono,fecha, direcion;
 
 
-    public User(){
+    public PacientePerfil(){
 
     }
 
-    public User(String dni, String correo, String password, String nombre, String apellido, String telefono, String fecha,String direcion) {
+    public PacientePerfil(String dni, String correo, String password, String nombre, String apellido, String telefono, String fecha, String direcion) {
         this.dni = dni;
         this.correo = correo;
         this.password = password;

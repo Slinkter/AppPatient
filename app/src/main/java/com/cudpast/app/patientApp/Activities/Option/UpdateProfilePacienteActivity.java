@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.cudpast.app.patientApp.Activities.MainActivity;
 import com.cudpast.app.patientApp.Common.Common;
-import com.cudpast.app.patientApp.Model.User;
+import com.cudpast.app.patientApp.Model.PacientePerfil;
 import com.cudpast.app.patientApp.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -49,12 +49,12 @@ public class UpdateProfilePacienteActivity extends AppCompatActivity {
 
 
         //.Obtener usuario actualizr
-        final User currentUser = Common.currentUser;
+        final PacientePerfil currentPacientePerfil = Common.currentPacientePerfil;
         //.Display on XML
-        updatePacienteName.setText(currentUser.getNombre());
-        updatePacienteLast.setText(currentUser.getApellido());
-        updatePacientePhone.setText(currentUser.getTelefono());
-        updatePacienteAnddress.setText(currentUser.getDirecion());
+        updatePacienteName.setText(currentPacientePerfil.getNombre());
+        updatePacienteLast.setText(currentPacientePerfil.getApellido());
+        updatePacientePhone.setText(currentPacientePerfil.getTelefono());
+        updatePacienteAnddress.setText(currentPacientePerfil.getDirecion());
         //
 
 
@@ -66,21 +66,21 @@ public class UpdateProfilePacienteActivity extends AppCompatActivity {
                 waitingDialog.show();
 
                 //.Actualizar campos
-                final User updateUser = new User();
-                updateUser.setNombre(updatePacienteName.getText().toString());
-                updateUser.setApellido(updatePacienteLast.getText().toString());
-                updateUser.setTelefono(updatePacientePhone.getText().toString());
-                updateUser.setDirecion(updatePacienteAnddress.getText().toString());
+                final PacientePerfil updatePacientePerfil = new PacientePerfil();
+                updatePacientePerfil.setNombre(updatePacienteName.getText().toString());
+                updatePacientePerfil.setApellido(updatePacienteLast.getText().toString());
+                updatePacientePerfil.setTelefono(updatePacientePhone.getText().toString());
+                updatePacientePerfil.setDirecion(updatePacienteAnddress.getText().toString());
 
-                updateUser.setCorreo(Common.currentUser.getCorreo());
-                updateUser.setPassword(Common.currentUser.getPassword());
-                updateUser.setFecha(Common.currentUser.getFecha());
-                updateUser.setDni(Common.currentUser.getDni());
-                Common.currentUser = updateUser;
+                updatePacientePerfil.setCorreo(Common.currentPacientePerfil.getCorreo());
+                updatePacientePerfil.setPassword(Common.currentPacientePerfil.getPassword());
+                updatePacientePerfil.setFecha(Common.currentPacientePerfil.getFecha());
+                updatePacientePerfil.setDni(Common.currentPacientePerfil.getDni());
+                Common.currentPacientePerfil = updatePacientePerfil;
 
                 tb_Info_Paciente
                         .child(auth.getCurrentUser().getUid())
-                        .setValue(updateUser)
+                        .setValue(updatePacientePerfil)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {

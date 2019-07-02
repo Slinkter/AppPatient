@@ -20,16 +20,13 @@ import com.cudpast.app.patientApp.Activities.MainActivity;
 import com.cudpast.app.patientApp.Common.Common;
 import com.cudpast.app.patientApp.Model.Comment;
 import com.cudpast.app.patientApp.Model.DoctorPerfil;
-import com.cudpast.app.patientApp.Model.User;
-import com.cudpast.app.patientApp.PDFHelper.TemplatePDF;
+import com.cudpast.app.patientApp.Model.PacientePerfil;
 import com.cudpast.app.patientApp.R;
 import com.cudpast.app.patientApp.Remote.IFCMService;
 import com.cudpast.app.patientApp.helper.Data;
 import com.cudpast.app.patientApp.helper.FCMResponse;
-import com.cudpast.app.patientApp.helper.Notification;
 import com.cudpast.app.patientApp.helper.Sender;
 import com.cudpast.app.patientApp.helper.Token;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -39,12 +36,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 import retrofit2.Call;
@@ -79,6 +73,7 @@ public class DoctorEnd extends AppCompatActivity {
     private Animation animation;
     private Vibrator vib;
 
+    public String firebaseDoctorUID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +82,10 @@ public class DoctorEnd extends AppCompatActivity {
         getSupportActionBar().hide();
 
         auth = FirebaseAuth.getInstance();
+        if (getIntent() != null) {
+            firebaseDoctorUID = getIntent().getStringExtra("firebaseDoctorUID");
+            Log.e(TAG , "firebaseDoctorUID" + " = " + firebaseDoctorUID);
+        }
 
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.shake);
         vib = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -125,7 +124,7 @@ public class DoctorEnd extends AppCompatActivity {
                 if (submitForm()) {
                     //
                     mFCMService = Common.getIFCMService();
-                    sendEndAttention(Common.token_doctor);
+                    sendEndAttention(Common.currentDoctorPerfil.getUid());
                     insertarHistoryPacienteDoctor();
                     //
                     Intent intent = new Intent(DoctorEnd.this, MainActivity.class);
@@ -174,8 +173,8 @@ public class DoctorEnd extends AppCompatActivity {
 
     private void metodoSignInResult() {
         try {
-            DoctorPerfil currentDoctor = Common.currentDoctor;
-            User currentUser = Common.currentUser;
+            DoctorPerfil currentDoctor = Common.currentDoctorPerfil;
+            PacientePerfil currentPacientePerfil = Common.currentPacientePerfil;
 
             tv_doctor_firstname.setText(currentDoctor.getFirstname());
             tv_doctor_lastName.setText(currentDoctor.getLastname());
@@ -183,8 +182,8 @@ public class DoctorEnd extends AppCompatActivity {
             c_tiempo.setText("30 min");
             c_servicio.setText("Consulta medica");
 
-            tv_paciente_firstname.setText(currentUser.getNombre());
-            tv_paciente_lastName.setText(currentUser.getApellido());
+            tv_paciente_firstname.setText(currentPacientePerfil.getNombre());
+            tv_paciente_lastName.setText(currentPacientePerfil.getApellido());
 
             Picasso
                     .with(this)
@@ -199,16 +198,16 @@ public class DoctorEnd extends AppCompatActivity {
     }
 
     //.
-    private void sendEndAttention(String driverID) {
+    private void sendEndAttention(String driverUID) {
         Log.e(TAG, "======================================================");
         Log.e(TAG, "             sendEndAttention                    ");
         DatabaseReference tokens = FirebaseDatabase.getInstance().getReference(Common.token_tbl);
-        Log.e(TAG, "driverID : " + driverID);
+        Log.e(TAG, "driverUID : " + driverUID);
         //Buscar a doctor por su id
         tokens
                 .orderByKey()
-                .equalTo(driverID)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+                .equalTo(driverUID)
+                .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot postSnapShot : dataSnapshot.getChildren()) {
@@ -251,7 +250,7 @@ public class DoctorEnd extends AppCompatActivity {
     private void insertarHistoryPacienteDoctor() {
         String fecha = getCurrentTimeStamp();
         String pacienteUID = auth.getCurrentUser().getUid();
-        String doctorUID = Common.currentDoctor.getUid();
+        String doctorUID = Common.currentDoctorPerfil.getUid();
         Log.e(TAG, "pacienteUID  " + pacienteUID);
         Log.e(TAG, "doctorUID  " + doctorUID);
 
@@ -259,7 +258,7 @@ public class DoctorEnd extends AppCompatActivity {
         AppPaciente_history
                 .child(pacienteUID)
                 .child(fecha)
-                .setValue(Common.currentDoctor)
+                .setValue(Common.currentDoctorPerfil)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -269,7 +268,7 @@ public class DoctorEnd extends AppCompatActivity {
         AppDoctor_history
                 .child(doctorUID)
                 .child(fecha)
-                .setValue(Common.currentUser)
+                .setValue(Common.currentPacientePerfil)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -280,7 +279,7 @@ public class DoctorEnd extends AppCompatActivity {
 
         String comment_content = id_paciente_comment.getText().toString();
         String uid = pacienteUID;
-        String uname = Common.currentUser.getNombre();
+        String uname = Common.currentPacientePerfil.getNombre();
         String uimg = "";
 
         Comment comment = new Comment(comment_content, uid, uimg, uname);

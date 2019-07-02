@@ -58,7 +58,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         Log.e(TAG, "Caso 1 : El doctor Acepta  ");
         mostrarMensaje(message);
         Common.doctorAcept = true;
-        String firebaseDoctorUID = message.getData().get("dToken");
+        String firebaseDoctorUID = message.getData().get("dToken");// no es el token es el UID del doctor usuario
         Intent intent = new Intent(MyFirebaseMessaging.this, DoctorRoad.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.putExtra("firebaseDoctorUID", firebaseDoctorUID);
@@ -88,8 +88,10 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
     private void showDoctorArrived(RemoteMessage message) {
         Log.e(TAG, "Caso 3 : El doctor ha llegado a tu domicilio             ");
         mostrarMensaje(message);
+        String firebaseDoctorUID = message.getData().get("dToken");// no es el token es el UID del doctor usuario
         Intent intent = new Intent(MyFirebaseMessaging.this, DoctorEnd.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.putExtra("firebaseDoctorUID", firebaseDoctorUID);
         startActivity(intent);
     }
 
@@ -110,7 +112,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
 
         Log.e(TAG, "Refreshed token: " + token);
-        Log.e(TAG,"Refreshed token: " + refreshedToken);
+        Log.e(TAG, "Refreshed token: " + refreshedToken);
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
         // Instance ID token to your app server.

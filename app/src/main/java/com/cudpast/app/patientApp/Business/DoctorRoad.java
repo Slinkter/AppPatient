@@ -81,7 +81,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.cudpast.app.patientApp.Common.Common.currentDoctor;
+import static com.cudpast.app.patientApp.Common.Common.currentDoctorPerfil;
 import static com.cudpast.app.patientApp.Common.Common.mLastLocation;
 
 public class DoctorRoad extends FragmentActivity implements
@@ -125,27 +125,20 @@ public class DoctorRoad extends FragmentActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_go_doctor);
+        Common.doctorAcept = true;// on Tick
         //
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapGoDoctor);
         mapFragment.getMapAsync(this);
         //
-        ubicacion = LocationServices.getFusedLocationProviderClient(this);
-        btn_ruta_cancelar = findViewById(R.id.btn_ruta_cancelar);
-        myDialog = new Dialog(this);
-
-        btn_ruta_cancelar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //  ShowPopupCancelar();
-                showDiaglo1();
-            }
-        });
-
         //.Recibir de la notificacion
         if (getIntent() != null) {
             firebaseDoctorUID = getIntent().getStringExtra("firebaseDoctorUID");
-            Log.e("firebaseDoctorUID", "-------------->" + firebaseDoctorUID);
+            Log.e(TAG, "firebaseDoctorUID" + " = " + firebaseDoctorUID);
         }
+        //
+        ubicacion = LocationServices.getFusedLocationProviderClient(this);
+        btn_ruta_cancelar = findViewById(R.id.btn_ruta_cancelar);
+        myDialog = new Dialog(this);
 
         mService = Common.getGoogleService();
         mFCMService = Common.getIFCMService();
@@ -155,8 +148,21 @@ public class DoctorRoad extends FragmentActivity implements
         referenceServiceDoctor.keepSynced(true);
         geoFire = new GeoFire(referenceServiceDoctor);
 
+        btn_ruta_cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDiaglo1();
+            }
+        });
+
         setUpLocation();
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Common.doctorAcept = true;// onTick
     }
 
     private void setUpLocation() {
@@ -244,8 +250,7 @@ public class DoctorRoad extends FragmentActivity implements
         Log.e(TAG, "==========================================================");
         Log.e(TAG, "                   loadRoadDoctorOnMap                    ");
         mMap.clear();
-        mMap
-                .animateCamera(CameraUpdateFactory.newLatLngZoom(pacienteLocation, 15.0f));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pacienteLocation, 15.0f));
 
         MarkerOptions markerOptions = new MarkerOptions()
                 .position(new LatLng(pacienteLocation.latitude, pacienteLocation.longitude))
@@ -272,7 +277,7 @@ public class DoctorRoad extends FragmentActivity implements
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         DoctorPerfil doctorPerfil = dataSnapshot.getValue(DoctorPerfil.class);
-                                        currentDoctor = doctorPerfil;
+                                        currentDoctorPerfil = doctorPerfil;
                                         getDirection();
                                     }
 
@@ -355,13 +360,12 @@ public class DoctorRoad extends FragmentActivity implements
 
                             try {
 
-                                requestApi =
-                                        "https://maps.googleapis.com/maps/api/directions/json?" +
-                                                "mode=driving&" +
-                                                "transit_routing_preference=less_driving&" +
-                                                "origin=" + doctorLat + "," + doctorLng + "&" +
-                                                "destination=" + mLastLocation.getLatitude() + "," + mLastLocation.getLongitude() + "&" +
-                                                "key=" + "AIzaSyCZMjdhZ3FydT4lkXtHGKs-d6tZKylQXAA";
+                                requestApi = "https://maps.googleapis.com/maps/api/directions/json?" +
+                                        "mode=driving&" +
+                                        "transit_routing_preference=less_driving&" +
+                                        "origin=" + doctorLat + "," + doctorLng + "&" +
+                                        "destination=" + mLastLocation.getLatitude() + "," + mLastLocation.getLongitude() + "&" +
+                                        "key=" + "AIzaSyCZMjdhZ3FydT4lkXtHGKs-d6tZKylQXAA";
 
 
                                 mService.getPath(requestApi)
@@ -593,45 +597,6 @@ public class DoctorRoad extends FragmentActivity implements
         Log.e(TAG, "======================================================");
     }
 
-    //.
-    private BitmapDescriptor BitmapDoctorApp(Context context, @DrawableRes int vectorDrawableResourceId) {
-        Drawable background = ContextCompat.getDrawable(context, vectorDrawableResourceId);
-        background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight());
-        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId);
-        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth() + 0, vectorDrawable.getIntrinsicHeight() + 0);
-        Bitmap bitmap = Bitmap.createBitmap(background.getIntrinsicWidth(), background.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        background.draw(canvas);
-        vectorDrawable.draw(canvas);
-        return BitmapDescriptorFactory.fromBitmap(bitmap);
-    }
-
-    //.Ventana Emergente al Cancelar DoctorRoad
-    public void ShowPopupCancelar() {
-        Button btn_accept_cancelar, btn_decline_cancelar;
-        myDialog.setContentView(R.layout.pop_up_cancelar);
-        btn_accept_cancelar = myDialog.findViewById(R.id.btn_accept_cancelar);
-        btn_decline_cancelar = myDialog.findViewById(R.id.btn_decline_cancelar);
-        btn_accept_cancelar
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Toast.makeText(getApplicationContext(), "Confirma cancelar", Toast.LENGTH_SHORT).show();
-                        cancelBooking(Common.token_doctor);
-                        myDialog.dismiss();
-
-                    }
-                });
-        btn_decline_cancelar
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        myDialog.dismiss();
-                    }
-                });
-        myDialog.show();
-    }
-
 
     public void showDiaglo1() {
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(DoctorRoad.this);
@@ -652,7 +617,7 @@ public class DoctorRoad extends FragmentActivity implements
                     @Override
                     public void onClick(View view) {
                         Toast.makeText(getApplicationContext(), "Enviando cancelación del servicio al doctor", Toast.LENGTH_SHORT).show();
-                        cancelBooking(Common.token_doctor);
+                        cancelBooking(firebaseDoctorUID);
                         dialog.dismiss();
                         finish();
 
@@ -670,5 +635,18 @@ public class DoctorRoad extends FragmentActivity implements
         dialog.show();
     }
 
+
+    //.
+    private BitmapDescriptor BitmapDoctorApp(Context context, @DrawableRes int vectorDrawableResourceId) {
+        Drawable background = ContextCompat.getDrawable(context, vectorDrawableResourceId);
+        background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight());
+        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId);
+        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth() + 0, vectorDrawable.getIntrinsicHeight() + 0);
+        Bitmap bitmap = Bitmap.createBitmap(background.getIntrinsicWidth(), background.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        background.draw(canvas);
+        vectorDrawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
+    }
 
 }

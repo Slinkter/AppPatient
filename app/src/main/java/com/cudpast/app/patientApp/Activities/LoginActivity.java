@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -23,13 +22,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cudpast.app.patientApp.Common.Common;
-import com.cudpast.app.patientApp.Model.User;
+import com.cudpast.app.patientApp.Model.PacientePerfil;
 import com.cudpast.app.patientApp.R;
 import com.cudpast.app.patientApp.Soporte.IntroActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -317,12 +314,12 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Com
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                             waitingDialog.dismiss();
 
-                                            User user001 = dataSnapshot.getValue(User.class);
-                                            Common.currentUser = user001;
-                                            if (Common.currentUser != null) {
+                                            PacientePerfil pacientePerfil001 = dataSnapshot.getValue(PacientePerfil.class);
+                                            Common.currentPacientePerfil = pacientePerfil001;
+                                            if (Common.currentPacientePerfil != null) {
 
 
-                                                Log.e(TAG, "currentUser : " + Common.currentUser.getNombre());
+                                                Log.e(TAG, "currentPacientePerfil : " + Common.currentPacientePerfil.getNombre());
                                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                                 startActivity(intent);

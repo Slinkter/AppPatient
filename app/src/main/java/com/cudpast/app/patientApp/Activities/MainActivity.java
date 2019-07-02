@@ -20,7 +20,7 @@ import com.cudpast.app.patientApp.Activities.Option.ListPlasmaActivity;
 import com.cudpast.app.patientApp.Activities.Option.UbicacionActivity;
 import com.cudpast.app.patientApp.Activities.Option.UpdateProfilePacienteActivity;
 import com.cudpast.app.patientApp.Common.Common;
-import com.cudpast.app.patientApp.Model.User;
+import com.cudpast.app.patientApp.Model.PacientePerfil;
 import com.cudpast.app.patientApp.R;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -84,14 +84,14 @@ public class MainActivity extends AppCompatActivity implements
     protected void onStart() {
         super.onStart();
         permisos();
-        User currentUser = Common.currentUser;
-        updateUI(currentUser);
+        PacientePerfil currentPacientePerfil = Common.currentPacientePerfil;
+        updateUI(currentPacientePerfil);
     }
 
     @Override
     protected void onDestroy() {
 
-        if (Common.currentUser != null) {
+        if (Common.currentPacientePerfil != null) {
             Log.e(TAG, "------------> usuario logeado <--------------");
         } else {
             Log.e(TAG, "------------> usuario no logeado <--------------");
@@ -141,8 +141,8 @@ public class MainActivity extends AppCompatActivity implements
     //. Cargar info del Paciente
     private void mostratInfoDelUsuario() {
 
-        if (Common.currentUser != null) {
-            User usuario = Common.currentUser;
+        if (Common.currentPacientePerfil != null) {
+            PacientePerfil usuario = Common.currentPacientePerfil;
             nameTextView.setText(usuario.getNombre() + " " + usuario.getApellido());
             emailTextView.setText(usuario.getCorreo());
         }
@@ -167,8 +167,8 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     //.Verificar Si Usuario Existe
-    private void updateUI(User user) {
-        if (user != null) {
+    private void updateUI(PacientePerfil pacientePerfil) {
+        if (pacientePerfil != null) {
             mostratInfoDelUsuario();
         } else {
             goLogIngScreen();

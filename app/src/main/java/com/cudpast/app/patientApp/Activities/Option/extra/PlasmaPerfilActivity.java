@@ -16,6 +16,8 @@ import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -83,7 +85,7 @@ public class PlasmaPerfilActivity extends AppCompatActivity {
 
     //
     CountDownTimer yourCountDownTimer;
-    long START_TIME_IN_MILLS = 60 * 1000 * 5;
+    long START_TIME_IN_MILLS = 60 * 1000 * 1;
     long mTimeLeftInMillis;
     IFCMService mFCMService;
     //
@@ -102,9 +104,9 @@ public class PlasmaPerfilActivity extends AppCompatActivity {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         getSupportActionBar().setTitle("Perfil del Plasma");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-//        Window w = getWindow();
-//        w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        Common.doctorAcept = false;
+        Window w = getWindow();
+        w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         RVComment = findViewById(R.id.myrecycleviewComments);
         AppDoctor_history_Comment = FirebaseDatabase.getInstance().getReference(Common.AppDoctor_history_Comment);
         mFCMService = Common.getIFCMService();
@@ -234,11 +236,7 @@ public class PlasmaPerfilActivity extends AppCompatActivity {
     }
 
     public void showAlertDialogBooking() {
-           /*
-            Intent waiting = new Intent(PlasmaPerfilActivity.this   , PlasmaWaiting.class);
-            startActivity(waiting);
-            finish();
-            */
+
         try {
             AlertDialog.Builder mBuiler = new AlertDialog.Builder(PlasmaPerfilActivity.this);
             View view = getLayoutInflater().inflate(R.layout.plasma_booking_waiting, null);
@@ -259,7 +257,14 @@ public class PlasmaPerfilActivity extends AppCompatActivity {
                     int secounds = (int) (mTimeLeftInMillis / 1000) % 60;
                     String timeFormated = String.format(Locale.getDefault(), "%02d:%02d", minutos, secounds);
                     xml_countDown.setText(timeFormated);
+                    if (Common.doctorAcept) {
+                        yourCountDownTimer.cancel();
+                        Log.e("onTick", " : Common.doctorAcept = " + Common.doctorAcept);
+                    }
+
                     Log.e("onTick", " : mTimeLeftInMillis = " + mTimeLeftInMillis);
+
+
                 }
 
                 @Override

@@ -18,13 +18,9 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.cudpast.app.patientApp.Common.Common;
-import com.cudpast.app.patientApp.Model.User;
+import com.cudpast.app.patientApp.Model.PacientePerfil;
 import com.cudpast.app.patientApp.R;
 import com.cudpast.app.patientApp.Soporte.VolleyRP;
 import com.cudpast.app.patientApp.helper.Token;
@@ -40,11 +36,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.Calendar;
-import java.util.HashMap;
 
 import dmax.dialog.SpotsDialog;
 
@@ -137,15 +129,15 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Obtener datos del usuario
-                final User user = new User();
-                user.setNombre(signupName.getText().toString());
-                user.setApellido(signupLast.getText().toString());
-                user.setTelefono(signupNumPhone.getText().toString());
-                user.setDni(signupDNI.getText().toString());
-                user.setCorreo(signupEmail.getText().toString().trim());
-//                user.setPassword(signupPassword.getText().toString()); <--Cuando era con Godaddy
-                user.setFecha(signupDate.getText().toString());
-                user.setDirecion(signupAnddress.getText().toString());
+                final PacientePerfil pacientePerfil = new PacientePerfil();
+                pacientePerfil.setNombre(signupName.getText().toString());
+                pacientePerfil.setApellido(signupLast.getText().toString());
+                pacientePerfil.setTelefono(signupNumPhone.getText().toString());
+                pacientePerfil.setDni(signupDNI.getText().toString());
+                pacientePerfil.setCorreo(signupEmail.getText().toString().trim());
+//                pacientePerfil.setPassword(signupPassword.getText().toString()); <--Cuando era con Godaddy
+                pacientePerfil.setFecha(signupDate.getText().toString());
+                pacientePerfil.setDirecion(signupAnddress.getText().toString());
 
                 if (submitForm()) {
 
@@ -162,7 +154,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 public void onSuccess(AuthResult authResult) {
                                     tb_Info_Paciente
                                             .child(authResult.getUser().getUid())
-                                            .setValue(user)
+                                            .setValue(pacientePerfil)
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void aVoid) {

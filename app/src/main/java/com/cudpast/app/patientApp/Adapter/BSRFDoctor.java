@@ -105,7 +105,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         auth = FirebaseAuth.getInstance();
-
+        Common.doctorAcept = false;
         pacienteUID = auth.getCurrentUser().getUid();
         doctorUID = getArguments().getString("doctorUID");
         mTitle = getArguments().getString("title");
@@ -123,6 +123,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
         Log.e(TAG, "doctorLongitud " + doctorLongitud);
         Log.e(TAG, "pacienteLatitude " + pacienteLatitude);
         Log.e(TAG, "pacienteLongitud " + pacienteLongitud);
+
     }
 
     //Location
@@ -236,6 +237,9 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                     String timeFormated = String.format(Locale.getDefault(), "%02d:%02d", minutos, secounds);
                     xml_countDown.setText(timeFormated);
                     Log.e("onTick", " : mTimeLeftInMillis = " + mTimeLeftInMillis);
+                    Log.e("onTick", " : Common.doctorAcept = " + Common.doctorAcept);
+
+
                 }
 
 
@@ -261,12 +265,11 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
 
                 }
             };
-            yourCountDownTimer.start();
-
-            if (Common.doctorAcept == true) {
+            yourCountDownTimer.start();// on Tick
+            if (Common.doctorAcept) {
                 Log.e(TAG, " Common.doctorAcept : " + Common.doctorAcept);
                 Log.e(TAG, " yourCountDownTimer  : " + mTimeLeftInMillis);
-                //  yourCountDownTimer.cancel();
+                yourCountDownTimer.cancel();
                 dialog.dismiss();
                 dialog.cancel();
                 dismiss();
