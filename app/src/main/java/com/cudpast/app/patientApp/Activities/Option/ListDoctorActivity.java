@@ -50,7 +50,7 @@ public class ListDoctorActivity extends AppCompatActivity {
                 com.cudpast.app.patientApp.Model.DoctorPerfil.class,
                 R.layout.doctor_layout_info,
                 BlogViewHolder.class,
-                mDatabase.orderByChild("especialidad").equalTo("Plasma")) {
+                mDatabase.orderByChild("especialidad").equalTo("Medicina General")) {
 
             @Override
             protected void populateViewHolder(final BlogViewHolder view, final com.cudpast.app.patientApp.Model.DoctorPerfil model, int position) {

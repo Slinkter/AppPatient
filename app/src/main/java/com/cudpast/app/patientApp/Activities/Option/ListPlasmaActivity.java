@@ -53,9 +53,9 @@ public class ListPlasmaActivity extends AppCompatActivity {
         //1.Hacer la referencia a la tabla
 
         refDB_PlasmaDoctor = FirebaseDatabase.getInstance().getReference(Common.TB_INFO_DOCTOR);
-
         refDB_PlasmaDoctor.keepSynced(true);
         refDB_PlasmaDoctor.orderByKey();
+
         //2.
         mBlogList = findViewById(R.id.myrecycleviewPlasma);
         mBlogList.setHasFixedSize(true);
@@ -72,7 +72,7 @@ public class ListPlasmaActivity extends AppCompatActivity {
                 DoctorPerfil.class,
                 R.layout.doctor_layout_info,
                 ListDoctorActivity.BlogViewHolder.class,
-                refDB_PlasmaDoctor.orderByChild("especialidad").equalTo("Medicina General")) {
+                refDB_PlasmaDoctor.orderByChild("especialidad").equalTo("Plasma")) {
 
             @Override
             protected void populateViewHolder(final ListDoctorActivity.BlogViewHolder view, final DoctorPerfil model, int position) {
@@ -94,7 +94,7 @@ public class ListPlasmaActivity extends AppCompatActivity {
                         i.putExtra("doctor_uid", model.getUid());
                         i.putExtra("doctor_img", model.getImage());
                         i.putExtra("doctor_name", model.getFirstname());
-                        i.putExtra("doctor_last", model.getFirstname());
+                        i.putExtra("doctor_last", model.getLastname());
                         i.putExtra("doctor_phone", model.getNumphone());
                         i.putExtra("doctor_especilidad", model.getEspecialidad());
                         view.mView.getContext().startActivity(i);
