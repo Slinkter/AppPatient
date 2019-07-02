@@ -41,7 +41,12 @@ public class ListPlasmaActivity extends AppCompatActivity {
     private static final String TAG = ListPlasmaActivity.class.getSimpleName();
     private RecyclerView mBlogList;
 
+    private DatabaseReference DbRef_TB_AVAILABLE_DOCTOR;
     private DatabaseReference refDB_PlasmaDoctor;
+
+
+    private int distance = 5;   // 3km
+    private static final int LIMIT = 10;
 
 
     @Override
@@ -51,7 +56,10 @@ public class ListPlasmaActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Lista de Enfermera");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //1.Hacer la referencia a la tabla
-
+        DbRef_TB_AVAILABLE_DOCTOR = FirebaseDatabase.getInstance().getReference(Common.TB_AVAILABLE_DOCTOR);
+        DbRef_TB_AVAILABLE_DOCTOR.keepSynced(true);
+        DbRef_TB_AVAILABLE_DOCTOR.orderByKey();
+        //
         refDB_PlasmaDoctor = FirebaseDatabase.getInstance().getReference(Common.TB_INFO_DOCTOR);
         refDB_PlasmaDoctor.keepSynced(true);
         refDB_PlasmaDoctor.orderByKey();
@@ -68,11 +76,15 @@ public class ListPlasmaActivity extends AppCompatActivity {
         super.onStart();
         FirebaseRecyclerAdapter<DoctorPerfil, ListDoctorActivity.BlogViewHolder> adapter;
 
+
+
+        Query query = refDB_PlasmaDoctor.orderByChild("especialidad").equalTo("Plasma");
+
         adapter = new FirebaseRecyclerAdapter<DoctorPerfil, ListDoctorActivity.BlogViewHolder>(
                 DoctorPerfil.class,
                 R.layout.doctor_layout_info,
                 ListDoctorActivity.BlogViewHolder.class,
-                refDB_PlasmaDoctor.orderByChild("especialidad").equalTo("Plasma")) {
+                query) {
 
             @Override
             protected void populateViewHolder(final ListDoctorActivity.BlogViewHolder view, final DoctorPerfil model, int position) {
@@ -104,6 +116,75 @@ public class ListPlasmaActivity extends AppCompatActivity {
         };
 
         mBlogList.setAdapter(adapter);
+    }
+
+    // .
+    private void loadDoctorAvailableOnMap(final LatLng pacienteLocation) {
+        //.
+
+        GeoFire gf = new GeoFire(DbRef_TB_AVAILABLE_DOCTOR);
+        //.
+        GeoLocation pacienetGeo = new GeoLocation(pacienteLocation.latitude, pacienteLocation.longitude);
+        GeoQuery geoQuery = gf.queryAtLocation(pacienetGeo, distance);
+        geoQuery.removeAllListeners();
+        geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
+            @Override
+            public void onKeyEntered(String key, final GeoLocation location) {
+                //use key to get email from table users
+                //table users is table when driver register account and update infomation
+                // just open your driver to check this table name
+                refDB_PlasmaDoctor
+                        .child(key)
+                        .addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                // because doctor_info and user model is same properties
+                                // so we can user Rider model to get user here
+                                Log.e(TAG, "==========================================");
+                                Log.e(TAG, "        onDataChange        ");
+                                DoctorPerfil doctor_info = dataSnapshot.getValue(DoctorPerfil.class);
+                                if (doctor_info != null) {
+                                    Log.e(TAG, " doctor_info.getFirstname()  " + doctor_info.getFirstname());
+                                    Log.e(TAG, " doctor_info.getLastname()  " + doctor_info.getLastname());
+                                    Log.e(TAG, " doctor_info.getUid()  " + doctor_info.getUid());
+                                    Log.e(TAG, " doctor_info.getDni()  " + doctor_info.getDni());
+
+                                }
+
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+            }
+
+            @Override
+            public void onKeyExited(String key) {
+
+            }
+
+            @Override
+            public void onKeyMoved(String key, GeoLocation location) {
+
+            }
+
+            @Override
+            public void onGeoQueryReady() {
+                if (distance <= LIMIT) {
+                    distance++;
+                    loadDoctorAvailableOnMap(pacienteLocation);
+                }
+            }
+
+            @Override
+            public void onGeoQueryError(DatabaseError error) {
+
+            }
+        });
+
     }
 
 }
