@@ -238,11 +238,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                     xml_countDown.setText(timeFormated);
                     Log.e("onTick", " : mTimeLeftInMillis = " + mTimeLeftInMillis);
                     Log.e("onTick", " : Common.doctorAcept = " + Common.doctorAcept);
-
-
                 }
-
-
                 @Override
                 public void onFinish() {
                     Log.e(TAG, " ==============================");
@@ -298,10 +294,14 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
     private void sendRequestDoctor(String doctorUID) {
         Log.e(TAG, "======================================================");
         Log.e(TAG, "             sendRequestDoctor                    ");
+
+        final String tokenPaciente = FirebaseInstanceId.getInstance().getToken();
+        updateTokenToServer(tokenPaciente);
+
         //
         final SpotsDialog waitingDialog = new SpotsDialog(getContext(), R.style.DialogLogin);
         waitingDialog.show();
-        //
+        //Obtener token del doctor a travez de su UID
         DatabaseReference tokens = FirebaseDatabase.getInstance().getReference(Common.token_tbl);
         tokens
                 .orderByKey()
@@ -319,7 +319,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                                     String title = "App Doctor";
                                     String body = "Usted tiene una solicutud de atención";
                                     String dToken = tokenDoctor.getToken();//doctor token
-                                    String pToken = FirebaseInstanceId.getInstance().getToken(); //todo: paciente token corregir
+                                    String pToken = tokenPaciente;
                                     String json_lat_lng = new Gson().toJson(userGeo);
                                     //.Data
                                     Data data = new Data(title, body, pToken, dToken, json_lat_lng, pacienteUID);
@@ -362,6 +362,19 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                                 Log.e(TAG, "======================================================");
                             }
                         });
+    }
+    //Generar el token
+    private void updateTokenToServer(String refreshedToken) {
+        DatabaseReference tokens = FirebaseDatabase.getInstance().getReference(Common.token_tbl);
+        Token token = new Token(refreshedToken);
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            tokens.child(FirebaseAuth
+                    .getInstance()
+                    .getCurrentUser()
+                    .getUid())
+                    .setValue(token);
+        }
+
     }
 
     //.Caso 2
