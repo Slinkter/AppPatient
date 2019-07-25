@@ -78,7 +78,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
     CountDownTimer yourCountDownTimer;
     //
     LottieAnimationView animationView;
-    long START_TIME_IN_MILLS = 60 * 1000 * 1; // 60 s  5min
+    long START_TIME_IN_MILLS = 60 * 1000 * 5; // 60 s  5min
     long mTimeLeftInMillis;
 
     AlertDialog dialog;
@@ -294,12 +294,9 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
     private void sendRequestDoctor(String doctorUID) {
         Log.e(TAG, "======================================================");
         Log.e(TAG, "             sendRequestDoctor                    ");
-
         final String tokenPaciente = FirebaseInstanceId.getInstance().getToken();
-        updateTokenToServer(tokenPaciente);
-
         //
-        final SpotsDialog waitingDialog = new SpotsDialog(getContext(), R.style.DialogLogin);
+        final SpotsDialog waitingDialog = new SpotsDialog(getContext(), R.style.DialogResetearPassword);
         waitingDialog.show();
         //Obtener token del doctor a travez de su UID
         DatabaseReference tokens = FirebaseDatabase.getInstance().getReference(Common.token_tbl);
@@ -362,19 +359,6 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                                 Log.e(TAG, "======================================================");
                             }
                         });
-    }
-    //Generar el token
-    private void updateTokenToServer(String refreshedToken) {
-        DatabaseReference tokens = FirebaseDatabase.getInstance().getReference(Common.token_tbl);
-        Token token = new Token(refreshedToken);
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            tokens.child(FirebaseAuth
-                    .getInstance()
-                    .getCurrentUser()
-                    .getUid())
-                    .setValue(token);
-        }
-
     }
 
     //.Caso 2

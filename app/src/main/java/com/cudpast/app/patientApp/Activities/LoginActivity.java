@@ -29,6 +29,7 @@ import com.cudpast.app.patientApp.Common.Common;
 import com.cudpast.app.patientApp.Model.PacientePerfil;
 import com.cudpast.app.patientApp.R;
 import com.cudpast.app.patientApp.Soporte.IntroActivity;
+import com.cudpast.app.patientApp.helper.Token;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -41,6 +42,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import dmax.dialog.SpotsDialog;
@@ -317,7 +319,8 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Com
                                             PacientePerfil pacientePerfil001 = dataSnapshot.getValue(PacientePerfil.class);
                                             Common.currentPacientePerfil = pacientePerfil001;
                                             if (Common.currentPacientePerfil != null) {
-
+                                                String tokenPaciente = FirebaseInstanceId.getInstance().getToken();
+                                                updateTokenToServer(tokenPaciente);
 
                                                 Log.e(TAG, "currentPacientePerfil : " + Common.currentPacientePerfil.getNombre());
                                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -355,6 +358,19 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Com
                         waitingDialog.dismiss();
                     }
                 });
+
+    }
+
+    private void updateTokenToServer(String refreshedToken) {
+        DatabaseReference tokens = FirebaseDatabase.getInstance().getReference(Common.token_tbl);
+        Token token = new Token(refreshedToken);
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            tokens.child(FirebaseAuth
+                    .getInstance()
+                    .getCurrentUser()
+                    .getUid())
+                    .setValue(token);
+        }
 
     }
 
