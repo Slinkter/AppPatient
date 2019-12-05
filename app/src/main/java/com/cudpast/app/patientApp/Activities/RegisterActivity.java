@@ -58,11 +58,11 @@ public class RegisterActivity extends AppCompatActivity {
             signupDate,
             signupAnddress;
 
-    //-->fecha
+    //--> fecha
     private EditText msignupDate;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     public int year_n, month_n, day_n;
-    //-->Validation
+    //--> Validation
     private Animation animation;
     private Vibrator vib;
 
@@ -161,7 +161,7 @@ public class RegisterActivity extends AppCompatActivity {
                                                     waitingDialog.dismiss();
                                                     Log.e(TAG, " : onSuccess ");
                                                     generarToken();
-                                                    Toast.makeText(RegisterActivity.this, "Usuario Registrado , espere correo de verificación", Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(RegisterActivity.this, "Verificar cuenta por correo ", Toast.LENGTH_SHORT).show();
                                                     sendEmailVerification();
                                                     goToLoginActivity();
 
@@ -182,7 +182,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 public void onFailure(@NonNull Exception e) {
                                     waitingDialog.dismiss();
                                     Log.e(TAG, "El correo ya existe -->" + e.getMessage());
-                                    Toast.makeText(RegisterActivity.this, "El correo ya existe", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(RegisterActivity.this, "Error al registrar usuario ", Toast.LENGTH_SHORT).show();
 
                                 }
                             });

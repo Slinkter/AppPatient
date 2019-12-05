@@ -2,13 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.cudpast.app.patientApp">
 
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_ambulance"
@@ -21,14 +14,14 @@
         <activity
             android:name=".Business.PlasmaWaiting"
             android:parentActivityName=".Activities.Option.extra.PlasmaPerfilActivity"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
 
 
         </activity>
-        <activity android:name=".Activities.Option.extra.PlasmaPerfilActivity"
+        <activity
+            android:name=".Activities.Option.extra.PlasmaPerfilActivity"
             android:parentActivityName=".Activities.Option.ListPlasmaActivity"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.Option.ListPlasmaActivity"
             android:parentActivityName=".Activities.MainActivity"
@@ -41,13 +34,6 @@
             android:parentActivityName=".Activities.MainActivity"
             android:screenOrientation="portrait" />
 
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
-        <meta-data
-            android:name="google_analytics_adid_collection_enabled"
-            android:value="false" />
-
         <activity
             android:name=".Activities.Option.UpdateProfilePacienteActivity"
             android:parentActivityName=".Activities.MainActivity"
@@ -55,6 +41,7 @@
         <activity
             android:name=".Business.DoctorEnd"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".Business.DoctorRoad"
             android:screenOrientation="portrait" />
@@ -127,12 +114,26 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-        </activity> <!-- Notification -->
+        </activity>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+        <meta-data
+            android:name="google_analytics_adid_collection_enabled"
+            android:value="false" /> <!-- Notification -->
         <service android:name=".Service.MyFirebaseMessaging">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
     </application>
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
 </manifest>

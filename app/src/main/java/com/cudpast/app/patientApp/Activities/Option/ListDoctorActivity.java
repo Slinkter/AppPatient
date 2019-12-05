@@ -18,6 +18,7 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
+import com.cudpast.app.patientApp.Model.DoctorPerfil;
 
 public class ListDoctorActivity extends AppCompatActivity {
 
@@ -45,15 +46,15 @@ public class ListDoctorActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        FirebaseRecyclerAdapter<com.cudpast.app.patientApp.Model.DoctorPerfil, BlogViewHolder> adapter;
-        adapter = new FirebaseRecyclerAdapter<com.cudpast.app.patientApp.Model.DoctorPerfil, BlogViewHolder>(
-                com.cudpast.app.patientApp.Model.DoctorPerfil.class,
+        FirebaseRecyclerAdapter<DoctorPerfil, myViewHolder> adapter;
+        adapter = new FirebaseRecyclerAdapter<DoctorPerfil, myViewHolder>(
+                DoctorPerfil.class,
                 R.layout.doctor_layout_info,
-                BlogViewHolder.class,
+                myViewHolder.class,
                 mDatabase.orderByChild("especialidad").equalTo("Medicina General")) {
 
             @Override
-            protected void populateViewHolder(final BlogViewHolder view, final com.cudpast.app.patientApp.Model.DoctorPerfil model, int position) {
+            protected void populateViewHolder(final myViewHolder view, final com.cudpast.app.patientApp.Model.DoctorPerfil model, int position) {
 
                 view.setImage(getApplicationContext(), model.getImage());
                 view.setFirstName(model.getFirstname() + " " + model.getLastname());
@@ -94,17 +95,12 @@ public class ListDoctorActivity extends AppCompatActivity {
         mBlogList.setAdapter(adapter);
     }
 
-    public static class BlogViewHolder extends RecyclerView.ViewHolder {
+    public static class myViewHolder extends RecyclerView.ViewHolder {
 
         View mView;
-        //
-        TextView tv_title, tv_content, tv_date;
-        ImageView img_user;
         RelativeLayout container;
-        //
 
-
-        public BlogViewHolder(@NonNull final View itemView) {
+        public myViewHolder(@NonNull final View itemView) {
             super(itemView);
             mView = itemView;
             container = mView.findViewById(R.id.containerDoctorInfo);

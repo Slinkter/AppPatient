@@ -136,17 +136,15 @@ public class DoctorEnd extends AppCompatActivity {
 
             }
         });
-
-
         //pdf
-//        templatePDF = new TemplatePDF(getApplicationContext());
-//        templatePDF.openDocument();
-//        templatePDF.addMetada("Clientes", "Ventas", "Marines");
-//        templatePDF.addTitles("Cudpast DoctorApp", "Dr. Juan Perez", "2019/04/27");
-//        templatePDF.addParagraph(shortText);
-//        templatePDF.addParagraph(longText);
-//        templatePDF.addCreateTable(header, getClients());
-//        templatePDF.closeDocument();
+        //        templatePDF = new TemplatePDF(getApplicationContext());
+        //        templatePDF.openDocument();
+        //        templatePDF.addMetada("Clientes", "Ventas", "Marines");
+        //        templatePDF.addTitles("Cudpast DoctorApp", "Dr. Juan Perez", "2019/04/27");
+        //        templatePDF.addParagraph(shortText);
+        //        templatePDF.addParagraph(longText);
+        //        templatePDF.addCreateTable(header, getClients());
+        //        templatePDF.closeDocument();
 
 
     }
