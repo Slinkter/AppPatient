@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (Common.currentPacientProfile != null) {
             nameTextView.setText(Common.currentPacientProfile.getFirstname());
-            emailTextView.setText(Common.currentDoctorProfile.getMail());
+            emailTextView.setText("");
         }
 
     }

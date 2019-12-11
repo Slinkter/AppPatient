@@ -98,7 +98,6 @@
                         android:orientation="vertical">
 
                         <Button
-
                             android:layout_width="55dp"
                             android:layout_height="55dp"
                             android:layout_margin="5dp"
