@@ -22,7 +22,7 @@ import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.cudpast.app.patientApp.Common.Common;
-import com.cudpast.app.patientApp.Model.DoctorPerfil;
+import com.cudpast.app.patientApp.Model.DoctorProfile;
 import com.cudpast.app.patientApp.R;
 import com.cudpast.app.patientApp.Remote.IFCMService;
 import com.cudpast.app.patientApp.helper.Data;
@@ -165,22 +165,22 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                             for (DataSnapshot post : dataSnapshot.getChildren()) {
-                                DoctorPerfil doctorPerfil = post.getValue(DoctorPerfil.class);
-                                if (doctorPerfil != null) {
-                                    post_firstName.setText(doctorPerfil.getFirstname());
-                                    post_lastName.setText(doctorPerfil.getLastname());
-                                    post_phone.setText(doctorPerfil.getNumphone());
-                                    post_especialidad.setText(doctorPerfil.getEspecialidad());
+                                DoctorProfile doctorProfile = post.getValue(DoctorProfile.class);
+                                if (doctorProfile != null) {
+                                    post_firstName.setText(doctorProfile.getFirstname());
+                                    post_lastName.setText(doctorProfile.getLastname());
+                                    post_phone.setText(doctorProfile.getNumphone());
+                                    post_especialidad.setText(doctorProfile.getEspecialidad());
                                     Picasso.with(getContext())
-                                            .load(doctorPerfil.getImage())
+                                            .load(doctorProfile.getImagePhoto())
                                             .resize(300, 300)
                                             .centerInside().
                                             into(post_image);
                                 }
                                 //Log
                                 Log.e("doctorUID", doctorUID);
-                                Log.e("doctorPerfil.uid:", doctorPerfil.getUid());
-                                Log.e("doctorPerfil", doctorPerfil.toString());
+                                Log.e("doctorProfile.uid:", doctorProfile.getUid());
+                                Log.e("doctorProfile", doctorProfile.toString());
                             }
                         }
 

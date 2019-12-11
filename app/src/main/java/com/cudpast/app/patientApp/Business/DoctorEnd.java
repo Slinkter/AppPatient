@@ -19,8 +19,8 @@ import android.widget.Toast;
 import com.cudpast.app.patientApp.Activities.MainActivity;
 import com.cudpast.app.patientApp.Common.Common;
 import com.cudpast.app.patientApp.Model.Comment;
-import com.cudpast.app.patientApp.Model.DoctorPerfil;
-import com.cudpast.app.patientApp.Model.PacientePerfil;
+import com.cudpast.app.patientApp.Model.DoctorProfile;
+import com.cudpast.app.patientApp.Model.PacientProfile;
 import com.cudpast.app.patientApp.R;
 import com.cudpast.app.patientApp.Remote.IFCMService;
 import com.cudpast.app.patientApp.helper.Data;
@@ -84,7 +84,7 @@ public class DoctorEnd extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         if (getIntent() != null) {
             firebaseDoctorUID = getIntent().getStringExtra("firebaseDoctorUID");
-            Log.e(TAG , "firebaseDoctorUID" + " = " + firebaseDoctorUID);
+            Log.e(TAG, "firebaseDoctorUID" + " = " + firebaseDoctorUID);
         }
 
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.shake);
@@ -124,7 +124,7 @@ public class DoctorEnd extends AppCompatActivity {
                 if (submitForm()) {
                     //
                     mFCMService = Common.getIFCMService();
-                    sendEndAttention(Common.currentDoctorPerfil.getUid());
+                    sendEndAttention(Common.currentDoctorProfile.getUid());
                     insertarHistoryPacienteDoctor();
                     //
                     Intent intent = new Intent(DoctorEnd.this, MainActivity.class);
@@ -171,8 +171,8 @@ public class DoctorEnd extends AppCompatActivity {
 
     private void metodoSignInResult() {
         try {
-            DoctorPerfil currentDoctor = Common.currentDoctorPerfil;
-            PacientePerfil currentPacientePerfil = Common.currentPacientePerfil;
+            DoctorProfile currentDoctor = Common.currentDoctorProfile;
+            PacientProfile currentPacientProfile = Common.currentPacientProfile;
 
             tv_doctor_firstname.setText(currentDoctor.getFirstname());
             tv_doctor_lastName.setText(currentDoctor.getLastname());
@@ -180,12 +180,12 @@ public class DoctorEnd extends AppCompatActivity {
             c_tiempo.setText("30 min");
             c_servicio.setText("Consulta medica");
 
-            tv_paciente_firstname.setText(currentPacientePerfil.getNombre());
-            tv_paciente_lastName.setText(currentPacientePerfil.getApellido());
+            tv_paciente_firstname.setText(currentPacientProfile.getFirstname());
+            tv_paciente_lastName.setText(currentPacientProfile.getLastname());
 
             Picasso
                     .with(this)
-                    .load(currentDoctor.getImage())
+                    .load(currentDoctor.getImagePhoto())
                     .placeholder(R.drawable.ic_doctorapp)
                     .error(R.drawable.ic_doctorapp)
                     .into(image_doctor);
@@ -246,27 +246,26 @@ public class DoctorEnd extends AppCompatActivity {
     }
 
     private void insertarHistoryPacienteDoctor() {
-        String fecha = getCurrentTimeStamp();
-        String pacienteUID = auth.getCurrentUser().getUid();
-        String doctorUID = Common.currentDoctorPerfil.getUid();
-        Log.e(TAG, "pacienteUID  " + pacienteUID);
-        Log.e(TAG, "doctorUID  " + doctorUID);
-
+        String end_atention = getCurrentTimeStamp();
+        String UID_paciente = auth.getCurrentUser().getUid();
+        String UID_doctor = Common.currentDoctorProfile.getUid();
 
         AppPaciente_history
-                .child(pacienteUID)
-                .child(fecha)
-                .setValue(Common.currentDoctorPerfil)
+                .child(UID_paciente)
+                .child(end_atention)
+                .setValue(Common.currentDoctorProfile)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.e("AppPaciente_history ", "onSuccess ");
                     }
                 });
+
+
         AppDoctor_history
-                .child(doctorUID)
-                .child(fecha)
-                .setValue(Common.currentPacientePerfil)
+                .child(UID_doctor)
+                .child(end_atention)
+                .setValue(Common.currentPacientProfile)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -275,32 +274,27 @@ public class DoctorEnd extends AppCompatActivity {
                 });
 
 
-        String comment_content = id_paciente_comment.getText().toString();
-        String uid = pacienteUID;
-        String uname = Common.currentPacientePerfil.getNombre();
-        String uimg = "";
+        String comment_pacient = id_paciente_comment.getText().toString();
+        //
+        String img_pacient = "default";
+        String username_paciente = Common.currentPacientProfile.getFirstname();
 
-        Comment comment = new Comment(comment_content, uid, uimg, uname);
+        Comment comment = new Comment(comment_pacient, UID_paciente, img_pacient, username_paciente);
 
-        DatabaseReference commentReference = AppDoctor_history_Comment.child(doctorUID).push();
-        commentReference
+        AppDoctor_history_Comment
+                .child(UID_doctor)
+                .child(end_atention)
                 .setValue(comment)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         showMessage("¡Gracias por commentar !");
                         id_paciente_comment.setText("");
-
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        showMessage("failt to add comment " + e.getMessage());
                     }
                 });
 
-
+        Log.e(TAG, "UID_paciente = " + UID_paciente);
+        Log.e(TAG, "UID_doctor = " + UID_doctor);
     }
 
 
@@ -314,8 +308,6 @@ public class DoctorEnd extends AppCompatActivity {
             return null;
         }
     }
-
-
 
     private void showMessage(String s) {
         Toast.makeText(this, s, Toast.LENGTH_SHORT).show();

@@ -12,7 +12,7 @@ import android.view.animation.AnimationUtils;
 
 import com.cudpast.app.patientApp.Activities.Option.extra.PlasmaPerfilActivity;
 import com.cudpast.app.patientApp.Common.Common;
-import com.cudpast.app.patientApp.Model.DoctorPerfil;
+import com.cudpast.app.patientApp.Model.DoctorProfile;
 import com.cudpast.app.patientApp.R;
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
@@ -36,7 +36,7 @@ public class ListPlasmaActivity extends AppCompatActivity {
 
     private int distance = 5;
     private static final int LIMIT = 10;
-    FirebaseRecyclerAdapter<DoctorPerfil, ListDoctorActivity.myViewHolder> adapter;
+    FirebaseRecyclerAdapter<DoctorProfile, ListDoctorActivity.myViewHolder> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,16 +110,16 @@ public class ListPlasmaActivity extends AppCompatActivity {
                         Log.e(TAG, "query =  " + query);
                         Log.e(TAG, "4 ");
 
-                        adapter = new FirebaseRecyclerAdapter<DoctorPerfil, ListDoctorActivity.myViewHolder>(
-                                DoctorPerfil.class,
+                        adapter = new FirebaseRecyclerAdapter<DoctorProfile, ListDoctorActivity.myViewHolder>(
+                                DoctorProfile.class,
                                 R.layout.doctor_layout_info,
                                 ListDoctorActivity.myViewHolder.class,
                                 query) {
 
                             @Override
-                            protected void populateViewHolder(final ListDoctorActivity.myViewHolder view, final DoctorPerfil model, int position) {
+                            protected void populateViewHolder(final ListDoctorActivity.myViewHolder view, final DoctorProfile model, int position) {
 
-                                view.setImage(getApplicationContext(), model.getImage());
+                                view.setImage(getApplicationContext(), model.getImagePhoto());
                                 view.setFirstName(model.getFirstname() + " " + model.getLastname());
                                 view.setPhone(model.getNumphone());
                                 view.setEspecialidad(model.getEspecialidad());
@@ -130,7 +130,7 @@ public class ListPlasmaActivity extends AppCompatActivity {
                                     public void onClick(View v) {
                                         Intent i = new Intent(view.mView.getContext(), PlasmaPerfilActivity.class);
                                         i.putExtra("doctor_uid", model.getUid());
-                                        i.putExtra("doctor_img", model.getImage());
+                                        i.putExtra("doctor_img", model.getImagePhoto());
                                         i.putExtra("doctor_name", model.getFirstname());
                                         i.putExtra("doctor_last", model.getLastname());
                                         i.putExtra("doctor_phone", model.getNumphone());

@@ -41,10 +41,12 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
 
         Glide.with(mContext).load(R.drawable.ic_user_comment).into(holder.img_user);
-        holder.tv_name.setText(mData.get(position).getUname());
-        holder.tv_content.setText(mData.get(position).getContent());
-        holder.tv_date.setText(timestampToString((Long) mData.get(position).getTimestamp()));
-        Log.e("holder : mData" , " " +timestampToString((Long) mData.get(position).getTimestamp()));
+        holder.tv_name.setText(mData.get(position).getName_pacient());
+        holder.tv_content.setText(mData.get(position).getComment_paciente());
+        holder.tv_date.setText(timestampToString((Long) mData.get(position).getDate_endAtention()));
+        Log.e("holder : mData" , " " +timestampToString((Long) mData.get(position).getDate_endAtention()));
+        Log.e("holder : mData" , " " +timestampToString((Long) mData.get(position).getDate_endAtention()));
+        Log.e("holder : mData" , " " +timestampToString((Long) mData.get(position).getDate_endAtention()));
 
     }
 

@@ -2,8 +2,8 @@ package com.cudpast.app.patientApp.Common;
 
 import android.location.Location;
 
-import com.cudpast.app.patientApp.Model.DoctorPerfil;
-import com.cudpast.app.patientApp.Model.PacientePerfil;
+import com.cudpast.app.patientApp.Model.DoctorProfile;
+import com.cudpast.app.patientApp.Model.PacientProfile;
 import com.cudpast.app.patientApp.Remote.FCMClient;
 import com.cudpast.app.patientApp.Remote.GoogleMapApi;
 import com.cudpast.app.patientApp.Remote.IFCMService;
@@ -27,8 +27,8 @@ public class Common {
 
     public static Boolean doctorAcept ;
 
-    public static PacientePerfil currentPacientePerfil;
-    public static DoctorPerfil currentDoctorPerfil;
+    public static PacientProfile currentPacientProfile;
+    public static DoctorProfile currentDoctorProfile;
 
     public static Location mLastLocation;
     public static  String token_doctor ;

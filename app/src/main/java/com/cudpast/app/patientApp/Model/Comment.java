@@ -4,70 +4,59 @@ import com.google.firebase.database.ServerValue;
 
 public class Comment {
 
-    private String content, uid, uimg, uname;
-    private Object timestamp;
+    private String comment_paciente, uid_paciente, img_pacient, name_pacient;
+    private Object date_endAtention;
 
     public Comment() {
 
     }
 
-
-    public Comment(String content, String uid, String uimg, String uname) {
-        this.content = content;
-        this.uid = uid;
-        this.uimg = uimg;
-        this.uname = uname;
-        this.timestamp = ServerValue.TIMESTAMP;
-
+    public Comment(String comment_paciente, String uid_paciente, String img_pacient, String uname) {
+        this.date_endAtention = ServerValue.TIMESTAMP;
+        this.uid_paciente = uid_paciente;
+        this.img_pacient = img_pacient;
+        this.name_pacient = uname;
+        this.comment_paciente = comment_paciente;
     }
 
-    public Comment(String content, String uid, String uimg, String uname, Object timestamp) {
-        this.content = content;
-        this.uid = uid;
-        this.uimg = uimg;
-        this.uname = uname;
-        this.timestamp = timestamp;
+    public String getComment_paciente() {
+        return comment_paciente;
     }
 
-
-    public String getContent() {
-        return content;
+    public void setComment_paciente(String comment_paciente) {
+        this.comment_paciente = comment_paciente;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public String getUid_paciente() {
+        return uid_paciente;
     }
 
-    public String getUid() {
-        return uid;
+    public void setUid_paciente(String uid_paciente) {
+        this.uid_paciente = uid_paciente;
     }
 
-    public void setUid(String uid) {
-        this.uid = uid;
+    public String getImg_pacient() {
+        return img_pacient;
     }
 
-    public String getUimg() {
-        return uimg;
+    public void setImg_pacient(String img_pacient) {
+        this.img_pacient = img_pacient;
     }
 
-    public void setUimg(String uimg) {
-        this.uimg = uimg;
+    public String getName_pacient() {
+        return name_pacient;
     }
 
-    public String getUname() {
-        return uname;
+    public void setName_pacient(String name_pacient) {
+        this.name_pacient = name_pacient;
     }
 
-    public void setUname(String uname) {
-        this.uname = uname;
+    public Object getDate_endAtention() {
+        return date_endAtention;
     }
 
-    public Object getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(Object timestamp) {
-        this.timestamp = timestamp;
+    public void setDate_endAtention(Object date_endAtention) {
+        this.date_endAtention = date_endAtention;
     }
 
 }

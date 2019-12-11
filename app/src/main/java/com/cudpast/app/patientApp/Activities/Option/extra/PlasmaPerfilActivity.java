@@ -35,6 +35,7 @@ import com.cudpast.app.patientApp.helper.Token;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -89,7 +90,7 @@ public class PlasmaPerfilActivity extends AppCompatActivity {
     long mTimeLeftInMillis;
     IFCMService mFCMService;
     //
-    private FusedLocationProviderClient fusedLocationClient;
+    FusedLocationProviderClient fusedLocationClient;
     //
     Button btn_plasma_call;
     Button btn_plasma_Booking;
@@ -123,16 +124,7 @@ public class PlasmaPerfilActivity extends AppCompatActivity {
                     MY_PERMISSION_REQUEST_CODE);
             return;
         }
-        fusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                pacienteLatitude = location.getLatitude();
-                pacienteLongitud = location.getLongitude();
-                Log.e(TAG, " :  fusedLocationClient    ");
-                Log.e(TAG, " :  pacienteLatitude  = " + pacienteLongitud);
-                Log.e(TAG, " :  pacienteLongitud  = " + pacienteLongitud);
-            }
-        });
+
 
 
         if (getIntent() != null) {
@@ -233,6 +225,28 @@ public class PlasmaPerfilActivity extends AppCompatActivity {
 
     private void showMessage(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    public void locationalgo (){
+        fusedLocationClient
+                .getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+
+                        Log.e(TAG, " :  fusedLocationClient    " + location);
+                        pacienteLatitude = location.getLatitude();
+                        pacienteLongitud = location.getLongitude();
+                        Log.e(TAG, " :  pacienteLatitude  = " + pacienteLongitud);
+                        Log.e(TAG, " :  pacienteLongitud  = " + pacienteLongitud);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(PlasmaPerfilActivity.this, "Fused Location Cliente Falta", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     public void showAlertDialogBooking() {

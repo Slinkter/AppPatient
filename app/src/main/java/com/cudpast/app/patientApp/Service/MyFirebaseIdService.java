@@ -29,7 +29,7 @@ public class MyFirebaseIdService {
 //            tokens.child(FirebaseAuth
 //                    .getInstance()
 //                    .getCurrentUser()
-//                    .getUid())
+//                    .getUid_paciente())
 //                    .setValue(token);
 //        }
 //    }

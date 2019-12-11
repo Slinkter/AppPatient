@@ -30,7 +30,7 @@ import android.widget.Toast;
 
 import com.cudpast.app.patientApp.Activities.MainActivity;
 import com.cudpast.app.patientApp.Common.Common;
-import com.cudpast.app.patientApp.Model.DoctorPerfil;
+import com.cudpast.app.patientApp.Model.DoctorProfile;
 import com.cudpast.app.patientApp.R;
 import com.cudpast.app.patientApp.Remote.IFCMService;
 import com.cudpast.app.patientApp.Remote.IGoogleAPI;
@@ -81,7 +81,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.cudpast.app.patientApp.Common.Common.currentDoctorPerfil;
+import static com.cudpast.app.patientApp.Common.Common.currentDoctorProfile;
 import static com.cudpast.app.patientApp.Common.Common.mLastLocation;
 
 public class DoctorRoad extends FragmentActivity implements
@@ -276,8 +276,8 @@ public class DoctorRoad extends FragmentActivity implements
                                 .addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        DoctorPerfil doctorPerfil = dataSnapshot.getValue(DoctorPerfil.class);
-                                        currentDoctorPerfil = doctorPerfil;
+                                        DoctorProfile doctorProfile = dataSnapshot.getValue(DoctorProfile.class);
+                                        currentDoctorProfile = doctorProfile;
                                         getDirection();
                                     }
 
@@ -513,11 +513,7 @@ public class DoctorRoad extends FragmentActivity implements
 
     //.
     private void startLocationUpdate() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return;
-        }
+
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiCliente, mLocationRequest, this);
     }
 

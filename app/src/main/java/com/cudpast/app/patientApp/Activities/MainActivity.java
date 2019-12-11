@@ -20,7 +20,7 @@ import com.cudpast.app.patientApp.Activities.Option.ListPlasmaActivity;
 import com.cudpast.app.patientApp.Activities.Option.UbicacionActivity;
 import com.cudpast.app.patientApp.Activities.Option.UpdateProfilePacienteActivity;
 import com.cudpast.app.patientApp.Common.Common;
-import com.cudpast.app.patientApp.Model.PacientePerfil;
+import com.cudpast.app.patientApp.Model.PacientProfile;
 import com.cudpast.app.patientApp.R;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -84,14 +84,14 @@ public class MainActivity extends AppCompatActivity implements
     protected void onStart() {
         super.onStart();
         permisos();
-        PacientePerfil currentPacientePerfil = Common.currentPacientePerfil;
-        updateUI(currentPacientePerfil);
+        PacientProfile currentPacientProfile = Common.currentPacientProfile;
+        updateUI(currentPacientProfile);
     }
 
     @Override
     protected void onDestroy() {
 
-        if (Common.currentPacientePerfil != null) {
+        if (Common.currentPacientProfile != null) {
             Log.e(TAG, "------------> usuario logeado <--------------");
         } else {
             Log.e(TAG, "------------> usuario no logeado <--------------");
@@ -141,10 +141,10 @@ public class MainActivity extends AppCompatActivity implements
     //. Cargar info del Paciente
     private void mostratInfoDelUsuario() {
 
-        if (Common.currentPacientePerfil != null) {
-            PacientePerfil usuario = Common.currentPacientePerfil;
-            nameTextView.setText(usuario.getNombre() + " " + usuario.getApellido());
-            emailTextView.setText(usuario.getCorreo());
+        if (Common.currentPacientProfile != null) {
+            PacientProfile usuario = Common.currentPacientProfile;
+            nameTextView.setText(usuario.getFirstname() + " " + usuario.getLastname());
+            emailTextView.setText(usuario.getMail());
         }
 
     }
@@ -167,8 +167,8 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     //.Verificar Si Usuario Existe
-    private void updateUI(PacientePerfil pacientePerfil) {
-        if (pacientePerfil != null) {
+    private void updateUI(PacientProfile pacientProfile) {
+        if (pacientProfile != null) {
             mostratInfoDelUsuario();
         } else {
             goLogIngScreen();

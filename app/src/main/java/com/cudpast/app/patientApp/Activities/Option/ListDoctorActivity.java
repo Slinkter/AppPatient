@@ -13,12 +13,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cudpast.app.patientApp.Activities.Option.extra.DoctorPerfilActivity;
+import com.cudpast.app.patientApp.Model.DoctorProfile;
 import com.cudpast.app.patientApp.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
-import com.cudpast.app.patientApp.Model.DoctorPerfil;
 
 public class ListDoctorActivity extends AppCompatActivity {
 
@@ -46,17 +46,17 @@ public class ListDoctorActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        FirebaseRecyclerAdapter<DoctorPerfil, myViewHolder> adapter;
-        adapter = new FirebaseRecyclerAdapter<DoctorPerfil, myViewHolder>(
-                DoctorPerfil.class,
+        FirebaseRecyclerAdapter<DoctorProfile, myViewHolder> adapter;
+        adapter = new FirebaseRecyclerAdapter<DoctorProfile, myViewHolder>(
+                DoctorProfile.class,
                 R.layout.doctor_layout_info,
                 myViewHolder.class,
                 mDatabase.orderByChild("especialidad").equalTo("Medicina General")) {
 
             @Override
-            protected void populateViewHolder(final myViewHolder view, final com.cudpast.app.patientApp.Model.DoctorPerfil model, int position) {
+            protected void populateViewHolder(final myViewHolder view, final DoctorProfile model, int position) {
 
-                view.setImage(getApplicationContext(), model.getImage());
+                view.setImage(getApplicationContext(), model.getImagePhoto());
                 view.setFirstName(model.getFirstname() + " " + model.getLastname());
                 view.setPhone(model.getNumphone());
                 view.setEspecialidad(model.getEspecialidad());
@@ -68,7 +68,7 @@ public class ListDoctorActivity extends AppCompatActivity {
                 final String especialidad = model.getEspecialidad();
                 final String fecha = model.getEspecialidad();
                 final String firstName = model.getFirstname();
-                final String img = model.getImage();
+                final String img = model.getImagePhoto();
                 final String lastname = model.getLastname();
                 final String numPhone = model.getNumphone();
                 final String pwd = model.getNumphone();

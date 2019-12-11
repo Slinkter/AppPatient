@@ -3,7 +3,7 @@ package com.cudpast.app.patientApp.Activities.Option;
 
 import com.cudpast.app.patientApp.Adapter.BSRFDoctor;
 import com.cudpast.app.patientApp.Common.Common;
-import com.cudpast.app.patientApp.Model.DoctorPerfil;
+import com.cudpast.app.patientApp.Model.DoctorProfile;
 import com.cudpast.app.patientApp.R;
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
@@ -299,11 +299,11 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
                                         // so we can user Rider model to get user here
                                         Log.e(TAG, "==========================================");
                                         Log.e(TAG, "        onDataChange        ");
-                                        DoctorPerfil doctor_info = dataSnapshot.getValue(DoctorPerfil.class);
+                                        DoctorProfile doctor_info = dataSnapshot.getValue(DoctorProfile.class);
                                         if (doctor_info != null) {
                                             Log.e(TAG, " doctor_info.getFirstname()  " + doctor_info.getFirstname());
                                             Log.e(TAG, " doctor_info.getLastname()  " + doctor_info.getLastname());
-                                            Log.e(TAG, " doctor_info.getUid()  " + doctor_info.getUid());
+                                            Log.e(TAG, " doctor_info.getUid_paciente()  " + doctor_info.getUid());
                                             Log.e(TAG, " doctor_info.getDni()  " + doctor_info.getDni());
                                             mMap
                                                     .addMarker(new MarkerOptions()

@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cudpast.app.patientApp.Common.Common;
-import com.cudpast.app.patientApp.Model.DoctorPerfil;
+import com.cudpast.app.patientApp.Model.DoctorProfile;
 import com.cudpast.app.patientApp.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -51,13 +51,13 @@ public class HistoryActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        FirebaseRecyclerAdapter<DoctorPerfil, BlogViewHolder> firebaseRecyclerAdapter
-                = new FirebaseRecyclerAdapter<DoctorPerfil, BlogViewHolder>  (DoctorPerfil.class, R.layout.doctor_layout_info, BlogViewHolder.class, AppPaciente_history) {
+        FirebaseRecyclerAdapter<DoctorProfile, BlogViewHolder> firebaseRecyclerAdapter
+                = new FirebaseRecyclerAdapter<DoctorProfile, BlogViewHolder>  (DoctorProfile.class, R.layout.doctor_layout_info, BlogViewHolder.class, AppPaciente_history) {
 
             @Override
-            protected void populateViewHolder(BlogViewHolder viewHolder, DoctorPerfil model, int position) {
+            protected void populateViewHolder(BlogViewHolder viewHolder, DoctorProfile model, int position) {
 
-                viewHolder.setImage(getApplicationContext(), model.getImage());
+                viewHolder.setImage(getApplicationContext(), model.getImagePhoto());
                 viewHolder.setFirstName(model.getFirstname() +" "+ model.getLastname());
 //                viewHolder.setLastName(model.getLastname());
                 viewHolder.setPhone(model.getNumphone());

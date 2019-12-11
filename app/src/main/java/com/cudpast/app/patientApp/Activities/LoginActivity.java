@@ -26,7 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cudpast.app.patientApp.Common.Common;
-import com.cudpast.app.patientApp.Model.PacientePerfil;
+import com.cudpast.app.patientApp.Model.PacientProfile;
 import com.cudpast.app.patientApp.R;
 import com.cudpast.app.patientApp.Soporte.IntroActivity;
 import com.cudpast.app.patientApp.helper.Token;
@@ -76,9 +76,9 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Com
         setContentView(R.layout.activity_login);
         getSupportActionBar().hide();
         permisos();
-        //AppIntro
-        Intent intent = new Intent(this, IntroActivity.class);
-        startActivity(intent);
+         //AppIntro
+        //        Intent intent = new Intent(this, IntroActivity.class);
+        //      startActivity(intent);
         //
 
         auth = FirebaseAuth.getInstance();
@@ -305,24 +305,24 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Com
                         if (user.isEmailVerified()) {
                             Log.e(TAG, "isEmailVerified");
                             updateUI(user);
-                            String user_Uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                            String tabla_paciente = Common.TB_INFO_PACIENTE;
+                            String user_Uid = auth.getCurrentUser().getUid();
+
                             FirebaseDatabase
                                     .getInstance()
-                                    .getReference(tabla_paciente)
+                                    .getReference(Common.TB_INFO_PACIENTE)
                                     .child(user_Uid)
                                     .addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                             waitingDialog.dismiss();
 
-                                            PacientePerfil pacientePerfil001 = dataSnapshot.getValue(PacientePerfil.class);
-                                            Common.currentPacientePerfil = pacientePerfil001;
-                                            if (Common.currentPacientePerfil != null) {
+                                            PacientProfile pacientProfile001 = dataSnapshot.getValue(PacientProfile.class);
+                                            Common.currentPacientProfile = pacientProfile001;
+                                            if (Common.currentPacientProfile != null) {
                                                 String tokenPaciente = FirebaseInstanceId.getInstance().getToken();
                                                 updateTokenToServer(tokenPaciente);
 
-                                                Log.e(TAG, "currentPacientePerfil : " + Common.currentPacientePerfil.getNombre());
+                                                Log.e(TAG, "currentPacientProfile : " + Common.currentPacientProfile.getFirstname());
                                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                                 startActivity(intent);

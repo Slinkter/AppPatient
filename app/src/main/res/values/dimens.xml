@@ -10,5 +10,5 @@
 
 
     <dimen name="button_width_main">250dp</dimen>
-    <dimen name="textSize_registro">20sp</dimen>
+    <dimen name="textSize_registro">16sp</dimen>
 </resources>
