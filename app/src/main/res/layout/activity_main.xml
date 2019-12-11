@@ -81,7 +81,7 @@
                 </android.support.v7.widget.CardView>
 
                 <android.support.v7.widget.CardView
-                    android:id="@+id/cv_ubicacion"
+                    android:id="@+id/btnUbicacion"
                     android:layout_width="110dp"
                     android:layout_height="110dp"
                     android:layout_margin="8dp"
@@ -98,7 +98,7 @@
                         android:orientation="vertical">
 
                         <Button
-                            android:id="@+id/btnUbicacion"
+
                             android:layout_width="55dp"
                             android:layout_height="55dp"
                             android:layout_margin="5dp"
@@ -110,7 +110,7 @@
                 </android.support.v7.widget.CardView>
 
                 <android.support.v7.widget.CardView
-                    android:id="@+id/cv_btnHistorial"
+                    android:id="@+id/btnHistorial"
                     android:layout_width="110dp"
                     android:layout_height="110dp"
                     android:layout_margin="8dp"
@@ -127,7 +127,7 @@
                         android:orientation="vertical">
 
                         <Button
-                            android:id="@+id/btnHistorial"
+
                             android:layout_width="49dp"
                             android:layout_height="49dp"
                             android:layout_margin="5dp"
@@ -179,7 +179,7 @@
                 </android.support.v7.widget.CardView>
 
                 <android.support.v7.widget.CardView
-                    android:id="@+id/cv_updateInfo"
+                    android:id="@+id/btnUpdateInfo"
                     android:layout_width="110dp"
                     android:layout_height="110dp"
                     android:layout_margin="8dp"
@@ -196,7 +196,7 @@
                         android:orientation="vertical">
 
                         <Button
-                            android:id="@+id/btnUpdateInfo"
+
                             android:layout_width="65dp"
                             android:layout_height="65dp"
                             android:layout_margin="5dp"
@@ -206,7 +206,7 @@
                 </android.support.v7.widget.CardView>
 
                 <android.support.v7.widget.CardView
-                    android:id="@+id/cv_cerrarsession"
+                    android:id="@+id/btnCerra_sesion"
                     android:layout_width="110dp"
                     android:layout_height="110dp"
                     android:layout_margin="8dp"
@@ -223,7 +223,7 @@
                         android:orientation="vertical">
 
                         <Button
-                            android:id="@+id/btnCerra_sesion"
+
                             android:layout_width="49dp"
                             android:layout_height="49dp"
                             android:layout_margin="5dp"
