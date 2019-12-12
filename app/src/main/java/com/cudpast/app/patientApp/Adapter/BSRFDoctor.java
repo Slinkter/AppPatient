@@ -194,7 +194,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                 @Override
                 public void onClick(View v) {
                     sendRequestDoctor(doctorUID);
-                    showDialog1();
+                   //  showDialog1();
 
                 }
             });

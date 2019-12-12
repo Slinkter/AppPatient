@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cudpast.app.patientApp.Common.Common;
 import com.cudpast.app.patientApp.Model.DoctorProfile;
@@ -23,7 +24,7 @@ public class HistoryActivity extends AppCompatActivity {
 
     private RecyclerView mBlogList;
     private DatabaseReference AppPaciente_history;
-    private FirebaseAuth auth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,18 +34,27 @@ public class HistoryActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Historial");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        auth = FirebaseAuth.getInstance();
-        String userUID = auth.getCurrentUser().getUid();
+
+        String userUID = Common.currentPacientProfile.getUid();
+        
+        
 
         AppPaciente_history = FirebaseDatabase.getInstance().getReference(Common.AppPaciente_history).child(userUID);
 
+        if (AppPaciente_history != null    ){
+            AppPaciente_history.keepSynced(true);
+            AppPaciente_history.orderByKey();
 
-        AppPaciente_history.keepSynced(true);
-        AppPaciente_history.orderByKey();
+            mBlogList = findViewById(R.id.myrecycleviewHistory);
+            mBlogList.setHasFixedSize(true);
+            mBlogList.setLayoutManager(new LinearLayoutManager(this));
+        }else{
+            Toast.makeText(this, "No tiene registros de atencion", Toast.LENGTH_SHORT).show();
+        }
 
-        mBlogList = findViewById(R.id.myrecycleviewHistory);
-        mBlogList.setHasFixedSize(true);
-        mBlogList.setLayoutManager(new LinearLayoutManager(this));
+    
+
+
     }
 
     @Override
