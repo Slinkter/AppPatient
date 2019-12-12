@@ -15,16 +15,7 @@
         android:src="@drawable/ic_ambulance"
         android:visibility="visible" />
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/animation_view_stopwatch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone"
-        app:lottie_autoPlay="true"
-        app:lottie_fileName="splash_doctor.json"
-        app:lottie_imageAssetsFolder="assets"
-        app:lottie_loop="true" />
+
 
 
 </RelativeLayout>

@@ -81,7 +81,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
     long START_TIME_IN_MILLS = 60 * 1000 * 5; // 60 s  5min
     long mTimeLeftInMillis;
 
-    AlertDialog dialog;
+
 
     //Constructor
     public static BSRFDoctor newInstance(String title, String doctorUID, boolean isTapOnMap, Double doctorLatitude, Double doctorLongitud, Double pacienteLatitude, Double pacienteLongitud) {
@@ -193,7 +193,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                 @Override
                 public void onClick(View v) {
                     sendRequestDoctor(doctorUID);
-                    //  showDialog1();
+                      showDialog1();
 
                 }
             });
@@ -210,21 +210,26 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
 
     //
     private void showDialog1() {
+
         try {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            View view = getLayoutInflater().inflate(R.layout.alert_booking, null);
+            LayoutInflater inflater = getLayoutInflater();
+            View view = inflater.inflate(R.layout.alert_booking, null);
             builder.setView(view);
             builder.setCancelable(false);
-            mTimeLeftInMillis = START_TIME_IN_MILLS;
             view.setKeepScreenOn(true);
-            btn_s_cancelar = view.findViewById(R.id.btn_s_cancelar);
+
+
+            final AlertDialog dialog = builder.create();
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+
+            mTimeLeftInMillis = START_TIME_IN_MILLS;
             Common.doctorAcept = false;
-
-            dialog = builder.create();
-
-            view.findViewById(R.id.animation_view_stopwatch);
+            Common.doctorAcept = false;
+        //    view.findViewById(R.id.animation_view_stopwatch);
+            btn_s_cancelar = view.findViewById(R.id.btn_s_cancelar);
             xml_countDown = view.findViewById(R.id.text_view_countDown);
-
 
             yourCountDownTimer = new CountDownTimer(mTimeLeftInMillis, 500) {
                 @Override
@@ -262,6 +267,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                 }
             };
             yourCountDownTimer.start();// on Tick
+
             if (Common.doctorAcept) {
                 Log.e(TAG, " Common.doctorAcept : " + Common.doctorAcept);
                 Log.e(TAG, " yourCountDownTimer  : " + mTimeLeftInMillis);
@@ -281,9 +287,10 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                     dismiss();
                 }
             });
-            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+
             dialog.show();
-        } catch (Exception e) {
+        } catch (Exception  e) {
             e.printStackTrace();
         }
 
