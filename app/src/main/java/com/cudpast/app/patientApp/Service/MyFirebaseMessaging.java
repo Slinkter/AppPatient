@@ -138,7 +138,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         Log.e(TAG, "pToken : " + message.getData().get("pToken"));
         Log.e(TAG, "dToken : " + message.getData().get("dToken"));
         Log.e(TAG, "json_lat_log : " + message.getData().get("json_lat_log"));
-        Log.e(TAG, "pacienteUID : " + message.getData().get("pacienteUID"));
+        Log.e(TAG, "uid_paciente : " + message.getData().get("uid_paciente"));
     }
 
 

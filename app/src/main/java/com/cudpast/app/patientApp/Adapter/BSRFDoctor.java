@@ -56,7 +56,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
 
     private static final String TAG = BSRFDoctor.class.getSimpleName();
 
-    public String mTitle, doctorUID, pacienteUID;
+    public String mTitle, doctorUID, uid_paciente;
     public Double doctorLatitude, doctorLongitud, pacienteLongitud, pacienteLatitude;
     boolean isTapOnMap;
     public DatabaseReference TB_AVAILABLE_DOCTOR;
@@ -106,23 +106,25 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
         super.onCreate(savedInstanceState);
         auth = FirebaseAuth.getInstance();
         Common.doctorAcept = false;
-        pacienteUID = auth.getCurrentUser().getUid();
+        isTapOnMap = getArguments().getBoolean("isTapOnMap");
+        //
+        uid_paciente = auth.getCurrentUser().getUid();
         doctorUID = getArguments().getString("doctorUID");
         mTitle = getArguments().getString("title");
-        isTapOnMap = getArguments().getBoolean("isTapOnMap");
         doctorLatitude = getArguments().getDouble("doctorLatitude");
         doctorLongitud = getArguments().getDouble("doctorLongitud");
         pacienteLatitude = getArguments().getDouble("pacienteLatitude");
         pacienteLongitud = getArguments().getDouble("pacienteLongitud");
 
-        Log.e(TAG, " onCreate doctorUID :  " + doctorUID);
-        Log.e(TAG, " onCreate pacienteUID : " + pacienteUID);
-
-        Log.e(TAG, "title " + mTitle);
-        Log.e(TAG, "doctorLatitude " + doctorLatitude);
-        Log.e(TAG, "doctorLongitud " + doctorLongitud);
-        Log.e(TAG, "pacienteLatitude " + pacienteLatitude);
-        Log.e(TAG, "pacienteLongitud " + pacienteLongitud);
+        Log.e(TAG, "======================================");
+        Log.e(TAG, "----------> onCreate");
+        Log.e(TAG, " uid_paciente : " + uid_paciente);
+        Log.e(TAG, " uid_doctor :  " + doctorUID);
+        Log.e(TAG, " title : " + mTitle);
+        Log.e(TAG, " doctorLatitude = " + doctorLatitude);
+        Log.e(TAG, " doctorLongitud = " + doctorLongitud);
+        Log.e(TAG, " pacienteLatitude = " + pacienteLatitude);
+        Log.e(TAG, " pacienteLongitud = " + pacienteLongitud);
 
     }
 
@@ -153,9 +155,6 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
 
         mFCMService = Common.getIFCMService();
 
-        Log.e(TAG, "pacienteLatitude " + pacienteLatitude);
-        Log.e(TAG, "pacienteLongitud " + pacienteLongitud);
-
         if (isTapOnMap) {
             TB_AVAILABLE_DOCTOR
                     .orderByKey()
@@ -173,11 +172,11 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                                     post_especialidad.setText(doctorProfile.getEspecialidad());
                                     Picasso.with(getContext())
                                             .load(doctorProfile.getImagePhoto())
-                                            .resize(300, 300)
+                                            .resize(200, 200)
                                             .centerInside().
                                             into(post_image);
                                 }
-                                //Log
+                                //
                                 Log.e("doctorUID", doctorUID);
                                 Log.e("doctorProfile.uid:", doctorProfile.getUid());
                                 Log.e("doctorProfile", doctorProfile.toString());
@@ -194,7 +193,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                 @Override
                 public void onClick(View v) {
                     sendRequestDoctor(doctorUID);
-                   //  showDialog1();
+                    //  showDialog1();
 
                 }
             });
@@ -239,6 +238,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                     Log.e("onTick", " : mTimeLeftInMillis = " + mTimeLeftInMillis);
                     Log.e("onTick", " : Common.doctorAcept = " + Common.doctorAcept);
                 }
+
                 @Override
                 public void onFinish() {
                     Log.e(TAG, " ==============================");
@@ -291,74 +291,73 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
     }
 
     //.Caso 1
-    private void sendRequestDoctor(String doctorUID) {
+    private void sendRequestDoctor(String uid_doctor) {
         Log.e(TAG, "======================================================");
-        Log.e(TAG, "             sendRequestDoctor                    ");
-        final String tokenPaciente = FirebaseInstanceId.getInstance().getToken();
+        Log.e(TAG, "--------------> sendRequestDoctor                    ");
+        //Obtener token del doctor a travez de su UID
+        DatabaseReference refDB_tokens = FirebaseDatabase.getInstance().getReference(Common.token_tbl);
         //
         final SpotsDialog waitingDialog = new SpotsDialog(getContext(), R.style.DialogResetearPassword);
         waitingDialog.show();
-        //Obtener token del doctor a travez de su UID
-        DatabaseReference tokens = FirebaseDatabase.getInstance().getReference(Common.token_tbl);
-        tokens
+
+        refDB_tokens
                 .orderByKey()
-                .equalTo(doctorUID)
-                .addValueEventListener
-                        (new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                for (DataSnapshot postSnapShot : dataSnapshot.getChildren()) {
-                                    //convert to LatLng to json.
-                                    LatLng userGeo = new LatLng(pacienteLatitude, pacienteLongitud);
-                                    Token tokenDoctor = postSnapShot.getValue(Token.class);
-                                    Log.e(TAG, " : Token tokenDoctor = " + tokenDoctor.getToken());
-                                    //.Pre-envio-data
-                                    String title = "App Doctor";
-                                    String body = "Usted tiene una solicutud de atención";
-                                    String dToken = tokenDoctor.getToken();//doctor token
-                                    String pToken = tokenPaciente;
-                                    String json_lat_lng = new Gson().toJson(userGeo);
-                                    //.Data
-                                    Data data = new Data(title, body, pToken, dToken, json_lat_lng, pacienteUID);
-                                    //Sender (to:token,data:información_del_paciente)
-                                    Sender sender = new Sender(dToken, data);
-                                    //.Log
-                                    Log.e(TAG, "title : " + title);
-                                    Log.e(TAG, "body : " + body);
-                                    Log.e(TAG, "doctorToken : " + dToken);
-                                    Log.e(TAG, "pacienteToken : " + pToken);
-                                    Log.e(TAG, "ubicacion de paciente : " + json_lat_lng);
-                                    Log.e(TAG, "pacienteUID : " + pacienteUID);
+                .equalTo(uid_doctor)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot postSnapShot : dataSnapshot.getChildren()) {
+                            //convert to LatLng to json.
+                            LatLng userGeo = new LatLng(pacienteLatitude, pacienteLongitud);
+                            Token token_doctor = postSnapShot.getValue(Token.class);
+                            Log.e(TAG, " : Token token_doctor = " + token_doctor.getToken());
+                            //.Pre-envio-data
+                            String title = "App Doctor";
+                            String body = "Usted tiene una solicutud de atención";
+                            String dToken = token_doctor.getToken();
+                            String pToken = FirebaseInstanceId.getInstance().getToken();
+                            String json_lat_lng = new Gson().toJson(userGeo);
+                            //.Data
+                            Data data = new Data(title, body, pToken, dToken, json_lat_lng, uid_paciente);
+                            //Sender (to:token,data:información_del_paciente)
+                            Sender sender = new Sender(dToken, data);
+                            //.Log
+                            Log.e(TAG, "title : " + title);
+                            Log.e(TAG, "body : " + body);
+                            Log.e(TAG, "token_doctor : " + dToken);
+                            Log.e(TAG, "token_paciente : " + pToken);
+                            Log.e(TAG, "ubicacion de paciente : " + json_lat_lng);
+                            Log.e(TAG, "uid_paciente : " + uid_paciente);
 
-                                    mFCMService
-                                            .sendMessage(sender)
-                                            .enqueue(new Callback<FCMResponse>() {
-                                                @Override
-                                                public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
-                                                    if (response.body().success == 1) {
-                                                        waitingDialog.dismiss();
-                                                        Log.e(TAG, "onResponse: success Caso 1");
-                                                        Log.e(TAG, "======================================================");
-                                                    }
-                                                }
+                            mFCMService
+                                    .sendMessage(sender)
+                                    .enqueue(new Callback<FCMResponse>() {
+                                        @Override
+                                        public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
+                                            if (response.body().success == 1) {
+                                                waitingDialog.dismiss();
+                                                Log.e(TAG, "onResponse: success Caso 1");
+                                                Log.e(TAG, "======================================================");
+                                            }
+                                        }
 
-                                                @Override
-                                                public void onFailure(Call<FCMResponse> call, Throwable t) {
-                                                    waitingDialog.dismiss();
-                                                    Log.e(TAG, "onFailure : " + t.getMessage());
-                                                    Log.e(TAG, "======================================================");
-                                                }
-                                            });
-                                }
-                            }
+                                        @Override
+                                        public void onFailure(Call<FCMResponse> call, Throwable t) {
+                                            waitingDialog.dismiss();
+                                            Log.e(TAG, "onFailure : " + t.getMessage());
+                                            Log.e(TAG, "======================================================");
+                                        }
+                                    });
+                        }
+                    }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-                                waitingDialog.dismiss();
-                                Log.e(TAG, " onCancelled" + databaseError.getMessage());
-                                Log.e(TAG, "======================================================");
-                            }
-                        });
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        waitingDialog.dismiss();
+                        Log.e(TAG, " onCancelled" + databaseError.getMessage());
+                        Log.e(TAG, "======================================================");
+                    }
+                });
     }
 
     //.Caso 2

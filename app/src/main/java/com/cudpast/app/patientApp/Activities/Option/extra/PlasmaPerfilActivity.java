@@ -342,7 +342,7 @@ public class PlasmaPerfilActivity extends AppCompatActivity {
                         Log.e(TAG, "doctorToken : " + dToken);
                         Log.e(TAG, "pacienteToken : " + pToken);
                         Log.e(TAG, "ubicacion de paciente : json_lat_lng = " + json_lat_lng);
-                        Log.e(TAG, "pacienteUID : " + pacienteUID);
+                        Log.e(TAG, "uid_paciente : " + pacienteUID);
                         Log.e(TAG, " : Token tokenDoctor = " + tokenDoctor.getToken());
                         mFCMService
                                 .sendMessage(sender)
