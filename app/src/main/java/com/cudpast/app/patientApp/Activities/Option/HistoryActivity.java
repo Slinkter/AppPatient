@@ -52,9 +52,6 @@ public class HistoryActivity extends AppCompatActivity {
             Toast.makeText(this, "No tiene registros de atencion", Toast.LENGTH_SHORT).show();
         }
 
-    
-
-
     }
 
     @Override
