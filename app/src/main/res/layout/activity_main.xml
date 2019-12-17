@@ -4,301 +4,325 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorAccent"
     android:gravity="center"
     android:orientation="vertical"
     tools:context=".Activities.MainActivity">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            app:cardCornerRadius="25dp"
+            app:cardElevation="8dp"
+            app:cardUseCompatPadding="true">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:layout_marginBottom="6dp"
-                android:gravity="center"
-                android:text="Bienvenido"
-                android:textColor="@color/btnSignIN"
-                android:textSize="40sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/nameTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:text="USUARIO"
-                android:textSize="18dp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/emailTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="USUARIO"
-                android:textSize="18sp"
-                android:visibility="gone" />
-            <!-- 1 -->
             <LinearLayout
+                android:layout_gravity="center"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center"
-                android:orientation="horizontal">
-
-                <android.support.v7.widget.CardView
-                    android:layout_width="110dp"
-                    android:layout_height="110dp"
-                    android:layout_margin="8dp"
-                    android:shape="ring"
-                    android:visibility="gone"
-                    app:cardCornerRadius="55dp"
-                    app:cardElevation="5dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="10dp"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <Button
-                            android:id="@+id/btnMedicos"
-                            android:layout_width="49dp"
-                            android:layout_height="49dp"
-                            android:layout_margin="49dp"
-                            android:background="@drawable/main_1"
-                            android:baselineAligned="false" />
-
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
-
-                <android.support.v7.widget.CardView
-                    android:id="@+id/cvUbicacion"
-                    android:layout_width="110dp"
-                    android:layout_height="110dp"
-                    android:layout_margin="8dp"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:shape="ring"
-                    app:cardCornerRadius="55dp"
-                    app:cardElevation="5dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="10dp"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <Button
-                            android:id="@+id/btnUbicacion"
-                            android:layout_width="55dp"
-                            android:layout_height="55dp"
-                            android:layout_margin="5dp"
-                            android:background="@drawable/main_2"
-                            android:baselineAligned="false" />
-
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
-
-                <android.support.v7.widget.CardView
-                    android:id="@+id/cvHistorial"
-                    android:layout_width="110dp"
-                    android:layout_height="110dp"
-                    android:layout_margin="8dp"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:shape="ring"
-                    app:cardCornerRadius="55dp"
-                    app:cardElevation="5dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="10dp"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <Button
-                            android:id="@+id/btnHistorial"
-                            android:layout_width="49dp"
-                            android:layout_height="49dp"
-                            android:layout_margin="5dp"
-                            android:background="@drawable/main_4"
-                            android:baselineAligned="false" />
+                android:orientation="vertical">
 
 
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="6dp"
+                    android:gravity="center"
+                    android:text="Bienvenido"
+                    android:textColor="@color/btnSignIN"
+                    android:textSize="40sp"
+                    android:textStyle="bold" />
 
+                <TextView
+                    android:id="@+id/nameTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="USUARIO"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/emailTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="USUARIO"
+                    android:textSize="18sp"
+                    android:visibility="gone" />
+                <!-- 1 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.CardView
+                        android:layout_width="110dp"
+                        android:layout_height="110dp"
+                        android:layout_margin="8dp"
+                        android:shape="ring"
+                        android:visibility="gone"
+                        app:cardCornerRadius="55dp"
+                        app:cardElevation="5dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="10dp"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <Button
+                                android:id="@+id/btnMedicos"
+                                android:layout_width="49dp"
+                                android:layout_height="49dp"
+                                android:layout_margin="49dp"
+                                android:background="@drawable/main_1"
+                                android:baselineAligned="false" />
+
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/cvUbicacion"
+                        android:layout_width="110dp"
+                        android:layout_height="110dp"
+                        android:layout_margin="8dp"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:shape="ring"
+                        app:cardCornerRadius="55dp"
+                        app:cardElevation="5dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="10dp"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <Button
+                                android:id="@+id/btnUbicacion"
+                                android:layout_width="55dp"
+                                android:layout_height="55dp"
+                                android:layout_margin="5dp"
+                                android:background="@drawable/main_2"
+                                android:baselineAligned="false" />
+
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/cvHistorial"
+                        android:layout_width="110dp"
+                        android:layout_height="110dp"
+                        android:layout_margin="8dp"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:shape="ring"
+                        app:cardCornerRadius="55dp"
+                        app:cardElevation="5dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="10dp"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <Button
+                                android:id="@+id/btnHistorial"
+                                android:layout_width="49dp"
+                                android:layout_height="49dp"
+                                android:layout_margin="5dp"
+                                android:background="@drawable/main_4"
+                                android:baselineAligned="false" />
+
+
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
+
+                </LinearLayout>
+                <!-- 2 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="3dp"
+                    android:clipToPadding="false"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.CardView
+                        android:layout_width="110dp"
+                        android:layout_height="110dp"
+                        android:layout_margin="8dp"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:shape="ring"
+                        android:visibility="gone"
+                        app:cardCornerRadius="55dp"
+                        app:cardElevation="5dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="10dp"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <Button
+                                android:id="@+id/btnHistorial2"
+                                android:layout_width="49dp"
+                                android:layout_height="49dp"
+                                android:layout_margin="5dp"
+                                android:background="@drawable/main_4"
+                                android:baselineAligned="false" />
+
+
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/cvUpdateInfo"
+                        android:layout_width="110dp"
+                        android:layout_height="110dp"
+                        android:layout_margin="8dp"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:shape="ring"
+                        app:cardCornerRadius="55dp"
+                        app:cardElevation="5dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="10dp"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <Button
+                                android:id="@+id/btnUpdateInfo"
+                                android:layout_width="65dp"
+                                android:layout_height="65dp"
+                                android:layout_margin="5dp"
+                                android:background="@drawable/ic_user1"
+                                android:baselineAligned="false" />
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/cvCerrasesion"
+                        android:layout_width="110dp"
+                        android:layout_height="110dp"
+                        android:layout_margin="8dp"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:shape="ring"
+                        app:cardCornerRadius="55dp"
+                        app:cardElevation="5dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="10dp"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <Button
+                                android:id="@+id/btnCerra_sesion"
+                                android:layout_width="49dp"
+                                android:layout_height="49dp"
+                                android:layout_margin="5dp"
+                                android:background="@drawable/ic_exit_to_app_red_24dp"
+                                android:baselineAligned="false" />
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+                </LinearLayout>
+                <!-- 3 -->
+                <LinearLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="3dp"
+                    android:clipToPadding="false"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.CardView
+                        android:layout_width="110dp"
+                        android:layout_height="110dp"
+                        android:layout_margin="8dp"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:shape="ring"
+                        android:visibility="gone"
+                        app:cardCornerRadius="55dp"
+                        app:cardElevation="5dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="10dp"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <Button
+                                android:id="@+id/btnPlasma"
+                                android:layout_width="65dp"
+                                android:layout_height="65dp"
+                                android:layout_margin="5dp"
+                                android:background="@drawable/ic_doctora"
+                                android:baselineAligned="false" />
+
+
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:layout_width="110dp"
+                        android:layout_height="110dp"
+                        android:layout_margin="8dp"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:shape="ring"
+                        android:visibility="gone"
+                        app:cardCornerRadius="55dp"
+                        app:cardElevation="5dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="10dp"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <Button
+                                android:id="@+id/btnCerra_sesion2"
+                                android:layout_width="49dp"
+                                android:layout_height="49dp"
+                                android:layout_margin="5dp"
+                                android:background="@drawable/ic_exit_to_app_red_24dp"
+                                android:baselineAligned="false" />
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+                </LinearLayout>
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="Cliente"
+                    android:textSize="12dp"
+                    android:textStyle="bold" />
 
             </LinearLayout>
-            <!-- 2 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="3dp"
-                android:clipToPadding="false"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <android.support.v7.widget.CardView
-                    android:layout_width="110dp"
-                    android:layout_height="110dp"
-                    android:layout_margin="8dp"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:shape="ring"
-                    android:visibility="gone"
-                    app:cardCornerRadius="55dp"
-                    app:cardElevation="5dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="10dp"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <Button
-                            android:id="@+id/btnHistorial2"
-                            android:layout_width="49dp"
-                            android:layout_height="49dp"
-                            android:layout_margin="5dp"
-                            android:background="@drawable/main_4"
-                            android:baselineAligned="false" />
+        </android.support.v7.widget.CardView>
 
 
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
-
-                <android.support.v7.widget.CardView
-                    android:id="@+id/cvUpdateInfo"
-                    android:layout_width="110dp"
-                    android:layout_height="110dp"
-                    android:layout_margin="8dp"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:shape="ring"
-                    app:cardCornerRadius="55dp"
-                    app:cardElevation="5dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="10dp"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <Button
-                            android:id="@+id/btnUpdateInfo"
-                            android:layout_width="65dp"
-                            android:layout_height="65dp"
-                            android:layout_margin="5dp"
-                            android:background="@drawable/ic_user1"
-                            android:baselineAligned="false" />
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
-
-                <android.support.v7.widget.CardView
-                    android:id="@+id/cvCerrasesion"
-                    android:layout_width="110dp"
-                    android:layout_height="110dp"
-                    android:layout_margin="8dp"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:shape="ring"
-                    app:cardCornerRadius="55dp"
-                    app:cardElevation="5dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="10dp"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <Button
-                            android:id="@+id/btnCerra_sesion"
-                            android:layout_width="49dp"
-                            android:layout_height="49dp"
-                            android:layout_margin="5dp"
-                            android:background="@drawable/ic_exit_to_app_red_24dp"
-                            android:baselineAligned="false" />
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
-            </LinearLayout>
-            <!-- 3 -->
-            <LinearLayout
-
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="3dp"
-                android:clipToPadding="false"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <android.support.v7.widget.CardView
-                    android:layout_width="110dp"
-                    android:layout_height="110dp"
-                    android:layout_margin="8dp"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:shape="ring"
-                    android:visibility="gone"
-                    app:cardCornerRadius="55dp"
-                    app:cardElevation="5dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="10dp"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <Button
-                            android:id="@+id/btnPlasma"
-                            android:layout_width="65dp"
-                            android:layout_height="65dp"
-                            android:layout_margin="5dp"
-                            android:background="@drawable/ic_doctora"
-                            android:baselineAligned="false" />
-
-
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
-
-                <android.support.v7.widget.CardView
-                    android:layout_width="110dp"
-                    android:layout_height="110dp"
-                    android:layout_margin="8dp"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:shape="ring"
-                    android:visibility="gone"
-                    app:cardCornerRadius="55dp"
-                    app:cardElevation="5dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="10dp"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <Button
-                            android:id="@+id/btnCerra_sesion2"
-                            android:layout_width="49dp"
-                            android:layout_height="49dp"
-                            android:layout_margin="5dp"
-                            android:background="@drawable/ic_exit_to_app_red_24dp"
-                            android:baselineAligned="false" />
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
-            </LinearLayout>
-
-
-        </LinearLayout>
-    </ScrollView>
+    </LinearLayout>
 </LinearLayout>
