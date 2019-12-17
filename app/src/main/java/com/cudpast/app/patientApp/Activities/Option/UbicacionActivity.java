@@ -70,11 +70,11 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getSupportActionBar().hide();
+       // getSupportActionBar().hide();
         setContentView(R.layout.activity_ubicacion);
         //
-           getSupportActionBar().setTitle("Mapas de Doctores");
-           getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Mapas de Doctores");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapUbicacion);
         mapFragment.getMapAsync(this);
