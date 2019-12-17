@@ -261,11 +261,12 @@ public class DoctorEnd extends AppCompatActivity {
                     }
                 });
 
-
+        PacientProfile pacientEnd = Common.currentPacientProfile;
+        pacientEnd.setDateborn(end_atention);
         AppDoctor_history
                 .child(UID_doctor)
                 .child(end_atention)
-                .setValue(Common.currentPacientProfile)
+                .setValue(pacientEnd)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

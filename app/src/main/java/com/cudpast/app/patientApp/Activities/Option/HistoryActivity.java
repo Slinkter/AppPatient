@@ -24,6 +24,7 @@ public class HistoryActivity extends AppCompatActivity {
 
     private RecyclerView mBlogList;
     private DatabaseReference AppPaciente_history;
+    private FirebaseAuth auth;
 
 
     @Override
@@ -34,21 +35,20 @@ public class HistoryActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Historial");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        auth = FirebaseAuth.getInstance();
+        String userUID = auth.getCurrentUser().getUid();
 
-        String userUID = Common.currentPacientProfile.getUid();
-        
-        
 
         AppPaciente_history = FirebaseDatabase.getInstance().getReference(Common.AppPaciente_history).child(userUID);
+        AppPaciente_history.keepSynced(true);
+        AppPaciente_history.orderByKey();
 
-        if (AppPaciente_history != null    ){
-            AppPaciente_history.keepSynced(true);
-            AppPaciente_history.orderByKey();
+        if (AppPaciente_history != null) {
 
             mBlogList = findViewById(R.id.myrecycleviewHistory);
             mBlogList.setHasFixedSize(true);
             mBlogList.setLayoutManager(new LinearLayoutManager(this));
-        }else{
+        } else {
             Toast.makeText(this, "No tiene registros de atencion", Toast.LENGTH_SHORT).show();
         }
 
@@ -59,13 +59,13 @@ public class HistoryActivity extends AppCompatActivity {
         super.onStart();
 
         FirebaseRecyclerAdapter<DoctorProfile, BlogViewHolder> firebaseRecyclerAdapter
-                = new FirebaseRecyclerAdapter<DoctorProfile, BlogViewHolder>  (DoctorProfile.class, R.layout.doctor_layout_info, BlogViewHolder.class, AppPaciente_history) {
+                = new FirebaseRecyclerAdapter<DoctorProfile, BlogViewHolder>(DoctorProfile.class, R.layout.doctor_layout_info, BlogViewHolder.class, AppPaciente_history) {
 
             @Override
             protected void populateViewHolder(BlogViewHolder viewHolder, DoctorProfile model, int position) {
 
                 viewHolder.setImage(getApplicationContext(), model.getImagePhoto());
-                viewHolder.setFirstName(model.getFirstname() +" "+ model.getLastname());
+                viewHolder.setFirstName(model.getFirstname() + " " + model.getLastname());
 //                viewHolder.setLastName(model.getLastname());
                 viewHolder.setPhone(model.getNumphone());
                 viewHolder.setEspecialidad(model.getEspecialidad());
