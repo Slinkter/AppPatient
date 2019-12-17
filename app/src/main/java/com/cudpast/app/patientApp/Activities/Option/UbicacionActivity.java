@@ -44,6 +44,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Window;
+import android.view.WindowManager;
 
 public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -67,10 +69,12 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_ubicacion);
         //
-        getSupportActionBar().setTitle("Mapas de Doctores");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+           getSupportActionBar().setTitle("Mapas de Doctores");
+           getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapUbicacion);
         mapFragment.getMapAsync(this);
