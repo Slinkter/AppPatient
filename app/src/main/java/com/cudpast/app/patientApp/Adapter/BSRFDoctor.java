@@ -188,6 +188,21 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                             Log.e(TAG, "USUARIO NO EXISTE EN LA BASE DE DATOS");
                         }
                     });
+
+            TB_AVAILABLE_DOCTOR
+                    .orderByKey()
+                    .equalTo(doctorUID)
+                    .addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            Log.e(TAG," dataSnaohot  = " +dataSnapshot.getValue());
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Log.e(TAG," databaseError  = "  + databaseError.getMessage());
+                        }
+                    });
             //.------------------->
             btn_yes.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -218,23 +233,16 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
             builder.setView(view);
             builder.setCancelable(false);
             view.setKeepScreenOn(true);
-
-
             final AlertDialog dialog = builder.create();
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-
             mTimeLeftInMillis = START_TIME_IN_MILLS;
             Common.doctorAcept = false;
-            Common.doctorAcept = false;
-        //    view.findViewById(R.id.animation_view_stopwatch);
             btn_s_cancelar = view.findViewById(R.id.btn_s_cancelar);
             xml_countDown = view.findViewById(R.id.text_view_countDown);
 
             yourCountDownTimer = new CountDownTimer(mTimeLeftInMillis, 500) {
                 @Override
                 public void onTick(long millisUntilFinished) {
-
                     mTimeLeftInMillis = millisUntilFinished;
                     int minutos = (int) (mTimeLeftInMillis / 1000) / 60;
                     int secounds = (int) (mTimeLeftInMillis / 1000) % 60;
@@ -266,7 +274,7 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
 
                 }
             };
-            yourCountDownTimer.start();// on Tick
+            yourCountDownTimer.start();
 
             if (Common.doctorAcept) {
                 Log.e(TAG, " Common.doctorAcept : " + Common.doctorAcept);
@@ -275,7 +283,6 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                 dialog.dismiss();
                 dialog.cancel();
                 dismiss();
-
             }
 
             btn_s_cancelar.setOnClickListener(new View.OnClickListener() {
@@ -288,8 +295,25 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                 }
             });
 
-
             dialog.show();
+
+
+            TB_AVAILABLE_DOCTOR
+                    .orderByKey()
+                    .equalTo(doctorUID)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            Log.e(TAG," dataSnaohot  = " +dataSnapshot.getValue());
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+
         } catch (Exception  e) {
             e.printStackTrace();
         }
@@ -486,4 +510,8 @@ public class BSRFDoctor extends BottomSheetDialogFragment implements LocationLis
                     }
                 });
     }
+    //. Caso 4
+    //cuando el doctor no responde
+    // enviar notificacion de que el doctor no esta disponible
+
 }
