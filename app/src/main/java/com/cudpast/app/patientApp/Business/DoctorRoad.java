@@ -26,6 +26,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cudpast.app.patientApp.Activities.MainActivity;
@@ -70,6 +71,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -121,6 +123,8 @@ public class DoctorRoad extends FragmentActivity implements
     Dialog myDialog;
 
 
+    TextView tv_nameDoctor,tv_timeDoctor,tv_distanceDoctor,tv_phoneDoctor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,6 +139,11 @@ public class DoctorRoad extends FragmentActivity implements
             firebaseDoctorUID = getIntent().getStringExtra("firebaseDoctorUID");
             Log.e(TAG, "firebaseDoctorUID" + " = " + firebaseDoctorUID);
         }
+        //
+        tv_nameDoctor = findViewById(R.id.tv_nameDoctor);
+        tv_timeDoctor = findViewById(R.id.tv_timeDoctor);
+        tv_distanceDoctor = findViewById(R.id.tv_distanceDoctor);
+        tv_phoneDoctor = findViewById(R.id.tv_phoneDoctor);
         //
         ubicacion = LocationServices.getFusedLocationProviderClient(this);
         btn_ruta_cancelar = findViewById(R.id.btn_ruta_cancelar);
@@ -229,6 +238,7 @@ public class DoctorRoad extends FragmentActivity implements
                             //cada evento de cambio vuelve a llamar a loadRoadDoctorOnMap
                             Log.e(TAG, "onDataChange --> pacienteLocation  " + pacienteLocation);
                             Log.e(TAG, "onDataChange --> DataSnapshot  " + dataSnapshot);
+                            Log.e(TAG, "tiempo  = " + System.currentTimeMillis());
                             loadRoadDoctorOnMap(pacienteLocation);
                         }
 
@@ -273,7 +283,7 @@ public class DoctorRoad extends FragmentActivity implements
 
                         referenceTbDoctor
                                 .child(key)
-                                .addListenerForSingleValueEvent(new ValueEventListener() {
+                                .addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         DoctorProfile doctorProfile = dataSnapshot.getValue(DoctorProfile.class);
@@ -376,10 +386,32 @@ public class DoctorRoad extends FragmentActivity implements
 
                                                     if (direction != null) {
                                                         direction.remove();//remote old direction
-
                                                     }
 
                                                     new getDireccionParserTask().execute(response.body().toString());
+                                                    //
+                                                    JSONObject jsonObject = new JSONObject(response.body());
+                                                    JSONArray routes = jsonObject.getJSONArray("routes");
+                                                    JSONObject object = routes.getJSONObject(0);
+                                                    JSONArray legs = object.getJSONArray("legs");
+                                                    JSONObject legsObject = legs.getJSONObject(0);
+                                                    Log.e(TAG, "onResponse : jsonObject =" + jsonObject);
+                                                    //
+                                                    JSONObject distance = legsObject.getJSONObject("distance");
+                                                    tv_distanceDoctor.setText(distance.getString("text"));
+                                                    Log.e(TAG, " distance = " + distance);
+                                                    //
+                                                    JSONObject time = legsObject.getJSONObject("duration");
+                                                    tv_timeDoctor.setText(time.getString("text"));
+                                                    Log.e(TAG, " time = " + time);
+                                                    //
+                                                    String address = legsObject.getString("end_address");
+                                                    tv_phoneDoctor.setText(currentDoctorProfile.getNumphone());
+                                                    Log.e(TAG, " address = " + address);
+                                                    //
+                                                    tv_nameDoctor.setText(currentDoctorProfile.getFirstname() + " " + currentDoctorProfile.getLastname() );
+
+
 
 
                                                 } catch (Exception e) {
@@ -458,6 +490,10 @@ public class DoctorRoad extends FragmentActivity implements
 
         ProgressDialog mDialog = new ProgressDialog(DoctorRoad.this);
 
+
+
+
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -476,6 +512,9 @@ public class DoctorRoad extends FragmentActivity implements
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
+
+
             return router;
         }
 
