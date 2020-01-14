@@ -1,6 +1,7 @@
 package com.cudpast.app.patientApp.Activities.Option;
 
 
+import com.cudpast.app.patientApp.Activities.LoginActivity;
 import com.cudpast.app.patientApp.Activities.MainActivity;
 import com.cudpast.app.patientApp.Adapter.BSRFDoctor;
 import com.cudpast.app.patientApp.Common.Common;
@@ -42,6 +43,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.DrawableRes;
@@ -77,6 +79,7 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
     private boolean mPermissionDenied = false;
 
     private GoogleMap mMap;
+    LocationManager locationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +104,12 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
         //.
         DbRef_TB_INFO_DOCTOR.keepSynced(true);
         DbRef_TB_INFO_DOCTOR.orderByKey();
+
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            displayLocationNull();
+        }
     }
 
     @SuppressLint("MissingPermission")
@@ -226,7 +235,6 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
 
     }
 
-
     private void getDeviceLocation() {
 
         if (ContextCompat
@@ -275,7 +283,7 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
                                 Log.e(TAG, "Current location is null. Using defaults.");
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
                                 mMap.getUiSettings().setMyLocationButtonEnabled(false);
-                                Toast.makeText(UbicacionActivity.this, "Debes activar la ubicación manualmente  ", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(UbicacionActivity.this, "Debes activar la ubicación manualmente", Toast.LENGTH_SHORT).show();
                                 displayLocationNull();
 
                             }
@@ -294,31 +302,33 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
     }
 
     private void displayLocationNull() {
-        Log.e(TAG,"NULL ,");
         try {
-            AlertDialog.Builder builder = new AlertDialog.Builder(UbicacionActivity.this);
+            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(UbicacionActivity.this);
             LayoutInflater inflater = getLayoutInflater();
             View view = inflater.inflate(R.layout.alert_location_null, null);
             builder.setView(view);
             builder.setCancelable(false);
             view.setKeepScreenOn(true);
-            final AlertDialog dialog = builder.create();
+            final android.app.AlertDialog dialog = builder.create();
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             dialog.show();
 
-           Button btn_regresar_main = view.findViewById(R.id.btn_regresar_main);
-
-            btn_regresar_main.setOnClickListener(new View.OnClickListener() {
+            Button btn_gps_active = view.findViewById(R.id.btn_gps_active);
+            Button btn_gps_cancele = view.findViewById(R.id.btn_gps_cancele);
+            btn_gps_active.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(UbicacionActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
+                    startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    dialog.dismiss();
+                }
+            });
+            btn_gps_cancele.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     dialog.dismiss();
                 }
             });
             dialog.show();
-
         } catch (Exception  e) {
             e.printStackTrace();
         }

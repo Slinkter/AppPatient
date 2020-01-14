@@ -490,10 +490,6 @@ public class DoctorRoad extends FragmentActivity implements
 
         ProgressDialog mDialog = new ProgressDialog(DoctorRoad.this);
 
-
-
-
-
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -512,8 +508,6 @@ public class DoctorRoad extends FragmentActivity implements
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-
 
             return router;
         }
@@ -552,7 +546,6 @@ public class DoctorRoad extends FragmentActivity implements
 
     //.
     private void startLocationUpdate() {
-
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiCliente, mLocationRequest, this);
     }
 
@@ -610,8 +603,7 @@ public class DoctorRoad extends FragmentActivity implements
                                                 Intent intent = new Intent(DoctorRoad.this, MainActivity.class);
                                                 startActivity(intent);
                                                 finish();
-                                                Log.e(TAG, "onResponse: success");
-
+                                                Log.e(TAG, "se envio la notificación : ");
                                             }
                                         }
 
