@@ -1,6 +1,16 @@
 package com.cudpast.app.patientApp.Activities;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.net.Uri;
+import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,13 +38,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView emailTextView;
     private FirebaseAuth auth;
 
+    public static boolean isGPSProvider(Context context) {
+        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        return lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    }
+
+    public static boolean isNetowrkProvider(Context context) {
+        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        return lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-     //   requestWindowFeature(Window.FEATURE_NO_TITLE);
-       // getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        //   requestWindowFeature(Window.FEATURE_NO_TITLE);
+        // getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_main);
+
+        if (isGPSProvider(getApplicationContext())) {
+            Toast.makeText(this, "GPS Activado", Toast.LENGTH_SHORT).show();
+            isNetowrkProvider(getApplicationContext());
+        }else{
+            isGPSProvider(getApplicationContext());
+            isNetowrkProvider(getApplicationContext());
+        }
+
+
         //
         auth = FirebaseAuth.getInstance();
         //
@@ -54,6 +84,54 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.cvUpdateInfo).setOnClickListener(this);
         findViewById(R.id.cvCerrasesion).setOnClickListener(this);
 
+        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+
+        if (permissionCheck == PackageManager.PERMISSION_DENIED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+
+            }
+
+
+        }
+
+
+
+
+    }
+
+
+    public void activeGPS() {
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        LocationListener locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+
+            }
+        };
+        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+
+
     }
 
     // METODO PRINCIPAL
@@ -61,22 +139,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         int i = v.getId();
         //
-        if (i == R.id.btnMedicos  ) {
+        if (i == R.id.btnMedicos) {
             Intent intent = new Intent(this, ListDoctorActivity.class);
             startActivity(intent);
-        } else if (i == R.id.btnHistorial || i ==  R.id.cvHistorial) {
+        } else if (i == R.id.btnHistorial || i == R.id.cvHistorial) {
             Intent intent = new Intent(this, HistoryActivity.class);
             startActivity(intent);
-        } else if (i == R.id.btnUpdateInfo || i ==  R.id.cvUpdateInfo) {
+        } else if (i == R.id.btnUpdateInfo || i == R.id.cvUpdateInfo) {
             Intent intent = new Intent(this, UpdateProfilePacienteActivity.class);
             startActivity(intent);
-        } else if (i == R.id.btnUbicacion || i ==  R.id.cvUbicacion) {
+        } else if (i == R.id.btnUbicacion || i == R.id.cvUbicacion) {
             Intent intent = new Intent(this, UbicacionActivity.class);
             startActivity(intent);
+
         } else if (i == R.id.btnPlasma) {
             Intent intent = new Intent(this, ListPlasmaActivity.class);
             startActivity(intent);
-        } else if (i == R.id.btnCerra_sesion || i ==  R.id.cvCerrasesion) {
+        } else if (i == R.id.btnCerra_sesion || i == R.id.cvCerrasesion) {
             signOut();
         }
     }
@@ -86,7 +165,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onStart();
         PacientProfile currentPacientProfile = Common.currentPacientProfile;
         updateUI(currentPacientProfile);
+
     }
+
 
     //.Check user
     private void updateUI(PacientProfile pacientProfile) {

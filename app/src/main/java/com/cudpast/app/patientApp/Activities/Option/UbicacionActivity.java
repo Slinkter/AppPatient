@@ -1,6 +1,7 @@
 package com.cudpast.app.patientApp.Activities.Option;
 
 
+import com.cudpast.app.patientApp.Activities.MainActivity;
 import com.cudpast.app.patientApp.Adapter.BSRFDoctor;
 import com.cudpast.app.patientApp.Common.Common;
 import com.cudpast.app.patientApp.Model.DoctorProfile;
@@ -31,21 +32,32 @@ import com.google.firebase.database.ValueEventListener;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.Toast;
+
+import java.util.Locale;
 
 public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -263,6 +275,9 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
                                 Log.e(TAG, "Current location is null. Using defaults.");
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
                                 mMap.getUiSettings().setMyLocationButtonEnabled(false);
+                                Toast.makeText(UbicacionActivity.this, "Debes activar la ubicación manualmente  ", Toast.LENGTH_SHORT).show();
+                                displayLocationNull();
+
                             }
                         }
                     })
@@ -275,6 +290,37 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
 
         } catch (SecurityException e) {
             Log.e("Exception: %s", e.getMessage());
+        }
+    }
+
+    private void displayLocationNull() {
+        Log.e(TAG,"NULL ,");
+        try {
+            AlertDialog.Builder builder = new AlertDialog.Builder(UbicacionActivity.this);
+            LayoutInflater inflater = getLayoutInflater();
+            View view = inflater.inflate(R.layout.alert_location_null, null);
+            builder.setView(view);
+            builder.setCancelable(false);
+            view.setKeepScreenOn(true);
+            final AlertDialog dialog = builder.create();
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.show();
+
+           Button btn_regresar_main = view.findViewById(R.id.btn_regresar_main);
+
+            btn_regresar_main.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(UbicacionActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
+
+        } catch (Exception  e) {
+            e.printStackTrace();
         }
     }
 
