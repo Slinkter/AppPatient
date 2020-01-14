@@ -69,7 +69,7 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
     private DatabaseReference DbRef_TB_AVAILABLE_DOCTOR;
     private DatabaseReference DbRef_TB_INFO_DOCTOR;
 
-    private static final int DEFAULT_ZOOM = 15;
+    private static final int DEFAULT_ZOOM = 13;
     private final LatLng mDefaultLocation = new LatLng(-12.141177, -77.026342);
 
     private int distance = 5;   // 3km
@@ -133,7 +133,7 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
                                         mMap.getUiSettings().setAllGesturesEnabled(true);
                                         Common.mLastLocation = location;
                                         LatLng p = new LatLng(Common.mLastLocation.getLatitude(), Common.mLastLocation.getLongitude());
-                                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(p, 16.05f));
+                                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(p, DEFAULT_ZOOM));
                                     }
                                 }
                             });

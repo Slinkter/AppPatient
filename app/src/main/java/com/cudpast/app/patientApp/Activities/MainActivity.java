@@ -38,15 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView emailTextView;
     private FirebaseAuth auth;
 
-    public static boolean isGPSProvider(Context context) {
-        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        return lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
-    }
 
-    public static boolean isNetowrkProvider(Context context) {
-        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        return lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,13 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getSupportActionBar().hide();
         setContentView(R.layout.activity_main);
 
-        if (isGPSProvider(getApplicationContext())) {
-            Toast.makeText(this, "GPS Activado", Toast.LENGTH_SHORT).show();
-            isNetowrkProvider(getApplicationContext());
-        }else{
-            isGPSProvider(getApplicationContext());
-            isNetowrkProvider(getApplicationContext());
-        }
+
 
 
         //
@@ -84,55 +70,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.cvUpdateInfo).setOnClickListener(this);
         findViewById(R.id.cvCerrasesion).setOnClickListener(this);
 
-        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
-
-        if (permissionCheck == PackageManager.PERMISSION_DENIED) {
-
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-
-            } else {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-
-            }
-
-
-        }
-
-
-
 
     }
 
 
-    public void activeGPS() {
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        LocationListener locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
 
-            }
-
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-
-            }
-
-            @Override
-            public void onProviderEnabled(String provider) {
-
-            }
-
-            @Override
-            public void onProviderDisabled(String provider) {
-
-            }
-        };
-        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
-
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-
-
-    }
 
     // METODO PRINCIPAL
     @Override
