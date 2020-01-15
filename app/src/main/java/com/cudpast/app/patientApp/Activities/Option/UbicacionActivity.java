@@ -122,8 +122,6 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
                 finish();
             }
         });
-
-
     }
 
     @SuppressLint("MissingPermission")
@@ -250,7 +248,7 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
     }
 
     private void getDeviceLocation() {
-
+        Log.e(TAG, " getDeviceLocation()");
         if (ContextCompat
                 .checkSelfPermission(this,
                         Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
@@ -264,16 +262,13 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
                     MY_PERMISSION_REQUEST_CODE);
             return;
         }
-        Log.e(TAG, " getDeviceLocation()");
         try {
-
             fusedLocationClient
                     .getLastLocation()
                     .addOnSuccessListener(this, new OnSuccessListener<Location>() {
                         @Override
                         public void onSuccess(Location location) {
                             if (location != null) {
-
                                 Common.mLastLocation = location;
                                 LatLng indexUbication = new LatLng(Common.mLastLocation.getLatitude(), Common.mLastLocation.getLongitude());
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(indexUbication, DEFAULT_ZOOM));
@@ -299,7 +294,6 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
                                 mMap.getUiSettings().setMyLocationButtonEnabled(false);
                                 Toast.makeText(UbicacionActivity.this, "Debes activar la ubicación manualmente", Toast.LENGTH_SHORT).show();
                                 displayLocationNull();
-
                             }
                         }
                     })

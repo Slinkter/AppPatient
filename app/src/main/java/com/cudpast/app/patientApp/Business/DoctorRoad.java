@@ -122,7 +122,6 @@ public class DoctorRoad extends FragmentActivity implements
     Button btn_ruta_cancelar;
     Dialog myDialog;
 
-
     TextView tv_nameDoctor,tv_timeDoctor,tv_distanceDoctor,tv_phoneDoctor;
 
     @Override
