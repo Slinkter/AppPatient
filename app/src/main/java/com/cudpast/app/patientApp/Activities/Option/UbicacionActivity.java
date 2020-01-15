@@ -81,15 +81,18 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
     private GoogleMap mMap;
     LocationManager locationManager;
 
+    Button btn_regresar_map_main;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-       // getSupportActionBar().hide();
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_ubicacion);
         //
-        getSupportActionBar().setTitle("Mapas de Doctores");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //  getSupportActionBar().setTitle("Mapas de Doctores");
+        //  getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapUbicacion);
         mapFragment.getMapAsync(this);
@@ -104,12 +107,23 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
         //.
         DbRef_TB_INFO_DOCTOR.keepSynced(true);
         DbRef_TB_INFO_DOCTOR.orderByKey();
-
+        //.
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             displayLocationNull();
         }
+        btn_regresar_map_main = findViewById(R.id.btn_regresar_map_main);
+        btn_regresar_map_main.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(UbicacionActivity.this,MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+
     }
 
     @SuppressLint("MissingPermission")
@@ -329,7 +343,7 @@ public class UbicacionActivity extends AppCompatActivity implements OnMapReadyCa
                 }
             });
             dialog.show();
-        } catch (Exception  e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
