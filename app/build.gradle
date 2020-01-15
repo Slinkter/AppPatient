@@ -6,8 +6,8 @@ android {
         applicationId "com.cudpast.app.patientApp"
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 24
-        versionName "1.24"
+        versionCode 25
+        versionName "1.25"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -71,12 +71,9 @@ dependencies {
     //PDF
     implementation 'com.itextpdf:itextg:5.5.10'
     implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
-
     //error de multidex
     implementation 'com.android.support:multidex:1.0.3'
     //AppIntro
     implementation 'com.github.AppIntro:AppIntro:4.2.3'
-
-
 }
 apply plugin: 'com.google.gms.google-services'
