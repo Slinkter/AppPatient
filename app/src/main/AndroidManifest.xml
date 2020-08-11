@@ -62,6 +62,7 @@
             android:name=".Business.PlasmaWaiting"
             android:parentActivityName=".Activities.Option.extra.PlasmaPerfilActivity"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".Activities.Option.extra.PlasmaPerfilActivity"
             android:parentActivityName=".Activities.Option.ListPlasmaActivity"

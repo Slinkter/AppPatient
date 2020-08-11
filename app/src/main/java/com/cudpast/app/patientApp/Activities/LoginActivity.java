@@ -33,7 +33,6 @@ import android.widget.Toast;
 import com.cudpast.app.patientApp.Common.Common;
 import com.cudpast.app.patientApp.Model.PacientProfile;
 import com.cudpast.app.patientApp.R;
-import com.cudpast.app.patientApp.Soporte.IntroActivity;
 import com.cudpast.app.patientApp.helper.Token;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -67,9 +66,9 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Com
 
     //Check
     private MaterialEditText ed_login_email, ed_login_pwd;
-    private CheckBox rem_userpass;
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
+    private CheckBox checkBox;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
     public static final String PREF_NAME = "prefs";
     public static final String KEY_REMEMBER = "remeber";
     public static final String KEY_USERNAME = "username";
@@ -88,7 +87,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Com
         getSupportActionBar().hide();
 
         permisos();
-         //AppIntro
+        //AppIntro
         //        Intent intent = new Intent(this, IntroActivity.class);
         //      startActivity(intent);
         //
@@ -106,12 +105,12 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Com
         editor = sharedPreferences.edit();
         ed_login_email = findViewById(R.id.ed_login_email);
         ed_login_pwd = findViewById(R.id.ed_login_pwd);
-        rem_userpass = (CheckBox) findViewById(R.id.rem_userpass);
+        checkBox = (CheckBox) findViewById(R.id.rem_userpass);
 
         if (sharedPreferences.getBoolean(KEY_REMEMBER, false)) {
-            rem_userpass.setChecked(true);
+            checkBox.setChecked(true);
         } else {
-            rem_userpass.setChecked(false);
+            checkBox.setChecked(false);
         }
 
         ed_login_email.setText(sharedPreferences.getString(KEY_USERNAME, ""));
@@ -119,7 +118,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Com
 
         ed_login_email.addTextChangedListener(this);
         ed_login_pwd.addTextChangedListener(this);
-        rem_userpass.setOnCheckedChangeListener(this);
+        checkBox.setOnCheckedChangeListener(this);
 
 
         btn_login.setOnClickListener(new View.OnClickListener() {
@@ -139,22 +138,18 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Com
         });
 
         txt_forgot_pwd = findViewById(R.id.txt_forgot_password);
-        txt_forgot_pwd
-                .setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View view, MotionEvent motionEvent) {
-                        showDialogForgotPwd();
-                        return false;
-                    }
-                });
-
-
+        txt_forgot_pwd.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                showDialogForgotPwd();
+                return false;
+            }
+        });
 
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-         //   AlertNoGps();
-            Log.e(TAG,"gps no activado");
+            //   AlertNoGps();
+            Log.e(TAG, "gps no activado");
         }
-
     }
 
     //GPS
@@ -184,13 +179,12 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Com
             btn_gps_cancele.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     dialog.dismiss();
                 }
             });
             dialog.show();
 
-        } catch (Exception  e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -219,7 +213,6 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Com
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-
         switch (requestCode) {
             case MY_PERMISSION_REQUEST_CODE: {
                 // If request is cancelled, the result arrays are empty.
@@ -228,9 +221,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Com
                 }
             }
         }
-
     }
-
 
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -251,10 +242,9 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Com
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         managePrefs();
     }
-
     //
     private void managePrefs() {
-        if (rem_userpass.isChecked()) {
+        if (checkBox.isChecked()) {
             editor.putString(KEY_USERNAME, ed_login_email.getText().toString().trim());
             editor.putString(KEY_PASS, ed_login_pwd.getText().toString().trim());
             editor.putBoolean(KEY_REMEMBER, true);
@@ -375,11 +365,11 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Com
                                             waitingDialog.dismiss();
 
                                             PacientProfile pacientProfile001 = dataSnapshot.getValue(PacientProfile.class);
+
                                             Common.currentPacientProfile = pacientProfile001;
                                             if (Common.currentPacientProfile != null) {
                                                 String tokenPaciente = FirebaseInstanceId.getInstance().getToken();
                                                 updateTokenToServer(tokenPaciente);
-
                                                 Log.e(TAG, "currentPacientProfile : " + Common.currentPacientProfile.getFirstname());
                                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -397,9 +387,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Com
                                             Log.e("ERROR", "DatabaseError -->" + databaseError.toString());
                                             updateUI(null);
                                         }
-                                    })
-
-                            ;
+                                    });
 
                         } else {
                             waitingDialog.dismiss();
@@ -429,7 +417,6 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Com
                     .getUid())
                     .setValue(token);
         }
-
     }
 
 }

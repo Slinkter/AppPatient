@@ -26,6 +26,7 @@ import com.cudpast.app.patientApp.Activities.Option.ListDoctorActivity;
 import com.cudpast.app.patientApp.Activities.Option.ListPlasmaActivity;
 import com.cudpast.app.patientApp.Activities.Option.UbicacionActivity;
 import com.cudpast.app.patientApp.Activities.Option.UpdateProfilePacienteActivity;
+import com.cudpast.app.patientApp.Activities.Option.extra.DoctorPerfilActivity;
 import com.cudpast.app.patientApp.Common.Common;
 import com.cudpast.app.patientApp.Model.PacientProfile;
 import com.cudpast.app.patientApp.R;
@@ -48,9 +49,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getSupportActionBar().hide();
         setContentView(R.layout.activity_main);
 
-
-
-
         //
         auth = FirebaseAuth.getInstance();
         //
@@ -63,29 +61,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.btnUbicacion).setOnClickListener(this);
         findViewById(R.id.btnCerra_sesion).setOnClickListener(this);
         findViewById(R.id.btnPlasma).setOnClickListener(this);
-
         // cv
         findViewById(R.id.cvUbicacion).setOnClickListener(this);
         findViewById(R.id.cvHistorial).setOnClickListener(this);
         findViewById(R.id.cvUpdateInfo).setOnClickListener(this);
         findViewById(R.id.cvCerrasesion).setOnClickListener(this);
 
-
     }
-
-
-
 
     // METODO PRINCIPAL
     @Override
     public void onClick(View v) {
         int i = v.getId();
-        //
         if (i == R.id.btnMedicos) {
             Intent intent = new Intent(this, ListDoctorActivity.class);
             startActivity(intent);
         } else if (i == R.id.btnHistorial || i == R.id.cvHistorial) {
-            Intent intent = new Intent(this, HistoryActivity.class);
+            Intent intent = new Intent(this, DoctorPerfilActivity.class);
             startActivity(intent);
         } else if (i == R.id.btnUpdateInfo || i == R.id.cvUpdateInfo) {
             Intent intent = new Intent(this, UpdateProfilePacienteActivity.class);
@@ -93,7 +85,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (i == R.id.btnUbicacion || i == R.id.cvUbicacion) {
             Intent intent = new Intent(this, UbicacionActivity.class);
             startActivity(intent);
-
         } else if (i == R.id.btnPlasma) {
             Intent intent = new Intent(this, ListPlasmaActivity.class);
             startActivity(intent);
@@ -109,7 +100,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         updateUI(currentPacientProfile);
 
     }
-
 
     //.Check user
     private void updateUI(PacientProfile pacientProfile) {

@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.cudpast.app.patientApp.Activities.SupportIntro.IntroViewPagerAdapter;
 import com.cudpast.app.patientApp.Activities.SupportIntro.ScreenItem;
@@ -26,11 +27,8 @@ public class IntroActivity extends AppCompatActivity {
     private IntroViewPagerAdapter adapter;
     private List<ScreenItem> mListSlide;
     private TabLayout tabIndicator;
-
     private Animation animation;
-
-
-    private Button btnNext;
+    private ImageView btnNext;
     private int position;
     private Button btnStarted;
 
@@ -47,39 +45,42 @@ public class IntroActivity extends AppCompatActivity {
         btnNext = findViewById(R.id.btn_next);
         btnStarted = findViewById(R.id.btn_get_started);
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.button_animation);
-        // Falso = todavia no vio
-        // Verdadero = ya vio
-        if (showSlideFirst()) {
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(intent);
-            finish();
-        }
+
+
         loadData();
-        //
         adapter = new IntroViewPagerAdapter(this, mListSlide);
         viewPager.setAdapter(adapter);
         tabIndicator.setupWithViewPager(viewPager);
-        btnNext
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
 
-                        position = viewPager.getCurrentItem();
-                        if (mListSlide.size() - 1 == position) {
-                            loadLastScreen();
-                        }
-                        if (mListSlide.size() - 1 > position) {
-                            position++;
-                            viewPager.setCurrentItem(position);
-                        }
-                    }
-                });
+        // Falso = todavia no vio
+        // Verdadero = ya vio
+        if (showSlideFirst()) {
+            init();
+        }
+
+        //
+
+
+        btnNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //
+                next();
+            }
+        });
+
+        btnStarted.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                init();
+                savePrefData();
+            }
+        });
 
         tabIndicator.addOnTabSelectedListener(new TabLayout.BaseOnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if (mListSlide.size() - 1 == tab.getPosition()) {
-
                     loadLastScreen();
                 }
             }
@@ -95,18 +96,26 @@ public class IntroActivity extends AppCompatActivity {
             }
         });
 
-
-        btnStarted.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent goMain = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(goMain);
-                savePrefData();
-                finish();
-            }
-        });
     }
 
+
+
+    private void next() {
+        position = viewPager.getCurrentItem();
+        if (mListSlide.size() - 1 == position) {
+            loadLastScreen();
+        }
+        if (mListSlide.size() - 1 > position) {
+            position++;
+            viewPager.setCurrentItem(position);
+        }
+    }
+
+    private void init() {
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
     private boolean showSlideFirst() {
         SharedPreferences sp;

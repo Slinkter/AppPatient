@@ -31,20 +31,17 @@ public class HistoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
-
         getSupportActionBar().setTitle("Historial");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         auth = FirebaseAuth.getInstance();
         String userUID = auth.getCurrentUser().getUid();
 
-
         AppPaciente_history = FirebaseDatabase.getInstance().getReference(Common.AppPaciente_history).child(userUID);
         AppPaciente_history.keepSynced(true);
         AppPaciente_history.orderByKey();
 
         if (AppPaciente_history != null) {
-
             mBlogList = findViewById(R.id.myrecycleviewHistory);
             mBlogList.setHasFixedSize(true);
             mBlogList.setLayoutManager(new LinearLayoutManager(this));
@@ -63,13 +60,10 @@ public class HistoryActivity extends AppCompatActivity {
 
             @Override
             protected void populateViewHolder(BlogViewHolder viewHolder, DoctorProfile model, int position) {
-
                 viewHolder.setImage(getApplicationContext(), model.getImagePhoto());
                 viewHolder.setFirstName(model.getFirstname() + " " + model.getLastname());
-//                viewHolder.setLastName(model.getLastname());
                 viewHolder.setPhone(model.getNumphone());
                 viewHolder.setEspecialidad(model.getEspecialidad());
-
             }
         };
 
@@ -88,11 +82,6 @@ public class HistoryActivity extends AppCompatActivity {
             TextView post_firstName = mView.findViewById(R.id.profile_doctor_firstname);
             post_firstName.setText(firstName);
         }
-
-//        public void setLastName(String lastName) {
-//            TextView post_lastName = mView.findViewById(R.id.lastname);
-//            post_lastName.setText(lastName);
-//        }
 
         public void setPhone(String phone) {
             TextView post_phone = mView.findViewById(R.id.profile_doctor_phone);

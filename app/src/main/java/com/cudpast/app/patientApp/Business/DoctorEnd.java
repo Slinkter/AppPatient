@@ -195,7 +195,6 @@ public class DoctorEnd extends AppCompatActivity {
         }
     }
 
-    //.
     private void sendEndAttention(String driverUID) {
         Log.e(TAG, "======================================================");
         Log.e(TAG, "             sendEndAttention                    ");
@@ -246,9 +245,18 @@ public class DoctorEnd extends AppCompatActivity {
     }
 
     private void insertarHistoryPacienteDoctor() {
+
         String end_atention = getCurrentTimeStamp();
         String UID_paciente = auth.getCurrentUser().getUid();
         String UID_doctor = Common.currentDoctorProfile.getUid();
+        PacientProfile pacientEnd = Common.currentPacientProfile;
+        pacientEnd.setDateborn(end_atention);
+
+        String comment_pacient = id_paciente_comment.getText().toString();
+        String img_pacient = "default";
+        String username_paciente = Common.currentPacientProfile.getFirstname();
+
+        Comment comment = new Comment(comment_pacient, UID_paciente, img_pacient, username_paciente);
 
         AppPaciente_history
                 .child(UID_paciente)
@@ -261,8 +269,6 @@ public class DoctorEnd extends AppCompatActivity {
                     }
                 });
 
-        PacientProfile pacientEnd = Common.currentPacientProfile;
-        pacientEnd.setDateborn(end_atention);
         AppDoctor_history
                 .child(UID_doctor)
                 .child(end_atention)
@@ -273,14 +279,6 @@ public class DoctorEnd extends AppCompatActivity {
                         Log.e("AppDoctor_history ", "onSuccess ");
                     }
                 });
-
-
-        String comment_pacient = id_paciente_comment.getText().toString();
-        //
-        String img_pacient = "default";
-        String username_paciente = Common.currentPacientProfile.getFirstname();
-
-        Comment comment = new Comment(comment_pacient, UID_paciente, img_pacient, username_paciente);
 
         AppDoctor_history_Comment
                 .child(UID_doctor)
@@ -294,8 +292,6 @@ public class DoctorEnd extends AppCompatActivity {
                     }
                 });
 
-        Log.e(TAG, "UID_paciente = " + UID_paciente);
-        Log.e(TAG, "UID_doctor = " + UID_doctor);
     }
 
 

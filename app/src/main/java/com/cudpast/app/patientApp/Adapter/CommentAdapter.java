@@ -45,9 +45,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         holder.tv_content.setText(mData.get(position).getComment_paciente());
         holder.tv_date.setText(timestampToString((Long) mData.get(position).getDate_endAtention()));
         Log.e("holder : mData" , " " +timestampToString((Long) mData.get(position).getDate_endAtention()));
-        Log.e("holder : mData" , " " +timestampToString((Long) mData.get(position).getDate_endAtention()));
-        Log.e("holder : mData" , " " +timestampToString((Long) mData.get(position).getDate_endAtention()));
-
     }
 
     @Override
@@ -68,7 +65,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             tv_date = itemView.findViewById(R.id.comment_date);
         }
     }
-
 
     private String timestampToString(long time) {
         Calendar calendar = Calendar.getInstance(Locale.ENGLISH);

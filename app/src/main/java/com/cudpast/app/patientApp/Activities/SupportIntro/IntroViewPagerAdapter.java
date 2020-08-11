@@ -20,12 +20,11 @@ public class IntroViewPagerAdapter extends PagerAdapter {
 
     private Context mContext;
     private List<ScreenItem> mListScreen;
-    private Animation animation;
+
 
     public IntroViewPagerAdapter(Context mContext, List<ScreenItem> mListScreen) {
         this.mContext = mContext;
         this.mListScreen = mListScreen;
-
     }
 
 
@@ -33,7 +32,7 @@ public class IntroViewPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         //
-        animation = AnimationUtils.loadAnimation(mContext, R.anim.button_animation);
+
         LayoutInflater li = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = li.inflate(R.layout.layout_screen, null);
 
@@ -41,10 +40,6 @@ public class IntroViewPagerAdapter extends PagerAdapter {
         ImageView imgSlide = v.findViewById(R.id.intro_img);
         TextView title = v.findViewById(R.id.intro_title);
         TextView description = v.findViewById(R.id.intro_description);
-        //
-        // imgSlide.setAnimation(animation);
-        // title.setAnimation(animation);
-        // description.setAnimation(animation);
         //
         imgSlide.setImageResource(mListScreen.get(position).getScreenImg());
         title.setText(mListScreen.get(position).getTitle());

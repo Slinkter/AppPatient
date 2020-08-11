@@ -4,21 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".Activities.IntroActivity">
 
-    <TextView
-        android:id="@+id/tv_skip"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="34dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
-
-        android:textColor="#2d2d2d"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewPager"
@@ -63,18 +51,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:tabBackground="@drawable/indicator_selector" />
 
-    <Button
+    <ImageView
         android:id="@+id/btn_next"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="30dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         android:layout_marginBottom="16dp"
-        android:background="#fff"
-        android:drawableRight="@drawable/a"
-        android:drawableTint="@color/colorPrimary"
-        android:text="Siguiente"
-        android:textColor="@color/colorPrimary"
+        android:background="@drawable/a"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

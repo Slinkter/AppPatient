@@ -60,12 +60,12 @@ public class DoctorPerfilActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.doctor_perfil);
-
+        //
         getSupportActionBar().setTitle("Perfil del Médico");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-//        Window w = getWindow();
-//        w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        //
+        // Window w = getWindow();
+        // w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         RVComment = findViewById(R.id.myrecycleviewComments);
         AppDoctor_history_Comment = FirebaseDatabase.getInstance().getReference(Common.AppDoctor_history_Comment);
 
@@ -77,8 +77,6 @@ public class DoctorPerfilActivity extends AppCompatActivity {
             numPhone = getIntent().getExtras().getString("doctor_phone");
             especialidad = getIntent().getExtras().getString("doctor_especilidad");
             doctor_uid = getIntent().getExtras().getString("doctor_uid");
-
-
             // init views-xml
             ImageView imgdoc = findViewById(R.id.aa_thumbnail);
             TextView post_firstName = findViewById(R.id.aa_firstname);
@@ -108,49 +106,35 @@ public class DoctorPerfilActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
-
-
-
         }
-
         initRVComment();
     }
 
     private void initRVComment() {
-
         RVComment.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
         DatabaseReference commentRef = AppDoctor_history_Comment.child(doctor_uid);
-        commentRef
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        commentRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                listComment = new ArrayList<>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Comment comment = snapshot.getValue(Comment.class);
+                    listComment.add(comment);
+                }
+                commentAdapter = new CommentAdapter(getApplicationContext(), listComment);
+                RVComment.setAdapter(commentAdapter);
+            }
 
-                        listComment = new ArrayList<>();
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            Comment comment = snapshot.getValue(Comment.class);
-                            listComment.add(comment);
-                        }
-                        commentAdapter = new CommentAdapter(getApplicationContext(), listComment);
-                        RVComment.setAdapter(commentAdapter);
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
+            }
+        });
 
     }
 
 
-    private String timestampToString(long time) {
-        Calendar calendar = Calendar.getInstance(Locale.ENGLISH);
-        calendar.setTimeInMillis(time);
-        String date = DateFormat.format("dd-MM-yyyy", calendar).toString();
-        return date;
-    }
 
     private void showMessage(String s) {
         Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
