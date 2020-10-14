@@ -6,9 +6,6 @@
     <dimen name="nav_header_height">176dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 
-
-
-
     <dimen name="button_width_main">250dp</dimen>
     <dimen name="textSize_registro">16sp</dimen>
 </resources>
